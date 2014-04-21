@@ -6,10 +6,8 @@ public class Model2048 extends Observable implements Model {
 	
 	int[][] mBoard;
 	
-	public Model2048() {
-		
-		mBoard = new int[4][4];
-		
+	public Model2048() {		
+		mBoard = new int[4][4];		
 	}
 
 	@Override
