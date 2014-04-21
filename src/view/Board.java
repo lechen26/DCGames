@@ -18,13 +18,9 @@ public class Board extends Canvas {
 			     
 		this.addPaintListener(new PaintListener() {
 	    	 public void paintControl(PaintEvent e) { 	        	
-	    		 boardData=new int[4][4];
-	    		 System.out.println("length is " + boardData.length);
-	    		 //Graph maze = new Graph();
-	    		 
+	    		 boardData=new int[4][4];	    			    		 	    		 
 	             for(int i=0; i < boardData.length-1; i++){
-	                 for(int j=0; j < boardData[0].length-1; j++){     
-	                	 System.out.println("square is in (" + (i*100) + "," + (j*100) +")to (" + (i*100+100) +","+ (j*100+100) + ")");
+	                 for(int j=0; j < boardData[0].length-1; j++){     	                	 
 	                     e.gc.drawRectangle(i*100, j*100, i*100+100, j*100+100);	                	 	                    
 	                 }
 	                 System.out.println("\n");
