@@ -2,11 +2,10 @@ package view;
 
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-
-import com.sun.corba.se.impl.orbutil.graph.Graph;
 
 
 public class Board extends Canvas {
@@ -15,13 +14,23 @@ public class Board extends Canvas {
 	
 	public Board(Composite parent,int style) {
 		super(parent,style);
-			     
+	
+		final Image image = new Image(parent.getDisplay(),"resources/2048_pics/0_pic.jpg");		
+		final Image image2 = new Image(parent.getDisplay(), "resources/2048_pics/2_pic.jpg");
+		final Image image4 = new Image(parent.getDisplay(), "resources/2048_pics/4_pic.jpg");
+		this.setLayout(new FillLayout());
 		this.addPaintListener(new PaintListener() {
-	    	 public void paintControl(PaintEvent e) { 	        	
+	    	 public void paintControl(PaintEvent e) { 	
+	    		 Canvas canvas = (Canvas) e.widget;
+	    		 int canvasX=canvas.getSize().x;
+	    		 int canvasY=canvas.getSize().y;
+	    		 System.out.println("Canvas X is " + canvasX + "and Canvas Y is " + canvasY);
 	    		 boardData=new int[4][4];	    			    		 	    		 
-	             for(int i=0; i < boardData.length-1; i++){
-	                 for(int j=0; j < boardData[0].length-1; j++){     	                	 
-	                     e.gc.drawRectangle(i*100, j*100, i*100+100, j*100+100);	                	 	                    
+	             for(int i=0; i < boardData.length; i++){
+	                 for(int j=0; j < boardData[0].length; j++){     	                	 
+	                     //e.gc.drawRectangle(i*100, j*100, i*100+100, j*100+100);	                	 
+	                	 e.gc.drawImage(image, i*(canvasX/4),j*(canvasY/4));	                	
+	                	 
 	                 }
 	                 System.out.println("\n");
 	             }

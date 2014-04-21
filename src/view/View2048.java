@@ -3,14 +3,11 @@ package view;
 import java.util.Observable;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -27,8 +24,8 @@ public class View2048 extends Observable implements View,Runnable {
 		display = new Display();
 		shell = new Shell(display);
 		shell.setLayout(new GridLayout(2,false));
-		shell.setSize(400, 300);
-		shell.setText("Levi & Duvid's 2048 Game");
+		shell.setSize(600, 500);
+		shell.setText("Levi and Duvid's 2048 Game");
 	    
 		//Defines Menunu
 		Menu menuBar = new Menu(shell, SWT.BAR);
@@ -68,12 +65,16 @@ public class View2048 extends Observable implements View,Runnable {
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
 	    Button b1=new Button(shell, SWT.PUSH);
 		b1.setText("Undo Move");
+		b1.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	    
 		Button b2=new Button(shell, SWT.PUSH);
 		b2.setText("Restart Game");
+		b2.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	   
 		Button b3=new Button(shell, SWT.PUSH);
 		b3.setText("Load Game");
+		b3.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	    
 		Button b4=new Button(shell, SWT.PUSH);
-		b4.setText("Save Game");		
+		b4.setText("Save Game");	
+		b4.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
 	    shell.open();
 	}   
 	@Override
