@@ -1,9 +1,10 @@
 package view;
 
-import java.awt.Color;
 import java.util.Observable;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -19,6 +20,8 @@ public class View2048 extends Observable implements View,Runnable {
 
 	Display display;
 	Shell shell;
+	Board board;
+	int userCommand=0;
 	
 	private void initComponents(){
 		int scr=0;
@@ -28,7 +31,7 @@ public class View2048 extends Observable implements View,Runnable {
 		shell.setSize(600, 500);
 		shell.setText("Levi and Duvid's 2048 Game");
 	    
-		//Defines Menunu
+		//Defines Menu
 		Menu menuBar = new Menu(shell, SWT.BAR);
 	    MenuItem cascadeFileMenu = new MenuItem(menuBar, SWT.CASCADE);
 	    //File menu
@@ -57,11 +60,10 @@ public class View2048 extends Observable implements View,Runnable {
 	    		shell.getDisplay().dispose();
 	    		System.exit(0);
 	    	}
-	    });	    	    
-	    //final int[][] boardData = new int[10][10];
+	    });	    	    	    
 	    Label score = new Label(shell, SWT.BORDER);
 		score.setText("Score:  " + scr);
-		Board board = new Board(shell, SWT.BORDER);
+		board = new Board(shell, SWT.BORDER);		
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
 	    Button b1=new Button(shell, SWT.PUSH);
@@ -75,12 +77,30 @@ public class View2048 extends Observable implements View,Runnable {
 		b3.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	    
 		Button b4=new Button(shell, SWT.PUSH);
 		b4.setText("Save Game");	
-		b4.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		b4.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));		
+		board.setFocus();
+		board.addKeyListener(new KeyListener() {			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+			}			
+			@Override
+			public void keyPressed(KeyEvent e) {								
+				if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {
+					userCommand=e.keyCode;
+					setChanged();
+					notifyObservers();
+				}				
+			}
+		});
+		
 	    shell.open();
 	}   
+	
 	@Override
-	public void run() { 
-		initComponents(); 
+	public void run() { 		
+		initComponents();
+		setChanged();
+		notifyObservers();
 		while(!shell.isDisposed()){
 			if(!display.readAndDispatch()){ 
 				display.sleep();
@@ -88,17 +108,25 @@ public class View2048 extends Observable implements View,Runnable {
 	}
 	display.dispose();
 	}
-
+	
 	@Override
 	public void displayData(int[][] data) {
-		// TODO Auto-generated method stub
-
+		board.setBoard(data);
+		//board.displayBoard();
+		board.redraw();
+		/*
+		display.syncExec(new Runnable () {
+			@Override
+			public void run() {
+				board.setBoard(mdata);
+			}
+		});*/
 	}
+	
 
 	@Override
-	public int getUserCommand() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getUserCommand() {		
+		return userCommand;
 	}
 
 	

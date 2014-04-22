@@ -1,23 +1,22 @@
 package model;
 
+import java.awt.Point;
 import java.io.Serializable;
 
 public class State implements Serializable {	
-	private double g = 0;
-	private double f = 0;
+	//private double g = 0;
+	//private double f = 0;
 	protected Object stateName;
-	int x;
-	int y;
-
-	public State() {
-		this.x = 0;
-		this.y = 0;
+	int value;
+	
+	public State() {		
 		this.stateName = null;
+		this.value=0;
 	}
-	public State(int x,int y,Object stateName) {
-		this.x=x;
-		this.y=y;
+	
+	public State(Object stateName,int value) {
 		this.stateName=stateName;
+		this.value=value;
 	}
 	
 	public State(Object stateName) {
@@ -25,11 +24,11 @@ public class State implements Serializable {
 	}
 
 	public int getX() {
-		return this.x;
+		return ((Point) getStateName()).x;	
 	}
 
 	public int getY() {
-		return this.y;
+		return ((Point) getStateName()).y;
 	}
 
 	public State getState() {
@@ -38,14 +37,6 @@ public class State implements Serializable {
 
 	public Object getStateName() {
 		return this.stateName;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public void setX(int x) {
-		this.x = x;
 	}
 
 	public void setStateName(String name) {

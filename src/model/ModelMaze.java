@@ -34,4 +34,10 @@ public class ModelMaze extends Observable implements Model {
 
 	}
 
+	@Override
+	public void initializeBoard() {
+
+		// TODO Auto-generated method stub		
+	}
+
 }

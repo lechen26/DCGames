@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
@@ -17,115 +18,128 @@ public class Model2048 extends Observable implements Model {
 		return mBoard;
 	}
 
-	@Override
-	public void moveUp() {
-		int pos=0;		
-		//Running on Board on each line from up to down
-		for(int i=mBoard[0].length;i>0;i--){				
+
+public void moveRight(){
+	for(int i=0;i<mBoard.length;i++){		
+		ArrayList<Integer> merged = new ArrayList<Integer>(); 
+		for(int j=mBoard[0].length-1;j>0;j--){
+			int pos = j-1;
+			if(mBoard[i][pos] != 0){
+				Boolean moved = false;
+				for(int k=j;k<mBoard[0].length;k++){ 
+					if(mBoard[i][k] == 0){
+						mBoard[i][k] = mBoard[i][pos];
+						mBoard[i][pos] = 0;
+						pos++;
+						moved = true;
+					}else{						
+						if(mBoard[i][pos] == mBoard[i][k] && !merged.contains(k)){
+						mBoard[i][k] = mBoard[i][pos] * 2;
+						mBoard[i][pos] = 0;
+						merged.add(k);
+						moved = true;
+					}
+					break;
+				}
+			}
+			}
+		}
+	}
+	generateState();
+	setChanged();
+	notifyObservers();
+}
+
+public void moveLeft(){	
+	for(int i=0;i<mBoard.length;i++){
+		ArrayList<Integer> merged = new ArrayList<Integer>();
+		for(int j=0;j<mBoard[0].length-1;j++){
+			int pos = j+1;
+			if(mBoard[i][pos] != 0){
+				Boolean moved = false;
+				for(int k=j;k>=0;k--){ 
+					if(mBoard[i][k] == 0){
+						mBoard[i][k] = mBoard[i][pos];
+						mBoard[i][pos] = 0;
+						pos--;
+						moved = true;
+					}
+					else{
+						if(mBoard[i][pos] == mBoard[i][k] && !merged.contains(k)){
+							mBoard[i][k] = mBoard[i][pos] * 2;
+							mBoard[i][pos] = 0;
+							merged.add(k);
+							moved = true;	
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+	generateState();
+	setChanged();
+	notifyObservers();
+}
+
+public void moveUp(){
+	for(int i=0;i<mBoard[0].length;i++){
+		ArrayList<Integer> merged = new ArrayList<Integer>(); 
 			for(int j=0;j<mBoard.length-1;j++){
-				pos=j+1;
+				int pos = j+1;
 				if(mBoard[pos][i] != 0){					
-					for(int k=j;j>0;j--){
+					for(int k=j;k>=0;k--){
 						if(mBoard[k][i] == 0){
-							mBoard[k][i] = mBoard[i][pos];
-							mBoard[pos][k] = 0;
+							mBoard[k][i] = mBoard[pos][i];
+							mBoard[pos][i] = 0;
 							pos--;							
 						}else{
-							if(mBoard[pos][i] == mBoard[k][i] ){
-								mBoard[k][i] = mBoard[pos][i]* mBoard[pos][i];
-								mBoard[pos][i] = 0;															
-							}						
+							if(mBoard[pos][i] == mBoard[k][i] && !merged.contains(k)){
+								mBoard[k][i] = mBoard[pos][i] * 2;
+								mBoard[pos][i] = 0;
+								merged.add(k);								
+							}
+							break;
 						}
-					}					
-					
+					}
 				}
 			}
-		}
-		
 	}
+	generateState();
+	setChanged();
+	notifyObservers();
+}
 
-	@Override
-	public void moveDown() {
-		int pos=0;		
-		//Running on Board on each line from down to up
-		for(int i=mBoard[0].length;i>0;i--){				
-			for(int j=mBoard.length-1;j>0;j--){
-				pos=j-1;
-				if(mBoard[pos][i] != 0){					
-					for(int k=j;j<mBoard.length;j++){
-						if(mBoard[k][i] == 0){
-							mBoard[k][i] = mBoard[i][pos];
-							mBoard[pos][k] = 0;
-							pos++;							
-						}else{
-							if(mBoard[pos][i] == mBoard[k][i] ){
-								mBoard[k][i] = mBoard[pos][i]* mBoard[pos][i];
-								mBoard[pos][i] = 0;															
-							}						
+public void moveDown(){
+	for(int i=0;i<mBoard[0].length;i++){
+		ArrayList<Integer> merged = new ArrayList<Integer>();
+		for(int j=mBoard.length-1;j>0;j--){
+			int pos = j-1;
+			if(mBoard[pos][i] != 0){				
+				for(int k=j;k<mBoard.length;k++){
+					if(mBoard[k][i] == 0){
+						mBoard[k][i] = mBoard[pos][i];
+						mBoard[pos][i] = 0;	
+						pos++;
+					}else{
+						if(mBoard[pos][i] == mBoard[k][i] && !merged.contains(k)){
+							mBoard[k][i] = mBoard[pos][i] * 2;
+							mBoard[pos][i] = 0;
+							merged.add(k);
 						}
-					}					
-					
-				}
-			}
-		}
-
-	}
-
-	@Override
-	public void moveLeft() {		
-		int pos=0;		
-		//Running on Board on each line from left to right
-		for(int i=0;i<mBoard.length;i++){				
-			for(int j=0;j<mBoard[0].length-1;j++){
-				pos=j+1;
-				if(mBoard[i][pos] != 0){					
-					for(int k=j;k>0;k--){
-						if(mBoard[i][k] == 0){
-							mBoard[i][k] = mBoard[i][pos];
-							mBoard[i][pos] = 0;
-							pos++;							
-						}else{
-							if(mBoard[i][pos] == mBoard[i][k] ){
-								mBoard[i][k] = mBoard[i][pos]* mBoard[i][pos];
-								mBoard[i][pos] = 0;															
-							}						
-						}
-					}					
-					
-				}
-			}
-		}		
-	}
-
-
-	@Override
-	public void moveRight() {		
-		int pos=0;		
-		//Running on Board on each line from right to left
-		for(int i=0;i<mBoard.length;i++){				
-			for(int j=mBoard[0].length-1;j>0;j--){
-				pos=j-1;
-				if(mBoard[i][pos] != 0){				
-					for(int k=j;k<mBoard[0].length;k++){
-						if(mBoard[i][k] == 0){
-							mBoard[i][k] = mBoard[i][pos];
-							mBoard[i][pos] = 0;
-							pos++;		
-						}else{
-							if(mBoard[i][pos] == mBoard[i][k] ){
-								mBoard[i][k] = mBoard[i][pos]* mBoard[i][pos];
-								mBoard[i][pos] = 0;																
-							}						
-						}
-					}	
+						break;
+					}
 				}
 			}
 		}
 	}
+	generateState();	
+	setChanged();
+	notifyObservers();
+}
 
-	
-	public void displayBoard() {
-		initializeBoard();
+
+	public void displayBoard() {		
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j)				
 				System.out.print(mBoard[i][j] + " ");			
@@ -149,14 +163,24 @@ public class Model2048 extends Observable implements Model {
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j){				
 				if (mBoard[i][j] == 0)
-					free.add(new State(i,j,0));
+					free.add(new State(new Point(i,j),0));
 			}
 		}
 		return free;
 	}
 	
+	public void generateState() {
+		ArrayList<State> free = getFreeStates();			
+		int cellIndex = new Random().nextInt(free.size());
+		int cellX = free.get(cellIndex).getX();
+		int cellY = free.get(cellIndex).getY();
+		int score=generateScore();
+		mBoard[cellX][cellY]=score;
+		free.remove(cellIndex);		
+	}
+	
 	//Initialize Board: all board with 0 besides 2 cells with random score(2/4)
-	private void initializeBoard() {
+	public void initializeBoard() {
 		createEmptyBoard();
 		ArrayList<State> free = getFreeStates();			
 		for(int i=0;i<2;++i)
@@ -167,7 +191,9 @@ public class Model2048 extends Observable implements Model {
 			int score=generateScore();
 			mBoard[cellX][cellY]=score;
 			free.remove(cellIndex);
-		}				
+		}	
+		setChanged();
+		notifyObservers();
 	}
 	
 	// generate the next score which will be 2 or 4 (90-10)

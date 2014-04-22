@@ -3,6 +3,7 @@ package model;
 public interface Model  {
 
 	public int[][] getData();
+	public void initializeBoard();
 	public void moveUp();
 	public void moveDown();
 	public void moveLeft();

@@ -3,10 +3,12 @@ package controller;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.eclipse.swt.SWT;
+
 import view.View;
 import model.Model;
 
-public class Presenter implements Observer {
+public class Presenter implements Observer, Runnable{
 	
 	Model mModel;
 	View ui;
@@ -19,27 +21,37 @@ public class Presenter implements Observer {
 	
 	
 	@Override
-	public void update(Observable o, Object arg) {
-		
-		if (o == mModel){
-			ui.displayData(mModel.getData());
+	public void update(Observable o, Object arg) {		
+		if (o == mModel){			
+			int[][] b=mModel.getData();			
+			ui.displayData(b);
 		}
-		if (o == ui){
-			int indexCMD = ui.getUserCommand();
-			// 1 - up , 2 - down , 3 - right , 4 - left
-			if (indexCMD == 1) {
+		if (o == ui){			
+			int indexCMD = ui.getUserCommand();			
+			if (indexCMD == 0) {
+				System.out.println("Starting the game");
+				mModel.initializeBoard();
+			}
+			if (indexCMD == SWT.ARROW_UP) {				
 				mModel.moveUp();
 			}
-			if (indexCMD == 2) {
+			if (indexCMD == SWT.ARROW_DOWN) {				
 				mModel.moveDown();
 			}
-			if (indexCMD == 3) {
+			if (indexCMD == SWT.ARROW_RIGHT) {				
 				mModel.moveRight();
 			}
-			if (indexCMD == 4) {
+			if (indexCMD == SWT.ARROW_LEFT) {
 				mModel.moveLeft();
 			}
 		}
+		
+	}
+
+
+	@Override
+	public void run() {
+	
 		
 	}
 	
