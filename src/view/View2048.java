@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.Color;
 import java.util.Observable;
 
 import org.eclipse.swt.SWT;
@@ -56,13 +57,13 @@ public class View2048 extends Observable implements View,Runnable {
 	    		shell.getDisplay().dispose();
 	    		System.exit(0);
 	    	}
-	    });
-	    
+	    });	    	    
 	    final int[][] boardData = new int[4][4];
 	    Label score = new Label(shell, SWT.BORDER);
 		score.setText("Score:  " + scr);
 		Board board = new Board(shell, SWT.BORDER);
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
+		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
 	    Button b1=new Button(shell, SWT.PUSH);
 		b1.setText("Undo Move");
 		b1.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	    
