@@ -58,7 +58,7 @@ public class View2048 extends Observable implements View,Runnable {
 	    		System.exit(0);
 	    	}
 	    });	    	    
-	    final int[][] boardData = new int[4][4];
+	    //final int[][] boardData = new int[10][10];
 	    Label score = new Label(shell, SWT.BORDER);
 		score.setText("Score:  " + scr);
 		Board board = new Board(shell, SWT.BORDER);
