@@ -32,18 +32,13 @@ public class Presenter implements Observer, Runnable{
 				System.out.println("Starting the game");
 				mModel.initializeBoard();
 			}
-			if (indexCMD == SWT.ARROW_UP) {				
-				mModel.moveUp();
-			}
-			if (indexCMD == SWT.ARROW_DOWN) {				
-				mModel.moveDown();
-			}
-			if (indexCMD == SWT.ARROW_RIGHT) {				
-				mModel.moveRight();
-			}
-			if (indexCMD == SWT.ARROW_LEFT) {
-				mModel.moveLeft();
-			}
+			switch (indexCMD) {
+	            case SWT.ARROW_UP:  mModel.moveUp();; break;
+	            case SWT.ARROW_DOWN:  mModel.moveDown(); break;
+	            case SWT.ARROW_RIGHT: mModel.moveRight(); break;
+	            case SWT.ARROW_LEFT:  mModel.moveLeft(); break;
+	            default: System.out.println("Invalid Key Stroke");break;
+	        }
 		}
 		
 	}
