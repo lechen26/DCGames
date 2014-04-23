@@ -2,12 +2,14 @@ package model;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Observable;
 import java.util.Random;
 
 public class Model2048 extends Observable implements Model {
 	
-	int[][] mBoard;
+	int[][] mBoard;	
+	int[][] undoBoard;
 	
 	public Model2048() {		
 		mBoard = new int[4][4];		
@@ -18,8 +20,15 @@ public class Model2048 extends Observable implements Model {
 		return mBoard;
 	}
 
-
-public void moveRight(){
+	public void undoBoard() {					
+		mBoard=copyBoard(undoBoard);		
+		setChanged();
+		notifyObservers();
+	}
+	
+	public void moveRight(){
+	//Save the board state right before we moving Right	
+	undoBoard=copyBoard(mBoard);	
 	for(int i=0;i<mBoard.length;i++){		
 		ArrayList<Integer> merged = new ArrayList<Integer>(); 
 		for(int j=mBoard[0].length-1;j>0;j--){
@@ -44,13 +53,16 @@ public void moveRight(){
 			}
 			}
 		}
-	}
+	}	
 	generateState();
 	setChanged();
 	notifyObservers();
 }
 
-public void moveLeft(){	
+public void moveLeft(){
+	//Save the board state right before we moving left
+	//undoBoard = this.mBoard.clone();
+	undoBoard=copyBoard(mBoard);
 	for(int i=0;i<mBoard.length;i++){
 		ArrayList<Integer> merged = new ArrayList<Integer>();
 		for(int j=0;j<mBoard[0].length-1;j++){
@@ -83,6 +95,8 @@ public void moveLeft(){
 }
 
 public void moveUp(){
+	//Save the board state right before we moving up	
+	undoBoard=copyBoard(mBoard);			
 	for(int i=0;i<mBoard[0].length;i++){
 		ArrayList<Integer> merged = new ArrayList<Integer>(); 
 			for(int j=0;j<mBoard.length-1;j++){
@@ -111,6 +125,8 @@ public void moveUp(){
 }
 
 public void moveDown(){
+	//Save the board state right before we moving down
+	undoBoard=copyBoard(mBoard);
 	for(int i=0;i<mBoard[0].length;i++){
 		ArrayList<Integer> merged = new ArrayList<Integer>();
 		for(int j=mBoard.length-1;j>0;j--){
@@ -139,7 +155,7 @@ public void moveDown(){
 }
 
 
-	public void displayBoard() {		
+	public void displayBoard(int[][] mBoard) {		
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j)				
 				System.out.print(mBoard[i][j] + " ");			
@@ -195,7 +211,19 @@ public void moveDown(){
 		setChanged();
 		notifyObservers();
 	}
+
+	private void copyBoard(int[][] source,int[][] target) {
+		for(int i=0;i<source.length;i++) 
+			 target[i] = Arrays.copyOf(source[i], source[i].length);				
+	}
 	
+	public static int[][] copyBoard(int[][] source) {
+	    int[][] copy = new int[source.length][];
+	    for (int i = 0; i < source.length; i++) {
+	        copy[i] = Arrays.copyOf(source[i],source[i].length);
+	    }
+	    return copy;
+	}
 	// generate the next score which will be 2 or 4 (90-10)
 	private int generateScore() {
 		return Math.random() < 0.9 ? 2 : 4;		

@@ -7,6 +7,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -60,7 +61,7 @@ public class View2048 extends Observable implements View,Runnable {
 	    		shell.getDisplay().dispose();
 	    		System.exit(0);
 	    	}
-	    });	    	    	    
+	    });
 	    Label score = new Label(shell, SWT.BORDER);
 		score.setText("Score:  " + scr);
 		board = new Board(shell, SWT.BORDER);		
@@ -68,10 +69,34 @@ public class View2048 extends Observable implements View,Runnable {
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
 	    Button b1=new Button(shell, SWT.PUSH);
 		b1.setText("Undo Move");
-		b1.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	    
+		b1.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		b1.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {				
+				userCommand=1;
+				setChanged();
+				notifyObservers();				
+			}
+		});
 		Button b2=new Button(shell, SWT.PUSH);
 		b2.setText("Restart Game");
-		b2.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	   
+		b2.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		b2.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {				
+				userCommand=2;
+				setChanged();
+				notifyObservers();				
+			}
+		});
 		Button b3=new Button(shell, SWT.PUSH);
 		b3.setText("Load Game");
 		b3.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	    

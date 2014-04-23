@@ -40,4 +40,8 @@ public class ModelMaze extends Observable implements Model {
 		// TODO Auto-generated method stub		
 	}
 
+	@Override
+	public void undoBoard() {
+		System.out.println("sd");		
+	}
 }
