@@ -7,6 +7,7 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -34,6 +35,7 @@ public class View2048 extends Observable implements View,Runnable {
 		//Defines Menu
 		Menu menuBar = new Menu(shell, SWT.BAR);
 	    MenuItem cascadeFileMenu = new MenuItem(menuBar, SWT.CASCADE);
+	    
 	    //File menu
 	    cascadeFileMenu.setText("&File");	        
 	    Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
@@ -44,6 +46,7 @@ public class View2048 extends Observable implements View,Runnable {
 	    loadItem.setText("&Load");
 	    MenuItem exitItem = new MenuItem(fileMenu, SWT.PUSH);
 	    exitItem.setText("&Exit");
+	    
 	    //Edit menu
 	    MenuItem cascadeEditMenu = new MenuItem(menuBar,SWT.CASCADE);
 	    cascadeEditMenu.setText("&Edit");
@@ -63,10 +66,16 @@ public class View2048 extends Observable implements View,Runnable {
 	    });	    	    	    
 	    Label score = new Label(shell, SWT.BORDER);
 		score.setText("Score:  " + scr);
+		// Set the New Board
 		board = new Board(shell, SWT.BORDER);		
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
-		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
-	    Button b1=new Button(shell, SWT.PUSH);
+		Color boardBgColor = new Color(null,187,160,176);
+		Color tileBgColor = new Color(null, 222, 211, 149);
+		//board.setGameColors(new Color(null, 199, 193, 173), new Color(null, 230, 227, 220));
+		board.setBackground(boardBgColor);
+	    
+		// Set buttons
+		Button b1=new Button(shell, SWT.PUSH);
 		b1.setText("Undo Move");
 		b1.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	    
 		Button b2=new Button(shell, SWT.PUSH);

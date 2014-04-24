@@ -40,7 +40,6 @@ public class Presenter implements Observer, Runnable{
 	            default: System.out.println("Invalid Key Stroke");break;
 	        }
 		}
-		
 	}
 
 
