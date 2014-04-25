@@ -12,9 +12,9 @@ public class Main2048 {
 		Presenter p = new Presenter(m,ui);
 		m.addObserver(p);
 		ui.addObserver(p);			
-		Thread th = new Thread(ui);
-		th.start();
-		//ui.run();
+		//Thread th = new Thread(ui);
+		//th.start();
+		ui.run();
 		//m.initializeBoard();
 		
 	}

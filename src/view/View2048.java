@@ -1,7 +1,6 @@
 package view;
 
 import java.util.Observable;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
