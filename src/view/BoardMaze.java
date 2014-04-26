@@ -16,18 +16,18 @@ public class BoardMaze extends Canvas {
 	
 	int[][] boardData;
 	final int N=4;
-	State states[][];
+	StateMaze states[][];
 	
 	public BoardMaze(Composite parent, int style) {
 		super(parent,style);				
 		boardData = new int[][] {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};		
 		setLayout(new GridLayout(N,true));
-		states = new State[N][N];
+		states = new StateMaze[N][N];
 		for(int i=0;i< boardData.length; ++i)
 		{
 				for(int j=0; j < boardData[0].length; ++j)
 				{
-					states[i][j] = new State(BoardMaze.this,SWT.BORDER);
+					states[i][j] = new StateMaze(BoardMaze.this,SWT.BORDER);
 					states[i][j].setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 					states[i][j].setValue(boardData[i][j]);
 				}	

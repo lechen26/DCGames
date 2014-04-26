@@ -16,19 +16,19 @@ public class Board2048 extends Canvas {
 	
 	int[][] boardData;
 	final int N=4;
-	State states[][];
+	State2048 states[][];
 	
 	public Board2048(Composite parent, int style) {
 		super(parent,style);
 				
 		boardData = new int[][] {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};		
 		setLayout(new GridLayout(N,true));
-		states = new State[N][N];
+		states = new State2048[N][N];
 		for(int i=0;i< boardData.length; ++i)
 		{
 				for(int j=0; j < boardData[0].length; ++j)
 				{
-					states[i][j] = new State(Board2048.this,SWT.BORDER);
+					states[i][j] = new State2048(Board2048.this,SWT.BORDER);
 					states[i][j].setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 					states[i][j].setValue(boardData[i][j]);
 				}	
