@@ -26,14 +26,19 @@ public class Model2048 extends Observable implements Model {
 	 */
 	public void undoBoard() {
 		if (undoBoards.isEmpty())
+		{
 			System.out.println("No Undo moves to perform");
+			setChanged();
+			notifyObservers("undoEnd");
+		}	
 		else
 		{
 			mBoard=copyBoard(undoBoards.get(undoBoards.size()-1));
 			undoBoards.remove(undoBoards.size()-1);
+			setChanged();
+			notifyObservers();
 		}
-		setChanged();
-		notifyObservers();
+		
 	}
 	
 	/* Move all possible cells to the Right and merge cells if needed
@@ -41,10 +46,10 @@ public class Model2048 extends Observable implements Model {
 	 Output: boolean - if we have possible movements or not.
 	 */
 	public boolean moveRight(boolean quiet){
+		boolean move=false;
 		//save board before operation for undo purposes
 		if (!quiet)
-			undoBoards.add(copyBoard(mBoard));			
-		boolean move=true;
+			undoBoards.add(copyBoard(mBoard));					
 		for(int i=0;i<mBoard.length;i++){		
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
 			for(int j=mBoard[0].length-1;j>0;j--){
@@ -53,19 +58,21 @@ public class Model2048 extends Observable implements Model {
 					for(int k=j;k<mBoard[0].length;k++){ 
 						if(mBoard[i][k] == 0){
 							move=true;
-							if (quiet == true)							
-								break;							
-							mBoard[i][k] = mBoard[i][pos];
-							mBoard[i][pos] = 0;
-							pos++;											
+							if (!quiet)
+							{
+								mBoard[i][k] = mBoard[i][pos];
+								mBoard[i][pos] = 0;
+								pos++;
+							}
 						}else{						
 							if(mBoard[i][pos] == mBoard[i][k] && !merged.contains(k)){
 								move=true;
-								if (quiet == true)															
-									break;								
-								mBoard[i][k] = mBoard[i][pos] * 2;
-								mBoard[i][pos] = 0;
-								merged.add(k);							
+								if(!quiet)
+								{
+									mBoard[i][k] = mBoard[i][pos] * 2;
+									mBoard[i][pos] = 0;
+									merged.add(k);
+								}
 							}
 							break;
 						}
@@ -108,20 +115,22 @@ public class Model2048 extends Observable implements Model {
 					for(int k=j;k>=0;k--){ 
 						if(mBoard[i][k] == 0){
 							move=true;
-							if (quiet == true)
-								break;
-							mBoard[i][k] = mBoard[i][pos];
-							mBoard[i][pos] = 0;
-							pos--;												
+							if (!quiet)
+							{
+								mBoard[i][k] = mBoard[i][pos];
+								mBoard[i][pos] = 0;
+								pos--;
+							}
 						}
 						else{
 							if(mBoard[i][pos] == mBoard[i][k] && !merged.contains(k)){
 								move=true;
-								if (quiet == true)
-									break;
-								mBoard[i][k] = mBoard[i][pos] * 2;
-								mBoard[i][pos] = 0;
-								merged.add(k);														
+								if (!quiet)
+								{
+									mBoard[i][k] = mBoard[i][pos] * 2;
+									mBoard[i][pos] = 0;
+									merged.add(k);
+								}
 							}
 							break;
 						}
@@ -162,19 +171,22 @@ public class Model2048 extends Observable implements Model {
 						for(int k=j;k>=0;k--){
 							if(mBoard[k][i] == 0){
 								move=true;
-								if (quiet == true)
-									break;
-								mBoard[k][i] = mBoard[pos][i];
-								mBoard[pos][i] = 0;
-								pos--;							
+								if(!quiet)
+								{
+									mBoard[k][i] = mBoard[pos][i];
+									mBoard[pos][i] = 0;
+									pos--;
+								}
 							}else{
 								if(mBoard[pos][i] == mBoard[k][i] && !merged.contains(k)){
 									move=true;
-									if (quiet == true) 
-										break;
-									mBoard[k][i] = mBoard[pos][i] * 2;
-									mBoard[pos][i] = 0;
-									merged.add(k);							
+									if (!quiet)
+									{
+										mBoard[k][i] = mBoard[pos][i] * 2;
+										mBoard[pos][i] = 0;
+										merged.add(k);
+									}
+									
 								}
 								break;
 							}
@@ -216,19 +228,21 @@ public class Model2048 extends Observable implements Model {
 					for(int k=j;k<mBoard.length;k++){
 						if(mBoard[k][i] == 0){
 							move=true;
-							if (quiet == true)
-								break;
-							mBoard[k][i] = mBoard[pos][i];
-							mBoard[pos][i] = 0;	
-							pos++;						
+							if (!quiet)
+							{
+								mBoard[k][i] = mBoard[pos][i];
+								mBoard[pos][i] = 0;	
+								pos++;
+							}
 						}else{
 							if(mBoard[pos][i] == mBoard[k][i] && !merged.contains(k)){
 								move=true;
-								if (quiet == true)
-									break;
-								mBoard[k][i] = mBoard[pos][i] * 2;
-								mBoard[pos][i] = 0;
-								merged.add(k);							
+								if (!quiet)
+								{
+									mBoard[k][i] = mBoard[pos][i] * 2;
+									mBoard[pos][i] = 0;
+									merged.add(k);
+								}
 							}
 							break;
 						}
@@ -297,19 +311,23 @@ public class Model2048 extends Observable implements Model {
 	 * Generate new state on the board
 	 */
 	public void generateState() {
-		ArrayList<Point> free = getFreeStates();			
-		int cellIndex = new Random().nextInt(free.size());
-		int cellX = free.get(cellIndex).x;
-		int cellY = free.get(cellIndex).y;		
-		mBoard[cellX][cellY]=generateScore();
-		free.remove(cellIndex);		
+		//Check if we gave space to generate
+		int freeSize = getFreeStates().size();
+		if (freeSize != 0)
+		{
+			ArrayList<Point> free = getFreeStates();			
+			int cellIndex = new Random().nextInt(free.size());
+			int cellX = free.get(cellIndex).x;
+			int cellY = free.get(cellIndex).y;		
+			mBoard[cellX][cellY]=generateScore();
+			free.remove(cellIndex);		
+		}
 	}
 	
 	/*
 	 * Initialize Board: all board with 0 besides 2 cells with random score(2/4)
 	 */
-	public void initializeBoard() {
-		System.out.println("Model: initializeBoard");
+	public void initializeBoard() {				
 		createEmptyBoard();
 		ArrayList<Point> free = getFreeStates();			
 		for(int i=0;i<2;++i)
@@ -320,7 +338,8 @@ public class Model2048 extends Observable implements Model {
 			int score=generateScore();
 			mBoard[cellX][cellY]=score;
 			free.remove(cellIndex);
-		}	
+		}
+		//mBoard = new int[][]{{2,4,16,32},{4,8,32,16},{2,16,64,128},{16,8,32,512}};
 		setChanged();
 		notifyObservers();
 	}
@@ -337,6 +356,19 @@ public class Model2048 extends Observable implements Model {
 	    return copy;
 	}
 	
+	/*
+	 * Returns user Score (The maximum value on the board)
+	 */
+	public int getCurrentScore() {
+		int max=2;
+		for(int i=0;i<mBoard.length;++i){
+			for(int j=0;j<mBoard[0].length;++j) {
+				if (mBoard[i][j] > max)
+					max=mBoard[i][j];
+			}
+		}
+		return max;		
+	}
 	
 	/*
 	 * generate the next score which will be 2 or 4 (90-10)
@@ -352,13 +384,13 @@ public class Model2048 extends Observable implements Model {
 	private boolean isMovesAvailable() {
 		return (moveRight(true) || moveLeft(true) || moveUp(true) || moveDown(true));					 		
 	}
-	
+
 	/*
 	 * Check if the game is over. 
 	 * if we got no possible moves and if we got no free cells
 	 */
-	public boolean isGameOver() {
-		return !isMovesAvailable() && (getFreeStates().size() == 0);		
+	public boolean isGameOver() {				
+		return ((!isMovesAvailable()) && (getFreeStates().size() == 0) );	
 	}
 	
 	/*

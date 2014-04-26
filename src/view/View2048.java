@@ -1,5 +1,11 @@
 package view;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Observable;
 
 import org.eclipse.swt.SWT;
@@ -8,7 +14,6 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -23,7 +28,8 @@ public class View2048 extends Observable implements View,Runnable {
 
 	Display display;
 	Shell shell;
-	Board2048 board;	
+	Board2048 board;
+	Label score;
 	int userCommand=0;
 	
 	private void initComponents(){
@@ -38,7 +44,7 @@ public class View2048 extends Observable implements View,Runnable {
 		initializeMenu();
 		
 	    //Defines the Score label
-	    Label score = new Label(shell, SWT.BORDER);
+	    score = new Label(shell, SWT.BORDER);
 		score.setText("Score:  " + scr);
 		
 		//Defines the board game
@@ -126,9 +132,18 @@ public class View2048 extends Observable implements View,Runnable {
 		}
 		if (response == SWT.YES){
 			setUserCommand(2);
-			hasChanged();
-			notifyObservers();			
-		}}
+			setChanged();
+			notifyObservers();	
+		}
+	}
+	
+	public void undoEnd()
+	{
+		MessageBox end = new MessageBox(shell,SWT.POP_UP);		
+		end.setMessage("This is the First state of the game");
+		end.setText("Undo");
+		end.open();		
+	}
 	
 	/*
 	 * Initialize Board canvas
@@ -223,8 +238,56 @@ public class View2048 extends Observable implements View,Runnable {
 		Button loadButton=new Button(shell, SWT.PUSH);
 		loadButton.setText("Load Game");
 		loadButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		loadButton.addSelectionListener(new SelectionListener() {
+
+			@Override	
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+			
+			public void widgetSelected(SelectionEvent arg0) {
+					try {
+						board.loadGame();
+					} catch (FileNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}					
+					shell.forceFocus();
+			}
+		});
 		Button saveButton=new Button(shell, SWT.PUSH);
 		saveButton.setText("Save Game");	
 		saveButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		saveButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub				
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {				
+				try {
+					board.saveGame();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
+				shell.forceFocus();
+			}
+		});
+	}
+
+	@Override
+	public void displayScore(int scr) {		
+		score.setText("Score : "+ scr);
 	}
 }

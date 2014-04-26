@@ -196,4 +196,10 @@ public class ModelMaze extends Observable implements Model {
 		notifyObservers();
 	}
 
+	@Override
+	public int getCurrentScore() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -31,18 +31,24 @@ public class Presenter implements Observer{
 					System.out.println("Presenter: Won the game");
 					ui.gameWon();
 				}
+				else if (arg.equals("undoEnd")){
+					ui.undoEnd();
+				}
 			}
 			else{
-				int[][] b=mModel.getData();			
+				int[][] b=mModel.getData();
+				int scr = mModel.getCurrentScore();
 				ui.displayData(b);
+				ui.displayScore(scr);
 			}
 		}
 		if (o == ui){			
-			int indexCMD = ui.getUserCommand();			
-			if ((indexCMD == 0) || (indexCMD == 2)){				
+			
+			int indexCMD = ui.getUserCommand();				
+			if ((indexCMD == 0) || (indexCMD == 2)){							
 				mModel.initializeBoard();
 			}
-			if (indexCMD == 1) {		
+			if (indexCMD == 1) {				
 				mModel.undoBoard();
 			}
 			switch (indexCMD) {

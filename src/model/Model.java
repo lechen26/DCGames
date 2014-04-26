@@ -3,6 +3,7 @@ package model;
 public interface Model  {
 
 	public int[][] getData();
+	public int getCurrentScore();
 	public void initializeBoard();
 	public void undoBoard();
 	public boolean moveUp(boolean quiet);

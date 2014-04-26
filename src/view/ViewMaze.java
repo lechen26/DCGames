@@ -229,4 +229,16 @@ public class ViewMaze extends Observable implements View,Runnable {
 		saveButton.setText("Save Game");	
 		saveButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
 	}
+
+	@Override
+	public void undoEnd() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayScore(int scr) {
+		// TODO Auto-generated method stub
+		
+	}
 }
