@@ -142,6 +142,7 @@ public class ModelMaze extends Observable implements Model {
 	public void initializeBoard() {
 		createEmptyBoard(4,4);
 		mBoard[0][2]=1;
+		mBoard[1][3]=-1;
 //		int[][] b =  {
 //	    		{ 2 , 0 , -1 , -1 },
 //	    		{ 0 , -1 , 0  , 0 },

@@ -38,22 +38,35 @@ public class State extends Canvas {
 		switch(val) {
 		case 0: 
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
+			break;
 		case 2:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_GRAY));
+			break;
 		case 4:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_CYAN));
+			break;
 		case 8: 
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_YELLOW));
+			break;
 		case 16:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_DARK_MAGENTA));
+			break;
 		case 64:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));
+			break;
 		case 128:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_CYAN));
+			break;
 		case 256:
+			break;
 		case 512:
+			break;
 		case 1024:
+			break;
 		case 2048:
+			break;
+		case -1:
+			setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
 	}
 			
 }
