@@ -45,81 +45,95 @@ public class ModelMaze extends Observable implements Model {
 		return null; // din't find the mouse
 	}
 
+	/*
+	 * move up method
+	 */
 	@Override
 	public boolean moveUp(boolean quiet) {
-		undoBoards.add(copyBoard(mBoard));		
-		
+		boolean move=false;
+		if (!quiet) {
+			undoBoards.add(copyBoard(mBoard));		
+		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
-		for(int i=0;i<1;i++){
-				for(int j=0;j<1;j++){
-					int newPos = j+1;
-					if(mBoard[cPosX][newPos] != -1){
-						mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
-						mBoard[cPosX][cPosY] = (Integer) null ;
-					}
-				}
+		int newPos = cPosY - 1;
+		if((newPos >=0) &&(mBoard[cPosX][newPos] != -1)){
+			move=true;
+			if (!quiet)
+			{
+				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
+				mBoard[cPosX][cPosY] = 0 ;
+			}
 		}
 		setChanged();
 		notifyObservers();
-		return true;
+		return move;
 	}
 
 	@Override
 	public boolean moveDown(boolean quiet) {
-		undoBoards.add(copyBoard(mBoard));	
+		boolean move=false;
+		if (!quiet) {
+			undoBoards.add(copyBoard(mBoard));		
+		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
-		for(int i=0;i<1;i++){
-				for(int j=0;j<1;j++){
-					int newPos = j-1;
-					if(mBoard[cPosX][newPos] != -1){
-						mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
-						mBoard[cPosX][cPosY] = (Integer) null ;
-					}
-				}
-		}	
+		int newPos = cPosY + 1;
+		if((newPos <mBoard.length) &&(mBoard[cPosX][newPos] != -1)){
+			move=true;
+			if (!quiet)
+			{
+				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
+				mBoard[cPosX][cPosY] = 0 ;
+			}
+		}
 		setChanged();
 		notifyObservers();
-		return true; //needs to be changed
+		return move;
 	}
 
 	@Override
 	public boolean moveLeft(boolean quiet) {
-		undoBoards.add(copyBoard(mBoard));	
+		boolean move=false;
+		if (!quiet) {
+			undoBoards.add(copyBoard(mBoard));		
+		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
-		for(int i=0;i<1;i++){
-				for(int j=0;j<1;j++){
-					int newPos = i-1;
-					if(mBoard[newPos][cPosY] != -1){
-						mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
-						mBoard[cPosX][cPosY] = (Integer) null ;
-					}
-				}
+		int newPos = cPosX - 1;
+		if((newPos >=0 ) &&(mBoard[cPosX][newPos] != -1)){
+			move=true;
+			if (!quiet)
+			{
+				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
+				mBoard[cPosX][cPosY] = 0 ;
+			}
 		}
 		setChanged();
 		notifyObservers();
-		return true;
+		return move;
 	}
 
 	@Override
 	public boolean moveRight(boolean quiet) {
-		undoBoards.add(copyBoard(mBoard));	
+		boolean move=false;
+		if (!quiet) {
+			undoBoards.add(copyBoard(mBoard));		
+		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
-		for(int i=0;i<1;i++){
-				for(int j=0;j<1;j++){
-					int newPos = i+1;
-					if(mBoard[newPos][cPosY] != -1){
-						mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
-						mBoard[cPosX][cPosY] = (Integer) null ;
-					}
-				}
+		int newPos = cPosX + 1;
+		if((newPos < mBoard[0].length) &&(mBoard[cPosX][newPos] != -1)){
+			move=true;
+			if (!quiet)
+			{
+				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
+				mBoard[cPosX][cPosY] = 0 ;
+			}
 		}
 		setChanged();
 		notifyObservers();
-		return true;
+		return move;
 	}
 
 
