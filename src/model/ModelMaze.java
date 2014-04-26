@@ -37,8 +37,8 @@ public class ModelMaze extends Observable implements Model {
 
 	public Point getCurrentPosition(){
 
-		for (int i=0; i<mBoard[0].length; i++)
-			for (int j=0;j<mBoard.length ; j++)
+		for (int i=0; i<mBoard.length; i++)
+			for (int j=0;j<mBoard[0].length ; j++)
 				if (mBoard[i][j] == 1 )
 					return new Point(i,j);
 
@@ -56,12 +56,13 @@ public class ModelMaze extends Observable implements Model {
 		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
-		int newPos = cPosY - 1;
+		System.out.println(cPosX + "," +cPosY);
+		int newPos = cPosX - 1;
 		if((newPos >=0) &&(mBoard[cPosX][newPos] != -1)){
 			move=true;
 			if (!quiet)
 			{
-				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
+				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
 		}
@@ -78,12 +79,12 @@ public class ModelMaze extends Observable implements Model {
 		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
-		int newPos = cPosY + 1;
-		if((newPos <mBoard.length) &&(mBoard[cPosX][newPos] != -1)){
+		int newPos = cPosX + 1;
+		if((newPos < mBoard.length) &&(mBoard[cPosX][newPos] != -1)){
 			move=true;
 			if (!quiet)
 			{
-				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
+				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
 		}
@@ -100,12 +101,12 @@ public class ModelMaze extends Observable implements Model {
 		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
-		int newPos = cPosX - 1;
+		int newPos = cPosY - 1;
 		if((newPos >=0 ) &&(mBoard[cPosX][newPos] != -1)){
 			move=true;
 			if (!quiet)
 			{
-				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
+				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
 		}
@@ -122,12 +123,12 @@ public class ModelMaze extends Observable implements Model {
 		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
-		int newPos = cPosX + 1;
+		int newPos = cPosY + 1;
 		if((newPos < mBoard[0].length) &&(mBoard[cPosX][newPos] != -1)){
 			move=true;
 			if (!quiet)
 			{
-				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
+				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
 		}
@@ -140,7 +141,8 @@ public class ModelMaze extends Observable implements Model {
 	// initialize the Maze Board
 	@Override
 	public void initializeBoard() {
-		createEmptyBoard(4,4);			
+		createEmptyBoard(4,4);
+		mBoard[0][2]=1;
 //		int[][] b =  {
 //	    		{ 2 , 0 , -1 , -1 },
 //	    		{ 0 , -1 , 0  , 0 },
