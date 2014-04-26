@@ -23,7 +23,7 @@ public class View2048 extends Observable implements View,Runnable {
 
 	Display display;
 	Shell shell;
-	Board board;	
+	Board2048 board;	
 	int userCommand=0;
 	
 	private void initComponents(){
@@ -135,7 +135,7 @@ public class View2048 extends Observable implements View,Runnable {
 	 * Initialize Board canvas
 	 */
 	private void initializeBoard() {		
-		board = new Board(shell, SWT.BORDER);		
+		board = new Board2048(shell, SWT.BORDER);		
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
 		shell.forceFocus();

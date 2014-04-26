@@ -9,11 +9,14 @@ import java.util.Random;
 public class ModelMaze extends Observable implements Model {
 
 	int[][] mBoard;	
-	int[][] undoBoard;
+	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
 	int M;
 	int N;
 
-
+	public ModelMaze() {
+		mBoard=new int[4][4];
+	}
+	
 	public int getM() {
 		return M;
 	}
@@ -44,7 +47,8 @@ public class ModelMaze extends Observable implements Model {
 
 	@Override
 	public boolean moveUp(boolean quiet) {
-		undoBoard=copyBoard(undoBoard);	
+		undoBoards.add(copyBoard(mBoard));		
+		
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		for(int i=0;i<1;i++){
@@ -63,7 +67,7 @@ public class ModelMaze extends Observable implements Model {
 
 	@Override
 	public boolean moveDown(boolean quiet) {
-		undoBoard=copyBoard(mBoard);	
+		undoBoards.add(copyBoard(mBoard));	
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		for(int i=0;i<1;i++){
@@ -82,7 +86,7 @@ public class ModelMaze extends Observable implements Model {
 
 	@Override
 	public boolean moveLeft(boolean quiet) {
-		undoBoard=copyBoard(mBoard);	
+		undoBoards.add(copyBoard(mBoard));	
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		for(int i=0;i<1;i++){
@@ -101,7 +105,7 @@ public class ModelMaze extends Observable implements Model {
 
 	@Override
 	public boolean moveRight(boolean quiet) {
-		undoBoard=copyBoard(mBoard);	
+		undoBoards.add(copyBoard(mBoard));	
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		for(int i=0;i<1;i++){
@@ -122,7 +126,6 @@ public class ModelMaze extends Observable implements Model {
 	// initialize the Maze Board
 	@Override
 	public void initializeBoard() {
-
 		createEmptyBoard(4,4);			
 //		int[][] b =  {
 //	    		{ 2 , 0 , -1 , -1 },
@@ -136,8 +139,8 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 	private void createEmptyBoard(int m,int n) {
-		for (int i=0 ; i<M ; i++)
-			for (int j=0 ; j<N ; j++){
+		for (int i=0 ; i<m ; i++)
+			for (int j=0 ; j<n ; j++){
 				mBoard[i][j] = 0;
 			}
 

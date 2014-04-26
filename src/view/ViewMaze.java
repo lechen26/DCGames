@@ -1,12 +1,14 @@
 package view;
 
 import java.util.Observable;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -14,26 +16,139 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 public class ViewMaze extends Observable implements View,Runnable {
 
 	Display display;
 	Shell shell;
-	Board board;
+	BoardMaze board;	
 	int userCommand=0;
-
+	
 	private void initComponents(){
 		int scr=0;
 		display = new Display();
 		shell = new Shell(display);
 		shell.setLayout(new GridLayout(2,false));
 		shell.setSize(600, 500);
-		shell.setText("Levi and Duvid's Maze Game");
+		shell.setText("Levi and Duvid's 2048 Game");
+	    
+		//Defines menu game
+		initializeMenu();
+		
+	    //Defines the Score label
+	    Label score = new Label(shell, SWT.BORDER);
+		score.setText("Score:  " + scr);
+		
+		//Defines the board game
+		initializeBoard();
+		
+		//Defines the buttons of the game
+		initializeButtons();
+		
+		//Defines Key Listener
+		shell.forceFocus();
+		shell.addKeyListener(new KeyListener() {			
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}			
+			@Override
+			public void keyPressed(KeyEvent e) {			
+				if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {
+					System.out.println("presses");
+					userCommand=e.keyCode;
+					setChanged();
+					notifyObservers();
+					shell.forceFocus();
+				}				
+			}
+		});		
+	    shell.open();
+	}   
+	
+	@Override
+	public void run() { 		
+		initComponents();
+		setChanged();
+		notifyObservers();
+		shell.forceFocus();
+		while(!shell.isDisposed()){
+			if(!display.readAndDispatch()){ 
+				display.sleep();
+			}
+		}
+		display.dispose();
+	}
+	
+		
+	@Override
+	/*
+	 * Display the Board with the given data
+	 */
+	public void displayData(int[][] data) {		
+		board.setBoard(data);
+		board.redraw();
+				
+	}
+	
 
+	/*
+	 *  Get user command
+	 */
+	@Override
+	public int getUserCommand() {		
+		return userCommand;
+	}
+	
+	public void setUserCommand(int command) {
+		this.userCommand = command;
+	}
+	/*
+	 * Display game Winning board
+	 */
+	public void gameWon() {
+		board.gameWin();
+		display.dispose();
+		System.exit(0);
+	}
+	
+	/*
+	 * Display Game over board 
+	 */
+	public void gameOver() {				
+		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
+		end.setMessage("You have lost the game. do you want to play another one?");
+		end.setText("gameOver");
+		int response = end.open();
+		if (response == SWT.NO) {
+			display.dispose();
+			System.exit(0);
+		}
+		if (response == SWT.YES){
+			setUserCommand(2);
+			hasChanged();
+			notifyObservers();			
+		}}
+	
+	/*
+	 * Initialize Board canvas
+	 */
+	private void initializeBoard() {		
+		board = new BoardMaze(shell, SWT.BORDER);		
+		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
+		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
+		shell.forceFocus();
+	}
+	
+	/*
+	 * Initialize Menu bottons 
+	 */
+	private void initializeMenu() {	    
 		//Defines Menu
 		Menu menuBar = new Menu(shell, SWT.BAR);
 	    MenuItem cascadeFileMenu = new MenuItem(menuBar, SWT.CASCADE);
+	    
 	    //File menu
 	    cascadeFileMenu.setText("&File");	        
 	    Menu fileMenu = new Menu(shell, SWT.DROP_DOWN);
@@ -44,6 +159,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 	    loadItem.setText("&Load");
 	    MenuItem exitItem = new MenuItem(fileMenu, SWT.PUSH);
 	    exitItem.setText("&Exit");
+	    
 	    //Edit menu
 	    MenuItem cascadeEditMenu = new MenuItem(menuBar,SWT.CASCADE);
 	    cascadeEditMenu.setText("&Edit");
@@ -52,24 +168,28 @@ public class ViewMaze extends Observable implements View,Runnable {
 	    MenuItem restartItem = new MenuItem(editMenu,SWT.PUSH);
 	    restartItem.setText("&Restart");
 	    MenuItem undoItem = new MenuItem(editMenu,SWT.PUSH);
-	    undoItem.setText("&Undo");
+	    undoItem.setText("&Undo");	    
 	    shell.setMenuBar(menuBar);
+	    //Defines the exit button
 	    exitItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
 	    		shell.getDisplay().dispose();
 	    		System.exit(0);
 	    	}
-	    });
-	    Label score = new Label(shell, SWT.BORDER);
-		score.setText("Score:  " + scr);
-		board = new Board(shell, SWT.BORDER);		
-		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
-		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
-	    Button b1=new Button(shell, SWT.PUSH);
-		b1.setText("Undo Move");
-		b1.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
-		b1.addSelectionListener(new SelectionListener() {
+	    });		
+	}
+	
+	/*
+	 * Initialize Shell buttons
+	 */
+	private void initializeButtons()
+	{
+		//Defines undo button
+	    Button undoButton=new Button(shell, SWT.PUSH);
+		undoButton.setText("Undo Move");
+		undoButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		undoButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
@@ -78,87 +198,34 @@ public class ViewMaze extends Observable implements View,Runnable {
 			public void widgetSelected(SelectionEvent arg0) {				
 				userCommand=1;
 				setChanged();
-				notifyObservers();				
+				notifyObservers();	
+				shell.forceFocus();
 			}
 		});
-		Button b2=new Button(shell, SWT.PUSH);
-		b2.setText("Restart Game");
-		b2.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
-		b2.addSelectionListener(new SelectionListener() {
+		
+		//Defines restart Button
+		Button restartButton=new Button(shell, SWT.PUSH);
+		restartButton.setText("Restart Game");
+		restartButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		restartButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
 			}
 
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {				
-				userCommand=2;
+				userCommand=2;				
 				setChanged();
-				notifyObservers();				
+				notifyObservers();			
+				shell.forceFocus();
 			}
 		});
-		Button b3=new Button(shell, SWT.PUSH);
-		b3.setText("Load Game");
-		b3.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));	    
-		Button b4=new Button(shell, SWT.PUSH);
-		b4.setText("Save Game");	
-		b4.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));		
-		board.setFocus();
-		board.addKeyListener(new KeyListener() {			
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-			}			
-			@Override
-			public void keyPressed(KeyEvent e) {								
-				if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {
-					userCommand=e.keyCode;
-					setChanged();
-					notifyObservers();
-				}				
-			}
-		});
-
-	    shell.open();
-	}   
-
-	@Override
-	public void run() { 		
-		initComponents();
-		setChanged();
-		notifyObservers();
-		while(!shell.isDisposed()){
-			if(!display.readAndDispatch()){ 
-				display.sleep();
-			}
-	}
-	display.dispose();
-	}
-
-	@Override
-	public void displayData(int[][] data) {
-		board.setBoard(data);
-		board.redraw();
-	}
-
-
-	@Override
-	public int getUserCommand() {		
-		return userCommand;
-	}
-
-	@Override
-	public void gameOver() {
-		// TODO Auto-generated method stub
 		
+		Button loadButton=new Button(shell, SWT.PUSH);
+		loadButton.setText("Load Game");
+		loadButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		Button saveButton=new Button(shell, SWT.PUSH);
+		saveButton.setText("Save Game");	
+		saveButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
 	}
-
-	@Override
-	public void gameWon() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-
-
 }

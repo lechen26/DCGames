@@ -1,7 +1,8 @@
 package controller;
 
-import view.ViewMaze;
 import model.ModelMaze;
+import view.View2048;
+import view.ViewMaze;
 
 public class MainMaze {
 
