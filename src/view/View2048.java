@@ -107,8 +107,7 @@ public class View2048 extends Observable implements View,Runnable {
 	/*
 	 * Display game Winning board
 	 */
-	public void gameWon() {
-		board.gameWin();
+	public void gameWon() {		
 		display.dispose();
 		System.exit(0);
 	}
