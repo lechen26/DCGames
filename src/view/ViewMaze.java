@@ -41,6 +41,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 	    Label score = new Label(shell, SWT.BORDER);
 		score.setText("Score:  " + scr);
 		
+		
 		//Defines the board game
 		initializeBoard();
 		
