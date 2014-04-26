@@ -21,22 +21,18 @@ public class Presenter implements Observer{
 		
 	@Override
 	public void update(Observable o, Object arg) {		
-		if (o == mModel)
-		{			
-			if (arg != null)
-			{
+		if (o == mModel){			
+			if (arg != null){
 				if (arg.equals("gameOver")){
 					System.out.println("Presenter: Game is over");
 					ui.gameOver();
 				}
-				else if (arg.equals("gameWon")) 
-				{
+				else if (arg.equals("gameWon")){
 					System.out.println("Presenter: Won the game");
 					ui.gameWon();
 				}
 			}
-			else
-			{
+			else{
 				int[][] b=mModel.getData();			
 				ui.displayData(b);
 			}
@@ -49,20 +45,28 @@ public class Presenter implements Observer{
 			if (indexCMD == 1) {		
 				mModel.undoBoard();
 			}
-			if (indexCMD == SWT.ARROW_UP) {				
-				mModel.moveUp(false);
+			switch (indexCMD) {
+            case SWT.ARROW_UP:  
+            	System.out.println("Presenter: move up");
+            	mModel.moveUp(false);
+            	break;
+            case SWT.ARROW_DOWN:  
+            	System.out.println("Presenter: move down");
+            	mModel.moveDown(false); 
+            	break;
+            case SWT.ARROW_RIGHT: 
+            	System.out.println("Presenter: move right");
+            	mModel.moveRight(false); 
+            	break;
+            case SWT.ARROW_LEFT:  
+            	System.out.println("Presenter: move left");
+            	mModel.moveLeft(false); 
+            	break;
+            default: 
+            	System.out.println("Invalid Key Stroke");
+            	break;
 			}
-			if (indexCMD == SWT.ARROW_DOWN) {				
-				mModel.moveDown(false);
-			}
-			if (indexCMD == SWT.ARROW_RIGHT) {
-				System.out.println("Presenter: right");
-				mModel.moveRight(false);
-			}
-			if (indexCMD == SWT.ARROW_LEFT) {				
-				mModel.moveLeft(false);
-			}
-		}
 		
+		}
 	}
 }

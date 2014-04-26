@@ -56,7 +56,6 @@ public class ModelMaze extends Observable implements Model {
 		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
-		System.out.println(cPosX + "," +cPosY);
 		int newPos = cPosX - 1;
 		if((newPos >=0) &&(mBoard[cPosX][newPos] != -1)){
 			move=true;
