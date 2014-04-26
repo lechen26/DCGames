@@ -32,7 +32,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 		shell = new Shell(display);
 		shell.setLayout(new GridLayout(2,false));
 		shell.setSize(600, 500);
-		shell.setText("Levi and Duvid's 2048 Game");
+		shell.setText("Levi and Duvid's Maze Game");
 	    
 		//Defines menu game
 		initializeMenu();

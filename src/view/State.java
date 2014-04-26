@@ -34,8 +34,8 @@ public class State extends Canvas {
 		
 	}
 	
-	private void changeBackground(int value) {
-		switch(value) {
+	private void changeBackground(int val) {
+		switch(val) {
 		case 0: 
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
 		case 2:

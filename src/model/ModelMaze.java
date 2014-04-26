@@ -184,7 +184,15 @@ public class ModelMaze extends Observable implements Model {
 
 	@Override
 	public void undoBoard() {
-		System.out.println("sd");		
+		if (undoBoards.isEmpty())
+			System.out.println("No Undo moves to perform");
+		else
+		{
+			mBoard=copyBoard(undoBoards.get(undoBoards.size()-1));
+			undoBoards.remove(undoBoards.size()-1);
+		}
+		setChanged();
+		notifyObservers();
 	}
 
 }

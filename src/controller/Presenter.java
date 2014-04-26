@@ -63,7 +63,7 @@ public class Presenter implements Observer{
             	mModel.moveLeft(false); 
             	break;
             default: 
-            	System.out.println("Invalid Key Stroke");
+            	// no key pushed... will wait
             	break;
 			}
 		
