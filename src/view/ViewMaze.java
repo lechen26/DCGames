@@ -138,7 +138,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 	private void initializeBoard() {		
 		board = new BoardMaze(shell, SWT.BORDER);		
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
-		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
+		board.setBackground(display.getSystemColor(SWT.COLOR_WHITE));	
 		shell.forceFocus();
 	}
 	

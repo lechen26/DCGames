@@ -27,7 +27,7 @@ public class BoardMaze extends Canvas {
 		{
 				for(int j=0; j < boardData[0].length; ++j)
 				{
-					states[i][j] = new StateMaze(BoardMaze.this,SWT.BORDER);
+					states[i][j] = new StateMaze(BoardMaze.this,SWT.NONE);
 					states[i][j].setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true));
 					states[i][j].setValue(boardData[i][j]);
 				}	
