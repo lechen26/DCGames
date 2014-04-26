@@ -16,4 +16,16 @@ public class ViewMaze extends Observable implements View {
 		return 0;
 	}
 
+	@Override
+	public void gameOver() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void gameWon() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

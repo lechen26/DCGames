@@ -3,7 +3,7 @@ package model;
 import java.util.Observable;
 
 public class ModelMaze extends Observable implements Model {
-
+	
 	@Override
 	public int[][] getData() {
 		// TODO Auto-generated method stub
@@ -11,25 +11,29 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 	@Override
-	public void moveUp() {
+	public boolean moveUp(boolean quiet) {
+		return false;
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void moveDown() {
+	public boolean moveDown(boolean quiet) {
+		return false;
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void moveLeft() {
+	public boolean moveLeft(boolean quiet) {
+		return false;
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void moveRight() {
+	public boolean moveRight(boolean quiet) {
+		return false;
 		// TODO Auto-generated method stub
 
 	}
