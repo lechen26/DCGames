@@ -65,8 +65,6 @@ public class State extends Canvas {
 			break;
 		case 2048:
 			break;
-		case -1:
-			setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
 	}
 			
 }

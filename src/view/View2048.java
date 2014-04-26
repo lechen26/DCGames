@@ -9,6 +9,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.ShellListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -136,7 +137,8 @@ public class View2048 extends Observable implements View,Runnable {
 	private void initializeBoard() {		
 		board = new Board2048(shell, SWT.BORDER);		
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
-		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
+		Color bgColor = new Color(display, 187, 173, 160);
+		board.setBackground(bgColor);	
 		shell.forceFocus();
 	}
 	
