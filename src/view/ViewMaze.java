@@ -109,28 +109,36 @@ public class ViewMaze extends Observable implements View,Runnable {
 	 * Display game Winning board
 	 */
 	public void gameWon() {
-		board.gameWin();
-		display.dispose();
-		System.exit(0);
-	}
-	
-	/*
-	 * Display Game over board 
-	 */
-	public void gameOver() {				
-		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
-		end.setMessage("You have lost the game. do you want to play another one?");
-		end.setText("gameOver");
+		System.out.println("I came to viewMaze !!! i win !!!");
+		MessageBox end = new MessageBox(shell,SWT.OK);		
+		end.setMessage("Your Are the MazeMaster,game won.");
+		end.setText("GAME WON");
 		int response = end.open();
-		if (response == SWT.NO) {
+		if (response == SWT.OK) {
 			display.dispose();
 			System.exit(0);
 		}
-		if (response == SWT.YES){
-			setUserCommand(2);
-			hasChanged();
-			notifyObservers();			
-		}}
+	}
+	
+//	/* NO NEED FOR GAME OVER IN MAZE
+//	 * Display Game over board 
+//	 */
+	public void gameOver() {				
+//		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
+//		end.setMessage("You have lost the game. do you want to play another one?");
+//		end.setText("gameOver");
+//		int response = end.open();
+//		if (response == SWT.NO) {
+//			display.dispose();
+//			System.exit(0);
+//		}
+//		if (response == SWT.YES){
+//			setUserCommand(2);
+//			hasChanged();
+//			notifyObservers();			
+//		}
+		
+	}
 	
 	/*
 	 * Initialize Board canvas
@@ -143,7 +151,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 	}
 	
 	/*
-	 * Initialize Menu bottons 
+	 * Initialize Menu buttons 
 	 */
 	private void initializeMenu() {	    
 		//Defines Menu
@@ -229,4 +237,6 @@ public class ViewMaze extends Observable implements View,Runnable {
 		saveButton.setText("Save Game");	
 		saveButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
 	}
+
+	
 }

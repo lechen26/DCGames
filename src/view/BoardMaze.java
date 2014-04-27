@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.MessageBox;
 
 
 public class BoardMaze extends Canvas {
@@ -65,16 +66,10 @@ public class BoardMaze extends Canvas {
 	 * 
 	 */
 	public void gameWin() {
-		this.addPaintListener(new PaintListener() {
-	    	 public void paintControl(PaintEvent e) { 	
-	    		 Canvas canvas = (Canvas) e.widget;
-	    		 int canvasX=canvas.getSize().x;
-	    		 int canvasY=canvas.getSize().y;
-	       		 Color c1 = new Color(e.display, 250, 250, 200);
-	    		 e.gc.setBackground(c1);	    		 
-	    		 e.gc.fillRectangle(0, 0, canvasX/4, canvasY/4);	    		 	    		 	             
-	    	 }
-	     });	  
+					
+		MessageBox end = new MessageBox(getShell(),SWT.OK);		
+		end.setMessage("Your Are the MazeMaster,game won.");
+		end.setText("GAME WON");
 	}
 	
 	/*
