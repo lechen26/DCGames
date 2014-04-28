@@ -45,7 +45,7 @@ public class ModelMaze extends Observable implements Model {
 				if (mBoard[i][j] == 1 )
 					return new Point(i,j);
 
-		return null; // din't find the mouse
+		return (Point) null; // din't find the mouse
 	}
 	public Point getExitPoint(){
 		for (int i=0;i<mBoard[0].length;i++)
@@ -94,6 +94,8 @@ public class ModelMaze extends Observable implements Model {
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
 		}
+		int ePosX = getExitPoint().x;
+		int ePosY = getExitPoint().y;
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX + 1;
@@ -104,9 +106,13 @@ public class ModelMaze extends Observable implements Model {
 				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
+			setChanged();
+			notifyObservers();
+			if ((newPos == ePosX) && (cPosY == ePosY)){
+				setChanged();
+				notifyObservers("gameWon");
+			}
 		}
-		setChanged();
-		notifyObservers();
 		return move;
 	}
 
@@ -116,6 +122,8 @@ public class ModelMaze extends Observable implements Model {
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
 		}
+		int ePosX = getExitPoint().x;
+		int ePosY = getExitPoint().y;
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY - 1;
@@ -126,9 +134,13 @@ public class ModelMaze extends Observable implements Model {
 				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
+			setChanged();
+			notifyObservers();
+			if ((newPos == ePosY) && (cPosX == ePosX)){
+				setChanged();
+				notifyObservers("gameWon");
+			}
 		}
-		setChanged();
-		notifyObservers();
 		return move;
 	}
 
@@ -138,6 +150,8 @@ public class ModelMaze extends Observable implements Model {
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
 		}
+		int ePosX = getExitPoint().x;
+		int ePosY = getExitPoint().y;
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY + 1;
@@ -148,9 +162,13 @@ public class ModelMaze extends Observable implements Model {
 				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
+			setChanged();
+			notifyObservers();
+			if ((newPos == ePosY) && (cPosX == ePosX)){
+				setChanged();
+				notifyObservers("gameWon");
+			}
 		}
-		setChanged();
-		notifyObservers();
 		return move;
 	}
 
