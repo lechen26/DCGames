@@ -124,20 +124,6 @@ public class ViewMaze extends Observable implements View,Runnable {
 //	 * Display Game over board 
 //	 */
 	public void gameOver() {				
-//		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
-//		end.setMessage("You have lost the game. do you want to play another one?");
-//		end.setText("gameOver");
-//		int response = end.open();
-//		if (response == SWT.NO) {
-//			display.dispose();
-//			System.exit(0);
-//		}
-//		if (response == SWT.YES){
-//			setUserCommand(2);
-//			hasChanged();
-//			notifyObservers();			
-//		}
-		
 	}
 	
 	/*
