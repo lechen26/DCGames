@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.Observable;
 import java.util.Random;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
+
 public class ModelMaze extends Observable implements Model {
 
 	int[][] mBoard;	
@@ -14,7 +17,7 @@ public class ModelMaze extends Observable implements Model {
 	int N;
 
 	public ModelMaze() {
-		mBoard=new int[4][4];
+		mBoard=new int[16][16];
 	}
 	
 	public int getM() {
@@ -42,7 +45,15 @@ public class ModelMaze extends Observable implements Model {
 				if (mBoard[i][j] == 1 )
 					return new Point(i,j);
 
-		return null; // din't find the mouse
+		return (Point) null; // din't find the mouse
+	}
+	public Point getExitPoint(){
+		for (int i=0;i<mBoard[0].length;i++)
+			for (int j=0;j<mBoard.length;j++)
+				if (mBoard[i][j] == 2)
+					return new Point(i,j);
+		
+		return (Point) null ; // didnt find the exit point
 	}
 
 	/*
@@ -54,21 +65,28 @@ public class ModelMaze extends Observable implements Model {
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
 		}
+		int ePosX = getExitPoint().x;
+		int ePosY = getExitPoint().y;
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX - 1;
-		if((newPos >=0) && (mBoard[cPosX][newPos] != -1)){
+		if((newPos >= 0) && (mBoard[newPos][cPosY] != -1)){
 			move=true;
 			if (!quiet)
 			{
-				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
+				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY];
 				mBoard[cPosX][cPosY] = 0 ;
 			}
+			setChanged();
+			notifyObservers();
+			if ((newPos == ePosX) && (cPosY == ePosY)){
+				setChanged();
+				notifyObservers("gameWon");
+			}
 		}
-		setChanged();
-		notifyObservers();
 		return move;
-	}
+}
+
 
 	@Override
 	public boolean moveDown(boolean quiet) {
@@ -76,19 +94,25 @@ public class ModelMaze extends Observable implements Model {
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
 		}
+		int ePosX = getExitPoint().x;
+		int ePosY = getExitPoint().y;
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX + 1;
-		if((newPos < mBoard.length) &&(mBoard[cPosX][newPos] != -1)){
+		if((newPos < mBoard.length) && (mBoard[newPos][cPosY] != -1)){
 			move=true;
 			if (!quiet)
 			{
 				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
+			setChanged();
+			notifyObservers();
+			if ((newPos == ePosX) && (cPosY == ePosY)){
+				setChanged();
+				notifyObservers("gameWon");
+			}
 		}
-		setChanged();
-		notifyObservers();
 		return move;
 	}
 
@@ -98,19 +122,25 @@ public class ModelMaze extends Observable implements Model {
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
 		}
+		int ePosX = getExitPoint().x;
+		int ePosY = getExitPoint().y;
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY - 1;
-		if((newPos >=0 ) &&(mBoard[cPosX][newPos] != -1)){
+		if((newPos >= 0 ) &&(mBoard[cPosX][newPos] != -1)){
 			move=true;
 			if (!quiet)
 			{
 				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
+			setChanged();
+			notifyObservers();
+			if ((newPos == ePosY) && (cPosX == ePosX)){
+				setChanged();
+				notifyObservers("gameWon");
+			}
 		}
-		setChanged();
-		notifyObservers();
 		return move;
 	}
 
@@ -120,6 +150,8 @@ public class ModelMaze extends Observable implements Model {
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
 		}
+		int ePosX = getExitPoint().x;
+		int ePosY = getExitPoint().y;
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY + 1;
@@ -130,9 +162,13 @@ public class ModelMaze extends Observable implements Model {
 				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 				mBoard[cPosX][cPosY] = 0 ;
 			}
+			setChanged();
+			notifyObservers();
+			if ((newPos == ePosY) && (cPosX == ePosX)){
+				setChanged();
+				notifyObservers("gameWon");
+			}
 		}
-		setChanged();
-		notifyObservers();
 		return move;
 	}
 
@@ -140,15 +176,25 @@ public class ModelMaze extends Observable implements Model {
 	// initialize the Maze Board
 	@Override
 	public void initializeBoard() {
-		createEmptyBoard(4,4);
-		mBoard[0][2]=1;
-		mBoard[1][3]=-1;
-//		int[][] b =  {
-//	    		{ 2 , 0 , -1 , -1 },
-//	    		{ 0 , -1 , 0  , 0 },
-//	    		{ 0 , 0 , -1 , 0 },
-//	    		{ 0 , -1 , 0 , 1  },
-//	    };			
+		createEmptyBoard(16,16);		
+		int[][] b = { { 2 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //1
+				    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //2
+				    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //3
+				    { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //4
+				    { -1 , -1 , -1 , -1 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //5
+				    { -1 , 0 , 0 , 0 , -1 , 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //6 
+				    { -1 , 0 , 0 , 0 , -1 , 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //7
+				    { -1 , 0 , 0 , -1 , -1 , 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //8
+				    { -1 , 0 , 0 , -1 , 0 , 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //9
+				    { -1 , 0 , 0 , -1 , 0 , 0 , 0 , -1 , -1 , -1 ,-1 , -1 , -1 , 0 , 0 , 0 }, //10
+				    { -1 , 0 , 0 , -1 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , -1 , 0 , 0 }, //11
+				    { -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , -1 , 0 , 0 }, //12
+				    { -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , -1 , 0 , 0 }, //13
+				    { -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , -1 , -1 , -1 }, //14
+				    { -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0}, //15
+				    { -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , 1 }, //16
+					};
+		mBoard = b;
 		setChanged();
 		notifyObservers();
 
@@ -182,7 +228,7 @@ public class ModelMaze extends Observable implements Model {
 	    }
 	    return copy;
 	}
-
+	
 	@Override
 	public void undoBoard() {
 		if (undoBoards.isEmpty())
@@ -195,6 +241,17 @@ public class ModelMaze extends Observable implements Model {
 		setChanged();
 		notifyObservers();
 	}
+	
+	public boolean isGameWon(int x, int y) 
+	{
+		int cPosX = x;
+		int cPosY = y;
+		if (mBoard[cPosX][cPosY] == 2 )
+			return true;
+		else
+			return false;
+	}
+	
 
 	@Override
 	public int getCurrentScore() {

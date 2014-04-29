@@ -10,17 +10,35 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.MessageBox;
 
 
 public class BoardMaze extends Canvas {
 	
 	int[][] boardData;
-	final int N=4;
+	final int N=16;
 	StateMaze states[][];
 	
 	public BoardMaze(Composite parent, int style) {
 		super(parent,style);				
-		boardData = new int[][] {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};		
+		//boardData = new int[][] {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};		
+		boardData = new int[][] { { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //1
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //2
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //3
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //4
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //5
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //6 
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //7
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //8
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //9
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //10
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //11
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //12
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //13
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //14
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //15
+								  { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //16
+															};
 		setLayout(new GridLayout(N,true));
 		states = new StateMaze[N][N];
 		for(int i=0;i< boardData.length; ++i)
@@ -65,16 +83,10 @@ public class BoardMaze extends Canvas {
 	 * 
 	 */
 	public void gameWin() {
-		this.addPaintListener(new PaintListener() {
-	    	 public void paintControl(PaintEvent e) { 	
-	    		 Canvas canvas = (Canvas) e.widget;
-	    		 int canvasX=canvas.getSize().x;
-	    		 int canvasY=canvas.getSize().y;
-	       		 Color c1 = new Color(e.display, 250, 250, 200);
-	    		 e.gc.setBackground(c1);	    		 
-	    		 e.gc.fillRectangle(0, 0, canvasX/4, canvasY/4);	    		 	    		 	             
-	    	 }
-	     });	  
+					
+		MessageBox end = new MessageBox(getShell(),SWT.OK);		
+		end.setMessage("Your Are the MazeMaster,game won.");
+		end.setText("GAME WON");
 	}
 	
 	/*

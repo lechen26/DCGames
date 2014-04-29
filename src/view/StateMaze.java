@@ -22,7 +22,7 @@ public class StateMaze extends Canvas implements State {
 				int stringWidth = e.gc.getFontMetrics().getAverageCharWidth();
 				int x = (getSize().x)/2  - (("" + value).length())*stringWidth/2;
 				int y = (getSize().y)/2 - (("" + value).length())*stringWidth/2;
-				e.gc.drawString("" + value, x, y);				
+				//e.gc.drawString("" + value, x, y);				
 			}			
 		});
 	}
@@ -46,6 +46,10 @@ public class StateMaze extends Canvas implements State {
 			break;
 		case 1:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_GREEN));
+			break;
+		case 2:
+			// this is the winning state !! :)
+			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));
 			break;
 	}
 			
