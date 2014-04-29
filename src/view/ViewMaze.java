@@ -28,6 +28,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 	int pressed=0;
 	int horizental=0;
 	int vertical=0;
+	Label score;
 	
 	public ViewMaze(int rows, int cols) {
 		this.rows=rows;
@@ -46,7 +47,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 		initializeMenu();
 		
 	    //Defines the Score label
-	    Label score = new Label(shell, SWT.BORDER);
+	    score = new Label(shell, SWT.BORDER);
 		score.setText("Score:  " + scr);
 		
 		
@@ -146,31 +147,30 @@ public class ViewMaze extends Observable implements View,Runnable {
 		this.userCommand = command;
 	}
 	/*
-	 * Display game Winning board
 	 */
-	public void gameWon() {
-		//board.gameWon();
-		display.dispose();
-		System.exit(0);
+	public void gameOver() {
 	}
 	
 	/*
 	 * Display Game over board 
 	 */
-	public void gameOver() {				
+	public void gameWom() {				
+		System.out.println("I came to viewMaze !!! i win !!!");
 		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
-		end.setMessage("You have lost the game. do you want to play another one?");
-		end.setText("gameOver");
+		end.setMessage("Your Are the MazeMaster,game won. do you wanna play another one?");
+		end.setText("GAME WON");
 		int response = end.open();
 		if (response == SWT.NO) {
 			display.dispose();
 			System.exit(0);
 		}
-		if (response == SWT.YES){
+		else
+		{
 			setUserCommand(2);
-			hasChanged();
-			notifyObservers();			
-		}}
+			setChanged();
+			notifyObservers();
+		}
+	}
 	
 	/*
 	 * Initialize Board canvas
@@ -183,7 +183,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 	}
 	
 	/*
-	 * Initialize Menu bottons 
+	 * Initialize Menu buttons 
 	 */
 	private void initializeMenu() {	    
 		//Defines Menu
@@ -278,6 +278,11 @@ public class ViewMaze extends Observable implements View,Runnable {
 
 	@Override
 	public void displayScore(int scr) {
+		score.setText("Score " + scr);
+	}
+
+	@Override
+	public void gameWon() {
 		// TODO Auto-generated method stub
 		
 	}
