@@ -8,7 +8,6 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -26,6 +25,9 @@ public class ViewMaze extends Observable implements View,Runnable {
 	Board board;	
 	int userCommand=0;
 	int rows,cols;
+	int pressed=0;
+	int horizental=0;
+	int vertical=0;
 	
 	public ViewMaze(int rows, int cols) {
 		this.rows=rows;
@@ -56,19 +58,52 @@ public class ViewMaze extends Observable implements View,Runnable {
 		
 		//Defines Key Listener
 		shell.forceFocus();
-		shell.addKeyListener(new KeyListener() {			
+		shell.addKeyListener(new KeyListener() {
+			
 			@Override
 			public void keyReleased(KeyEvent e) {
-			}			
+				pressed--;
+				setChanged();
+				userCommand=e.keyCode;		
+				if (pressed == 0) {
+					notifyObservers("" + horizental + "," + vertical);
+					horizental=0;
+					vertical=0;
+				}
+			}
+			
 			@Override
 			public void keyPressed(KeyEvent e) {			
-				if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {
-					System.out.println("presses");
-					userCommand=e.keyCode;
-					setChanged();
-					notifyObservers();
-					shell.forceFocus();
-				}				
+				switch (e.keyCode) {
+					case SWT.ARROW_UP:
+					{		
+						System.out.println("up pressed");
+						vertical++;
+						pressed++;
+						break;
+					}
+					case SWT.ARROW_DOWN:
+					{	
+						System.out.println("down pressed");
+						vertical--;
+						pressed++;
+						break;
+					}
+					case SWT.ARROW_RIGHT:
+					{					
+						System.out.println("right pressed");
+						horizental++;
+						pressed++;
+						break;
+					}
+					case SWT.ARROW_LEFT:
+					{				
+						System.out.println("left pressed");
+						horizental--;
+						pressed++;
+						break;
+					}
+				}		
 			}
 		});		
 	    shell.open();
@@ -98,7 +133,6 @@ public class ViewMaze extends Observable implements View,Runnable {
 		board.redraw();
 				
 	}
-	
 
 	/*
 	 *  Get user command

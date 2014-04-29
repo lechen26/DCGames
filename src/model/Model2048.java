@@ -19,6 +19,7 @@ public class Model2048 extends Observable implements Model {
 	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
 	//HashSet<Integer,int[][]> undoBoards = new HashSet<Integer,int[][]>();
 	int score=0;
+	int free=-2;
 	
 	public Model2048(int rows,int cols) {		
 		mBoard = new int[rows][cols];		
@@ -65,14 +66,14 @@ public class Model2048 extends Observable implements Model {
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
 			for(int j=mBoard[0].length-1;j>0;j--){
 				int pos = j-1;
-				if(mBoard[i][pos] != 0){
+				if(mBoard[i][pos] != free){
 					for(int k=j;k<mBoard[0].length;k++){ 
-						if(mBoard[i][k] == 0){
+						if(mBoard[i][k] == free){
 							move=true;
 							if (!quiet)
 							{
 								mBoard[i][k] = mBoard[i][pos];
-								mBoard[i][pos] = 0;
+								mBoard[i][pos] = free;
 								pos++;
 							}
 						}else{						
@@ -82,7 +83,7 @@ public class Model2048 extends Observable implements Model {
 								{									
 									score+=mBoard[i][pos];
 									mBoard[i][k] = mBoard[i][pos] * 2;
-									mBoard[i][pos] = 0;
+									mBoard[i][pos] = free;
 									merged.add(k);																		
 								}
 							}
@@ -124,14 +125,14 @@ public class Model2048 extends Observable implements Model {
 			ArrayList<Integer> merged = new ArrayList<Integer>();
 			for(int j=0;j<mBoard[0].length-1;j++){
 				int pos = j+1;
-				if(mBoard[i][pos] != 0){				
+				if(mBoard[i][pos] != free){				
 					for(int k=j;k>=0;k--){ 
-						if(mBoard[i][k] == 0){
+						if(mBoard[i][k] == free){
 							move=true;
 							if (!quiet)
 							{
 								mBoard[i][k] = mBoard[i][pos];
-								mBoard[i][pos] = 0;
+								mBoard[i][pos] = free;
 								pos--;
 							}
 						}
@@ -142,7 +143,7 @@ public class Model2048 extends Observable implements Model {
 								{									
 									score+=mBoard[i][pos];
 									mBoard[i][k] = mBoard[i][pos] * 2;
-									mBoard[i][pos] = 0;
+									mBoard[i][pos] = free;
 									merged.add(k);																		
 								}
 							}
@@ -182,14 +183,14 @@ public class Model2048 extends Observable implements Model {
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
 				for(int j=0;j<mBoard.length-1;j++){
 					int pos = j+1;
-					if(mBoard[pos][i] != 0){				
+					if(mBoard[pos][i] != free){				
 						for(int k=j;k>=0;k--){
-							if(mBoard[k][i] == 0){
+							if(mBoard[k][i] == free){
 								move=true;
 								if(!quiet)
 								{
 									mBoard[k][i] = mBoard[pos][i];
-									mBoard[pos][i] = 0;
+									mBoard[pos][i] = free;
 									pos--;
 								}
 							}else{
@@ -199,7 +200,7 @@ public class Model2048 extends Observable implements Model {
 									{										
 										score+=mBoard[pos][i];
 										mBoard[k][i] = mBoard[pos][i] * 2;
-										mBoard[pos][i] = 0;
+										mBoard[pos][i] = free;
 										merged.add(k);																			
 									}
 									
@@ -241,14 +242,14 @@ public class Model2048 extends Observable implements Model {
 			ArrayList<Integer> merged = new ArrayList<Integer>();
 			for(int j=mBoard.length-1;j>0;j--){
 				int pos = j-1;
-				if(mBoard[pos][i] != 0){				
+				if(mBoard[pos][i] != free){				
 					for(int k=j;k<mBoard.length;k++){
-						if(mBoard[k][i] == 0){
+						if(mBoard[k][i] == free){
 							move=true;
 							if (!quiet)
 							{
 								mBoard[k][i] = mBoard[pos][i];
-								mBoard[pos][i] = 0;	
+								mBoard[pos][i] = free;	
 								pos++;
 							}
 						}else{
@@ -258,7 +259,7 @@ public class Model2048 extends Observable implements Model {
 								{									
 									score+=mBoard[pos][i];
 									mBoard[k][i] = mBoard[pos][i] * 2;
-									mBoard[pos][i] = 0;
+									mBoard[pos][i] = free;
 									merged.add(k);																	
 								}
 							}
@@ -303,7 +304,7 @@ public class Model2048 extends Observable implements Model {
 	private void createEmptyBoard() {
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j){				
-				mBoard[i][j]=0;
+				mBoard[i][j]=free;
 				//Create state with 0?
 			}
 		}
@@ -316,14 +317,14 @@ public class Model2048 extends Observable implements Model {
 	 * Output: returns a list of Points
 	 */
 	private ArrayList<Point> getFreeStates() {
-		ArrayList<Point> free = new ArrayList<Point>();
+		ArrayList<Point> freeStates = new ArrayList<Point>();
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j){				
-				if (mBoard[i][j] == 0)
-					free.add(new Point(i,j));
+				if (mBoard[i][j] == free)
+					freeStates.add(new Point(i,j));
 			}
 		}
-		return free;
+		return freeStates;
 	}
 	
 	/*
@@ -334,12 +335,12 @@ public class Model2048 extends Observable implements Model {
 		int freeSize = getFreeStates().size();
 		if (freeSize != 0)
 		{
-			ArrayList<Point> free = getFreeStates();			
-			int cellIndex = new Random().nextInt(free.size());
-			int cellX = free.get(cellIndex).x;
-			int cellY = free.get(cellIndex).y;		
+			ArrayList<Point> freeStates = getFreeStates();			
+			int cellIndex = new Random().nextInt(freeStates.size());
+			int cellX = freeStates.get(cellIndex).x;
+			int cellY = freeStates.get(cellIndex).y;		
 			mBoard[cellX][cellY]=generateScore();
-			free.remove(cellIndex);		
+			freeStates.remove(cellIndex);		
 		}
 	}
 	
@@ -349,15 +350,15 @@ public class Model2048 extends Observable implements Model {
 	public void initializeBoard() {			
 		initializeScore();
 		createEmptyBoard();
-		ArrayList<Point> free = getFreeStates();			
+		ArrayList<Point> freeStates = getFreeStates();			
 		for(int i=0;i<2;++i)
 		{
-			int cellIndex = new Random().nextInt(free.size());
-			int cellX = free.get(cellIndex).x;
-			int cellY = free.get(cellIndex).y;
+			int cellIndex = new Random().nextInt(freeStates.size());
+			int cellX = freeStates.get(cellIndex).x;
+			int cellY = freeStates.get(cellIndex).y;
 			int score=generateScore();
 			mBoard[cellX][cellY]=score;
-			free.remove(cellIndex);
+			freeStates.remove(cellIndex);
 		}
 		//mBoard = new int[][]{{2,4,16,32},{4,8,32,16},{2,16,64,128},{16,8,32,512}};
 		setChanged();
@@ -477,27 +478,19 @@ public class Model2048 extends Observable implements Model {
 
 	@Override
 	public void moveDiagonalRightUp(boolean b) {
-		System.out.println("Moved digonalRightUp");
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void moveDiagonalRightDown(boolean b) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void moveDiagonalLeftUp(boolean b) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public void moveDiagonalLeftDown(boolean b) {
-		// TODO Auto-generated method stub
-		
+	public void moveDiagonalLeftDown(boolean b) {	
 	}
 
 }

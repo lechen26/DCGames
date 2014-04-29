@@ -44,63 +44,59 @@ public class Presenter implements Observer{
 				ui.displayScore(scr);
 			}
 		}
-		if (o == ui){			
+		if (o == ui){
+			int indexCMD = ui.getUserCommand();			
 			if (arg != null)
 			{
 				String[] values = ((String) arg ).split(",");				
 				horizental=Integer.parseInt(values[0]);
 				vertical=Integer.parseInt(values[1]);								
-			}
-			int indexCMD = ui.getUserCommand();
-				//Check Diagonal moves
-				if (horizental > 0 && vertical > 0)
-					mModel.moveDiagonalRightUp(false);			
-				else if (horizental > 0  && vertical < 0 )
-					mModel.moveDiagonalRightDown(false);
-				else if (horizental < 0 && vertical > 0 )
-					mModel.moveDiagonalLeftUp(false);
-				else if (horizental < 0 && vertical < 0)
-					mModel.moveDiagonalLeftDown(false);
-				
-				else
-				{
-					switch (indexCMD) {
-					case 0 :
-						mModel.initializeBoard();
-						break;
-					case 2:
-						mModel.initializeBoard();
-						break;
-					case 1 :
-						mModel.undoBoard();
-						break;
-					case 3:
-						mModel.loadGame();
-						break;
-					case 4:
-						mModel.saveGame();
-						break;
-		            case SWT.ARROW_UP:  
-		            	System.out.println("Presenter: move up");
-		            	mModel.moveUp(false);
-		            	break;
-		            case SWT.ARROW_DOWN:  
-		            	System.out.println("Presenter: move down");
-		            	mModel.moveDown(false); 
-		            	break;
-		            case SWT.ARROW_RIGHT: 
-		            	System.out.println("Presenter: move right");
-		            	mModel.moveRight(false); 
-		            	break;
-		            case SWT.ARROW_LEFT:  
-		            	System.out.println("Presenter: move left");
-		            	mModel.moveLeft(false); 
-		            	break;
-		            default: 
-		            	// no key pushed... will wait
+			}			
+			
+			//Check Diagonal moves
+			if (horizental > 0 && vertical > 0)
+				mModel.moveDiagonalRightUp(false);			
+			else if (horizental > 0  && vertical < 0 )
+				mModel.moveDiagonalRightDown(false);
+			else if (horizental < 0 && vertical > 0 )
+				mModel.moveDiagonalLeftUp(false);
+			else if (horizental < 0 && vertical < 0)
+				mModel.moveDiagonalLeftDown(false);			
+			else
+			{
+				switch (indexCMD) {
+				case 0 :
+					mModel.initializeBoard();
+					break;
+				case 2:
+					mModel.initializeBoard();
+					break;
+				case 1 :
+					mModel.undoBoard();
+					break;
+				case 3:
+					mModel.loadGame();
+					break;
+				case 4:
+					mModel.saveGame();
+					break;
+	            case SWT.ARROW_UP:  	        
+	            	mModel.moveUp(false);
 	            	break;
-					}
-		}
+	            case SWT.ARROW_DOWN:  	            	
+	            	mModel.moveDown(false); 
+	            	break;
+	            case SWT.ARROW_RIGHT: 	            	
+	            	mModel.moveRight(false); 
+	            	break;
+	            case SWT.ARROW_LEFT:  	            	
+	            	mModel.moveLeft(false); 
+	            	break;
+	            default: 
+	            	// no key pushed... will wait
+            	break;
+				}
+			}
 			
 		}
 	}

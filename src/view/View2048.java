@@ -1,6 +1,4 @@
 package view;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Observable;
 
 import org.eclipse.swt.SWT;
@@ -27,7 +25,6 @@ public class View2048 extends Observable implements View,Runnable {
 	Label score;	
 	int userCommand=0;
 	int rows,cols;
-	int horizental=0, vertical=0;
 	
 	public View2048(int rows,int cols) {
 		this.rows=rows;
@@ -57,81 +54,21 @@ public class View2048 extends Observable implements View,Runnable {
 		//Defines Key Listener
 		shell.forceFocus();
 		shell.addKeyListener(new KeyListener() {						
+			
 			@Override
-			public void keyReleased(KeyEvent e) {
-				if (e.keyCode == SWT.ARROW_UP)
-				{
-					vertical--;
-					System.out.println("Up released on view");
-				}
-				else if (e.keyCode == SWT.ARROW_DOWN)
-				{
-					System.out.println("Down released on view");
-					vertical++;
-				}
-				else if (e.keyCode == SWT.ARROW_RIGHT)
-				{
-					System.out.println("Right released on view");
-					horizental--;
-				}
-				else if (e.keyCode == SWT.ARROW_LEFT)
-				{
-					System.out.println("Left released on view");
-					horizental++;
-				}
-userCommand=e.keyCode;
-				
-				setChanged();
-				System.out.println("Npotifying");
-				notifyObservers("" + horizental + "," + vertical);
-			}			
+			public void keyReleased(KeyEvent e) {				
+			}
+			
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.keyCode == SWT.ARROW_UP)
-				{
-					System.out.println("Up pressed on view");
-					vertical++;
-				}
-				else if (e.keyCode == SWT.ARROW_DOWN)
-				{
-					System.out.println("Down pressed on view");
-					vertical--;
-				}
-				else if (e.keyCode == SWT.ARROW_RIGHT)
-				{
-					System.out.println("Right pressed on view");
-					horizental++;
-				}
-					
-				else if (e.keyCode == SWT.ARROW_LEFT)
-				{
-					System.out.println("Left pressed on view");
-					horizental--;
-				}
-				
-				
-				/*
-				if (horizental == 0 | vertical == 0)
-				{
-					System.out.println("No diagonal!!!!!!!!!!!!!");
-					userCommand=e.keyCode;
-				
-				}
-				else
-				{
-					System.out.println("State is. horizental=" + horizental + " and vertical=" + vertical);
-				
-				}*/
-			}
-			/*	if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {					
+				if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {					
 					userCommand=e.keyCode;
 					setChanged();
 					notifyObservers();
 					shell.forceFocus();
 				}			
-			}*/
-			
-		});	
+			}			
+		});			
 	    shell.open();
 	}   
 	

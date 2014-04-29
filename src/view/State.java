@@ -39,7 +39,7 @@ public class State extends Canvas {
 	
 	public void changeBackground(int val) {
 		switch(val) {
-		case 0: 
+		case -2: 
 			Color bgColor0 = new Color(getDisplay(),238, 228, 218);
 			setBackground(bgColor0);
 			break;
@@ -87,12 +87,15 @@ public class State extends Canvas {
 			Color bgColor2048 = new Color(getDisplay(),237, 194, 46);
 			setBackground(bgColor2048);	
 			break;
+		case 0:
+			setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			break;		
 		case -1:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
 			break;
 		case 1:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_GREEN));
-			break;
+			break;		
 		}
 	}
 	

@@ -6,8 +6,8 @@ import view.ViewMaze;
 public class MainMaze {
 
 	public static void main(String[] args) {
-		ModelMaze m = new ModelMaze(30,30);
-		ViewMaze ui = new ViewMaze(30,30);
+		ModelMaze m = new ModelMaze(10,10);
+		ViewMaze ui = new ViewMaze(10,10);
 		Presenter p = new Presenter(m,ui);
 		m.addObserver(p);
 		ui.addObserver(p);			
