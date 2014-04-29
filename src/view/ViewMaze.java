@@ -23,8 +23,14 @@ public class ViewMaze extends Observable implements View,Runnable {
 
 	Display display;
 	Shell shell;
-	BoardMaze board;	
+	Board board;	
 	int userCommand=0;
+	int rows,cols;
+	
+	public ViewMaze(int rows, int cols) {
+		this.rows=rows;
+		this.cols=cols;
+	}
 	
 	private void initComponents(){
 		int scr=0;
@@ -109,7 +115,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 	 * Display game Winning board
 	 */
 	public void gameWon() {
-		board.gameWin();
+		//board.gameWon();
 		display.dispose();
 		System.exit(0);
 	}
@@ -136,7 +142,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 	 * Initialize Board canvas
 	 */
 	private void initializeBoard() {		
-		board = new BoardMaze(shell, SWT.BORDER);		
+		board = new Board(shell, SWT.BORDER,rows,cols,SWT.NONE);		
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
 		board.setBackground(display.getSystemColor(SWT.COLOR_WHITE));	
 		shell.forceFocus();

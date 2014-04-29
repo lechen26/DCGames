@@ -1,6 +1,13 @@
 package model;
 
 import java.awt.Point;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
@@ -8,11 +15,13 @@ import java.util.Random;
 
 public class Model2048 extends Observable implements Model {
 	
-	int[][] mBoard;		
+	int[][] mBoard;	
 	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
+	//HashSet<Integer,int[][]> undoBoards = new HashSet<Integer,int[][]>();
+	int score=0;
 	
-	public Model2048() {		
-		mBoard = new int[4][4];		
+	public Model2048(int rows,int cols) {		
+		mBoard = new int[rows][cols];		
 	}
 	
 	@Override
@@ -34,7 +43,7 @@ public class Model2048 extends Observable implements Model {
 		else
 		{
 			mBoard=copyBoard(undoBoards.get(undoBoards.size()-1));
-			undoBoards.remove(undoBoards.size()-1);
+			undoBoards.remove(undoBoards.size()-1);			
 			setChanged();
 			notifyObservers();
 		}
@@ -46,10 +55,12 @@ public class Model2048 extends Observable implements Model {
 	 Output: boolean - if we have possible movements or not.
 	 */
 	public boolean moveRight(boolean quiet){
+		System.out.println("Moved right on model");
 		boolean move=false;
 		//save board before operation for undo purposes
 		if (!quiet)
-			undoBoards.add(copyBoard(mBoard));					
+			undoBoards.add(copyBoard(mBoard));
+			//undoBoards.put(score,copyBoard(mBoard));		
 		for(int i=0;i<mBoard.length;i++){		
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
 			for(int j=mBoard[0].length-1;j>0;j--){
@@ -68,10 +79,11 @@ public class Model2048 extends Observable implements Model {
 							if(mBoard[i][pos] == mBoard[i][k] && !merged.contains(k)){
 								move=true;
 								if(!quiet)
-								{
+								{									
+									score+=mBoard[i][pos];
 									mBoard[i][k] = mBoard[i][pos] * 2;
 									mBoard[i][pos] = 0;
-									merged.add(k);
+									merged.add(k);																		
 								}
 							}
 							break;
@@ -106,6 +118,7 @@ public class Model2048 extends Observable implements Model {
 		//save board before operation for undo purposes
 		if (!quiet)
 			undoBoards.add(copyBoard(mBoard));
+			//undoBoards.put(score,copyBoard(mBoard));
 		boolean move=false;	
 		for(int i=0;i<mBoard.length;i++){
 			ArrayList<Integer> merged = new ArrayList<Integer>();
@@ -126,10 +139,11 @@ public class Model2048 extends Observable implements Model {
 							if(mBoard[i][pos] == mBoard[i][k] && !merged.contains(k)){
 								move=true;
 								if (!quiet)
-								{
+								{									
+									score+=mBoard[i][pos];
 									mBoard[i][k] = mBoard[i][pos] * 2;
 									mBoard[i][pos] = 0;
-									merged.add(k);
+									merged.add(k);																		
 								}
 							}
 							break;
@@ -162,6 +176,7 @@ public class Model2048 extends Observable implements Model {
 		//save board before operation for undo purposes	
 		if (!quiet)
 			undoBoards.add(copyBoard(mBoard));
+			//undoBoards.put(score,copyBoard(mBoard));
 		boolean move=false;	
 		for(int i=0;i<mBoard[0].length;i++){
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
@@ -181,10 +196,11 @@ public class Model2048 extends Observable implements Model {
 								if(mBoard[pos][i] == mBoard[k][i] && !merged.contains(k)){
 									move=true;
 									if (!quiet)
-									{
+									{										
+										score+=mBoard[pos][i];
 										mBoard[k][i] = mBoard[pos][i] * 2;
 										mBoard[pos][i] = 0;
-										merged.add(k);
+										merged.add(k);																			
 									}
 									
 								}
@@ -219,6 +235,7 @@ public class Model2048 extends Observable implements Model {
 		//save board before operation for undo purposes
 		if (! quiet)
 			undoBoards.add(copyBoard(mBoard));
+			//undoBoards.put(score,copyBoard(mBoard));
 		boolean move=false;
 		for(int i=0;i<mBoard[0].length;i++){
 			ArrayList<Integer> merged = new ArrayList<Integer>();
@@ -238,10 +255,11 @@ public class Model2048 extends Observable implements Model {
 							if(mBoard[pos][i] == mBoard[k][i] && !merged.contains(k)){
 								move=true;
 								if (!quiet)
-								{
+								{									
+									score+=mBoard[pos][i];
 									mBoard[k][i] = mBoard[pos][i] * 2;
 									mBoard[pos][i] = 0;
-									merged.add(k);
+									merged.add(k);																	
 								}
 							}
 							break;
@@ -290,6 +308,7 @@ public class Model2048 extends Observable implements Model {
 			}
 		}
 		undoBoards = new ArrayList<int[][]>();
+		//undoBoards = new HashMap<Integer,int[][]>();
 	}
 	
 	/*
@@ -327,7 +346,8 @@ public class Model2048 extends Observable implements Model {
 	/*
 	 * Initialize Board: all board with 0 besides 2 cells with random score(2/4)
 	 */
-	public void initializeBoard() {				
+	public void initializeBoard() {			
+		initializeScore();
 		createEmptyBoard();
 		ArrayList<Point> free = getFreeStates();			
 		for(int i=0;i<2;++i)
@@ -359,15 +379,8 @@ public class Model2048 extends Observable implements Model {
 	/*
 	 * Returns user Score (The maximum value on the board)
 	 */
-	public int getCurrentScore() {
-		int max=2;
-		for(int i=0;i<mBoard.length;++i){
-			for(int j=0;j<mBoard[0].length;++j) {
-				if (mBoard[i][j] > max)
-					max=mBoard[i][j];
-			}
-		}
-		return max;		
+	public int getScore() {
+		return this.score;
 	}
 	
 	/*
@@ -408,4 +421,83 @@ public class Model2048 extends Observable implements Model {
 		}
 		return false;
 	}
+	
+	private void initializeScore() {
+		this.score=0;
+	}
+	
+	public void loadGame() { 
+		ObjectInputStream in = null;
+		try {
+			in = new ObjectInputStream(new FileInputStream("resources/array.txt"));
+		} catch (FileNotFoundException e) {			// 
+			System.out.println("cannot Load the Game. source file does not exist");
+		} catch (IOException e) { 
+			System.out.println("I/O error while loading the source file. Error=" + e.getMessage());
+		}
+		try {
+			mBoard = (int[][]) in.readObject();
+		} catch (IOException e) {
+			System.out.println("I/O error while reading Object from file");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		setChanged();
+		notifyObservers();
+		try {
+			in.close();
+		} catch (IOException e) {
+			System.out.println("Unable to close File.Error=" + e.getMessage());			
+		}
+	}
+	
+	public void saveGame() {
+		ObjectOutputStream out=null;
+		File outFile = new File("resources/array.txt");
+		if (!outFile.exists())
+			try {
+				out = new ObjectOutputStream(new FileOutputStream("array.txt"));
+			} catch (FileNotFoundException e) {
+				System.out.println("cannot Save the Game. cannot create output file");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		try {
+			out.writeObject(mBoard);
+		} catch (IOException e) {
+			System.out.println("CAnnot write the Board to the file");
+		}
+		try {
+			out.close();
+		} catch (IOException e) {
+			System.out.println("Cannot close the file. Error=" + e.getMessage());
+		}
+	}
+
+	@Override
+	public void moveDiagonalRightUp(boolean b) {
+		System.out.println("Moved digonalRightUp");
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveDiagonalRightDown(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveDiagonalLeftUp(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveDiagonalLeftDown(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

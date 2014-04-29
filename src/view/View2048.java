@@ -1,11 +1,6 @@
 package view;
-
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Observable;
 
 import org.eclipse.swt.SWT;
@@ -28,12 +23,18 @@ public class View2048 extends Observable implements View,Runnable {
 
 	Display display;
 	Shell shell;
-	Board2048 board;
-	Label score;
+	Board board;
+	Label score;	
 	int userCommand=0;
+	int rows,cols;
+	int horizental=0, vertical=0;
+	
+	public View2048(int rows,int cols) {
+		this.rows=rows;
+		this.cols=cols;
+	}
 	
 	private void initComponents(){
-		int scr=0;
 		display = new Display();
 		shell = new Shell(display);
 		shell.setLayout(new GridLayout(2,false));
@@ -44,8 +45,8 @@ public class View2048 extends Observable implements View,Runnable {
 		initializeMenu();
 		
 	    //Defines the Score label
-	    score = new Label(shell, SWT.BORDER);
-		score.setText("Score:  " + scr);
+	    score = new Label(shell, SWT.NONE);		
+		score.setText("Score  0                      ");
 		
 		//Defines the board game
 		initializeBoard();
@@ -55,21 +56,82 @@ public class View2048 extends Observable implements View,Runnable {
 		
 		//Defines Key Listener
 		shell.forceFocus();
-		shell.addKeyListener(new KeyListener() {			
+		shell.addKeyListener(new KeyListener() {						
 			@Override
 			public void keyReleased(KeyEvent e) {
+				if (e.keyCode == SWT.ARROW_UP)
+				{
+					vertical--;
+					System.out.println("Up released on view");
+				}
+				else if (e.keyCode == SWT.ARROW_DOWN)
+				{
+					System.out.println("Down released on view");
+					vertical++;
+				}
+				else if (e.keyCode == SWT.ARROW_RIGHT)
+				{
+					System.out.println("Right released on view");
+					horizental--;
+				}
+				else if (e.keyCode == SWT.ARROW_LEFT)
+				{
+					System.out.println("Left released on view");
+					horizental++;
+				}
+userCommand=e.keyCode;
+				
+				setChanged();
+				System.out.println("Npotifying");
+				notifyObservers("" + horizental + "," + vertical);
 			}			
 			@Override
-			public void keyPressed(KeyEvent e) {			
-				if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {
-					System.out.println("presses");
+			public void keyPressed(KeyEvent e) {
+				if (e.keyCode == SWT.ARROW_UP)
+				{
+					System.out.println("Up pressed on view");
+					vertical++;
+				}
+				else if (e.keyCode == SWT.ARROW_DOWN)
+				{
+					System.out.println("Down pressed on view");
+					vertical--;
+				}
+				else if (e.keyCode == SWT.ARROW_RIGHT)
+				{
+					System.out.println("Right pressed on view");
+					horizental++;
+				}
+					
+				else if (e.keyCode == SWT.ARROW_LEFT)
+				{
+					System.out.println("Left pressed on view");
+					horizental--;
+				}
+				
+				
+				/*
+				if (horizental == 0 | vertical == 0)
+				{
+					System.out.println("No diagonal!!!!!!!!!!!!!");
+					userCommand=e.keyCode;
+				
+				}
+				else
+				{
+					System.out.println("State is. horizental=" + horizental + " and vertical=" + vertical);
+				
+				}*/
+			}
+			/*	if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {					
 					userCommand=e.keyCode;
 					setChanged();
 					notifyObservers();
 					shell.forceFocus();
-				}				
-			}
-		});		
+				}			
+			}*/
+			
+		});	
 	    shell.open();
 	}   
 	
@@ -94,8 +156,7 @@ public class View2048 extends Observable implements View,Runnable {
 	 */
 	public void displayData(int[][] data) {		
 		board.setBoard(data);
-		board.redraw();
-				
+		board.redraw();			
 	}
 	
 
@@ -110,6 +171,7 @@ public class View2048 extends Observable implements View,Runnable {
 	public void setUserCommand(int command) {
 		this.userCommand = command;
 	}
+	
 	/*
 	 * Display game Winning board
 	 */
@@ -149,7 +211,7 @@ public class View2048 extends Observable implements View,Runnable {
 	 * Initialize Board canvas
 	 */
 	private void initializeBoard() {		
-		board = new Board2048(shell, SWT.BORDER);		
+		board = new Board(shell, SWT.BORDER,rows,cols,SWT.BORDER);		
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
 		shell.forceFocus();
@@ -246,19 +308,10 @@ public class View2048 extends Observable implements View,Runnable {
 			}
 			
 			public void widgetSelected(SelectionEvent arg0) {
-					try {
-						board.loadGame();
-					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}					
-					shell.forceFocus();
+				userCommand=3;
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();					
 			}
 		});
 		Button saveButton=new Button(shell, SWT.PUSH);
@@ -272,22 +325,15 @@ public class View2048 extends Observable implements View,Runnable {
 
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {				
-				try {
-					board.saveGame();
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}			
-				shell.forceFocus();
-			}
+				userCommand=4;
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();			}
 		});
 	}
 
 	@Override
 	public void displayScore(int scr) {		
-		score.setText("Score : "+ scr);
+		score.setText("Score "+ scr);
 	}
 }

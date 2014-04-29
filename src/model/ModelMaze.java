@@ -10,26 +10,13 @@ public class ModelMaze extends Observable implements Model {
 
 	int[][] mBoard;	
 	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
-	int M;
-	int N;
+	int rows;
+	int cols;
 
-	public ModelMaze() {
-		mBoard=new int[4][4];
+	public ModelMaze(int rows,int cols) {
+		mBoard=new int[rows][cols];
 	}
 	
-	public int getM() {
-		return M;
-	}
-	public void setM(int m) {
-		M = m;
-	}
-	public int getN() {
-		return N;
-	}
-	public void setN(int n) {
-		N = n;
-	}
-
 	@Override
 	public int[][] getData() {
 		return mBoard;
@@ -197,9 +184,22 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 	@Override
-	public int getCurrentScore() {
+	public int getScore() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
+	@Override
+	public void saveGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loadGame() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 }
