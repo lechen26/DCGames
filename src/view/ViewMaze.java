@@ -8,7 +8,6 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -23,8 +22,18 @@ public class ViewMaze extends Observable implements View,Runnable {
 
 	Display display;
 	Shell shell;
-	BoardMaze board;	
+	Board board;	
 	int userCommand=0;
+	int rows,cols;
+	int pressed=0;
+	int horizental=0;
+	int vertical=0;
+	Label score;
+	
+	public ViewMaze(int rows, int cols) {
+		this.rows=rows;
+		this.cols=cols;
+	}
 	
 	private void initComponents(){
 		int scr=0;
@@ -38,7 +47,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 		initializeMenu();
 		
 	    //Defines the Score label
-	    Label score = new Label(shell, SWT.BORDER);
+	    score = new Label(shell, SWT.BORDER);
 		score.setText("Score:  " + scr);
 		
 		
@@ -50,19 +59,52 @@ public class ViewMaze extends Observable implements View,Runnable {
 		
 		//Defines Key Listener
 		shell.forceFocus();
-		shell.addKeyListener(new KeyListener() {			
+		shell.addKeyListener(new KeyListener() {
+			
 			@Override
 			public void keyReleased(KeyEvent e) {
-			}			
+				pressed--;
+				setChanged();
+				userCommand=e.keyCode;		
+				if (pressed == 0) {
+					notifyObservers("" + horizental + "," + vertical);
+					horizental=0;
+					vertical=0;
+				}
+			}
+			
 			@Override
 			public void keyPressed(KeyEvent e) {			
-				if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {
-					System.out.println("presses");
-					userCommand=e.keyCode;
-					setChanged();
-					notifyObservers();
-					shell.forceFocus();
-				}				
+				switch (e.keyCode) {
+					case SWT.ARROW_UP:
+					{		
+						System.out.println("up pressed");
+						vertical++;
+						pressed++;
+						break;
+					}
+					case SWT.ARROW_DOWN:
+					{	
+						System.out.println("down pressed");
+						vertical--;
+						pressed++;
+						break;
+					}
+					case SWT.ARROW_RIGHT:
+					{					
+						System.out.println("right pressed");
+						horizental++;
+						pressed++;
+						break;
+					}
+					case SWT.ARROW_LEFT:
+					{				
+						System.out.println("left pressed");
+						horizental--;
+						pressed++;
+						break;
+					}
+				}		
 			}
 		});		
 	    shell.open();
@@ -92,7 +134,6 @@ public class ViewMaze extends Observable implements View,Runnable {
 		board.redraw();
 				
 	}
-	
 
 	/*
 	 *  Get user command
@@ -106,31 +147,36 @@ public class ViewMaze extends Observable implements View,Runnable {
 		this.userCommand = command;
 	}
 	/*
-	 * Display game Winning board
 	 */
-	public void gameWon() {
+	public void gameOver() {
+	}
+	
+	/*
+	 * Display Game over board 
+	 */
+	public void gameWom() {				
 		System.out.println("I came to viewMaze !!! i win !!!");
-		MessageBox end = new MessageBox(shell,SWT.OK);		
-		end.setMessage("Your Are the MazeMaster,game won.");
+		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
+		end.setMessage("Your Are the MazeMaster,game won. do you wanna play another one?");
 		end.setText("GAME WON");
 		int response = end.open();
-		if (response == SWT.OK) {
+		if (response == SWT.NO) {
 			display.dispose();
 			System.exit(0);
 		}
-	}
-	
-//	/* NO NEED FOR GAME OVER IN MAZE
-//	 * Display Game over board 
-//	 */
-	public void gameOver() {				
+		else
+		{
+			setUserCommand(2);
+			setChanged();
+			notifyObservers();
+		}
 	}
 	
 	/*
 	 * Initialize Board canvas
 	 */
 	private void initializeBoard() {		
-		board = new BoardMaze(shell, SWT.BORDER);		
+		board = new Board(shell, SWT.BORDER,rows,cols,SWT.NONE);		
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
 		board.setBackground(display.getSystemColor(SWT.COLOR_WHITE));	
 		shell.forceFocus();
@@ -232,6 +278,11 @@ public class ViewMaze extends Observable implements View,Runnable {
 
 	@Override
 	public void displayScore(int scr) {
+		score.setText("Score " + scr);
+	}
+
+	@Override
+	public void gameWon() {
 		// TODO Auto-generated method stub
 		
 	}

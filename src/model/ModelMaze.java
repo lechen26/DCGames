@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
-import java.util.Random;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -13,26 +12,14 @@ public class ModelMaze extends Observable implements Model {
 
 	int[][] mBoard;	
 	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
-	int M;
-	int N;
-
-	public ModelMaze() {
-		mBoard=new int[16][16];
+	int rows;
+	int cols;
+	int score=0;
+	
+	public ModelMaze(int rows,int cols) {
+		mBoard=new int[rows][cols];
 	}
 	
-	public int getM() {
-		return M;
-	}
-	public void setM(int m) {
-		M = m;
-	}
-	public int getN() {
-		return N;
-	}
-	public void setN(int n) {
-		N = n;
-	}
-
 	@Override
 	public int[][] getData() {
 		return mBoard;
@@ -60,7 +47,7 @@ public class ModelMaze extends Observable implements Model {
 	 * move up method
 	 */
 	@Override
-	public boolean moveUp(boolean quiet) {
+	public boolean moveUp(boolean quiet) {		
 		boolean move=false;
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
@@ -84,12 +71,16 @@ public class ModelMaze extends Observable implements Model {
 				notifyObservers("gameWon");
 			}
 		}
+
+		score+=10;
+		setChanged();
+		notifyObservers();
 		return move;
 }
 
 
 	@Override
-	public boolean moveDown(boolean quiet) {
+	public boolean moveDown(boolean quiet) {		
 		boolean move=false;
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
@@ -113,11 +104,15 @@ public class ModelMaze extends Observable implements Model {
 				notifyObservers("gameWon");
 			}
 		}
+		score+=10;
+		setChanged();
+		notifyObservers();
 		return move;
 	}
 
 	@Override
 	public boolean moveLeft(boolean quiet) {
+		System.out.println("Move left");
 		boolean move=false;
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
@@ -141,11 +136,14 @@ public class ModelMaze extends Observable implements Model {
 				notifyObservers("gameWon");
 			}
 		}
+		score+=10;
+		setChanged();
+		notifyObservers();
 		return move;
 	}
 
 	@Override
-	public boolean moveRight(boolean quiet) {
+	public boolean moveRight(boolean quiet) {		
 		boolean move=false;
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
@@ -169,6 +167,9 @@ public class ModelMaze extends Observable implements Model {
 				notifyObservers("gameWon");
 			}
 		}
+		score+=10;
+		setChanged();
+		notifyObservers();
 		return move;
 	}
 
@@ -254,9 +255,51 @@ public class ModelMaze extends Observable implements Model {
 	
 
 	@Override
-	public int getCurrentScore() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int getScore() {
+		return score;
 	}
+
+	@Override
+	public void saveGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void loadGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveDiagonalRightUp(boolean b) {		
+		moveUp(b);
+		moveRight(b);
+		score-=5;
+		
+	}
+
+	@Override
+	public void moveDiagonalRightDown(boolean b) {		
+		moveRight(b);
+		moveDown(b);
+		score-=5;
+		
+	}
+
+	@Override
+	public void moveDiagonalLeftUp(boolean b) {		
+		moveLeft(b);
+		moveUp(b);
+		score-=5;
+	}
+
+	@Override
+	public void moveDiagonalLeftDown(boolean b) {
+		moveLeft(b);
+		moveDown(b);
+		score-=5;		
+	}
+	
 
 }
