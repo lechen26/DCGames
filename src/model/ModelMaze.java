@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
+import java.util.Random;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -47,7 +48,7 @@ public class ModelMaze extends Observable implements Model {
 	 * move up method
 	 */
 	@Override
-	public boolean moveUp(boolean quiet) {		
+	public boolean moveUp(boolean quiet) {
 		boolean move=false;
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
@@ -58,6 +59,7 @@ public class ModelMaze extends Observable implements Model {
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX - 1;
 		if((newPos >= 0) && (mBoard[newPos][cPosY] != -1)){
+			score+=10;
 			move=true;
 			if (!quiet)
 			{
@@ -71,16 +73,13 @@ public class ModelMaze extends Observable implements Model {
 				notifyObservers("gameWon");
 			}
 		}
-
 		score+=10;
-		setChanged();
-		notifyObservers();
 		return move;
 }
 
 
 	@Override
-	public boolean moveDown(boolean quiet) {		
+	public boolean moveDown(boolean quiet) {
 		boolean move=false;
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
@@ -92,6 +91,7 @@ public class ModelMaze extends Observable implements Model {
 		int newPos = cPosX + 1;
 		if((newPos < mBoard.length) && (mBoard[newPos][cPosY] != -1)){
 			move=true;
+			score+=10;
 			if (!quiet)
 			{
 				mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
@@ -103,16 +103,12 @@ public class ModelMaze extends Observable implements Model {
 				setChanged();
 				notifyObservers("gameWon");
 			}
-		}
-		score+=10;
-		setChanged();
-		notifyObservers();
+		}		
 		return move;
 	}
 
 	@Override
 	public boolean moveLeft(boolean quiet) {
-		System.out.println("Move left");
 		boolean move=false;
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
@@ -124,6 +120,7 @@ public class ModelMaze extends Observable implements Model {
 		int newPos = cPosY - 1;
 		if((newPos >= 0 ) &&(mBoard[cPosX][newPos] != -1)){
 			move=true;
+			score+=10;
 			if (!quiet)
 			{
 				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
@@ -136,14 +133,11 @@ public class ModelMaze extends Observable implements Model {
 				notifyObservers("gameWon");
 			}
 		}
-		score+=10;
-		setChanged();
-		notifyObservers();
 		return move;
 	}
 
 	@Override
-	public boolean moveRight(boolean quiet) {		
+	public boolean moveRight(boolean quiet) {
 		boolean move=false;
 		if (!quiet) {
 			undoBoards.add(copyBoard(mBoard));		
@@ -155,6 +149,7 @@ public class ModelMaze extends Observable implements Model {
 		int newPos = cPosY + 1;
 		if((newPos < mBoard[0].length) &&(mBoard[cPosX][newPos] != -1)){
 			move=true;
+			score+=10;
 			if (!quiet)
 			{
 				mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
@@ -167,9 +162,6 @@ public class ModelMaze extends Observable implements Model {
 				notifyObservers("gameWon");
 			}
 		}
-		score+=10;
-		setChanged();
-		notifyObservers();
 		return move;
 	}
 
@@ -256,7 +248,8 @@ public class ModelMaze extends Observable implements Model {
 
 	@Override
 	public int getScore() {
-		return score;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
@@ -270,7 +263,6 @@ public class ModelMaze extends Observable implements Model {
 		// TODO Auto-generated method stub
 		
 	}
-
 	@Override
 	public void moveDiagonalRightUp(boolean b) {		
 		moveUp(b);
