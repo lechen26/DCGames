@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
-import java.util.Random;
 
 public class ModelMaze extends Observable implements Model {
 
