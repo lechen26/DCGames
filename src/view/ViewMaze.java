@@ -63,7 +63,11 @@ public class ViewMaze extends Observable implements View,Runnable {
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				pressed--;
+				if (pressed > 2){
+					pressed=1;
+				}
+				else 
+					pressed--;
 				setChanged();
 				userCommand=e.keyCode;		
 				if (pressed == 0) {
@@ -76,34 +80,32 @@ public class ViewMaze extends Observable implements View,Runnable {
 			@Override
 			public void keyPressed(KeyEvent e) {			
 				switch (e.keyCode) {
-					case SWT.ARROW_UP:
-					{		
+					case SWT.ARROW_UP:		
 						System.out.println("up pressed");
 						vertical++;
 						pressed++;
+						//what can we do with this ???
+//						if (e.stateMask == SWT.ARROW_LEFT) {
+//							
+//						}
 						break;
-					}
 					case SWT.ARROW_DOWN:
-					{	
 						System.out.println("down pressed");
 						vertical--;
 						pressed++;
 						break;
-					}
-					case SWT.ARROW_RIGHT:
-					{					
+					case SWT.ARROW_RIGHT:		
 						System.out.println("right pressed");
 						horizental++;
 						pressed++;
 						break;
-					}
-					case SWT.ARROW_LEFT:
-					{				
+					case SWT.ARROW_LEFT:	
 						System.out.println("left pressed");
 						horizental--;
 						pressed++;
 						break;
-					}
+					default:
+						break;
 				}		
 			}
 		});		
@@ -149,27 +151,6 @@ public class ViewMaze extends Observable implements View,Runnable {
 	/*
 	 */
 	public void gameOver() {
-	}
-	
-	/*
-	 * Display Game over board 
-	 */
-	public void gameWom() {				
-		System.out.println("I came to viewMaze !!! i win !!!");
-		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
-		end.setMessage("Your Are the MazeMaster,game won. do you wanna play another one?");
-		end.setText("GAME WON");
-		int response = end.open();
-		if (response == SWT.NO) {
-			display.dispose();
-			System.exit(0);
-		}
-		else
-		{
-			setUserCommand(2);
-			setChanged();
-			notifyObservers();
-		}
 	}
 	
 	/*
@@ -254,7 +235,8 @@ public class ViewMaze extends Observable implements View,Runnable {
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {				
+			public void widgetSelected(SelectionEvent arg0) {	
+				System.out.println("user restart game");
 				userCommand=2;				
 				setChanged();
 				notifyObservers();			
@@ -280,10 +262,26 @@ public class ViewMaze extends Observable implements View,Runnable {
 	public void displayScore(int scr) {
 		score.setText("Score " + scr);
 	}
-
+	/*
+	 * Display Game Won board 
+	 */
 	@Override
 	public void gameWon() {
-		// TODO Auto-generated method stub
+		System.out.println("I came to viewMaze !!! i win !!!");
+		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
+		end.setMessage("Your Are the MazeMaster,game won. do you wanna play another one?");
+		end.setText("GAME WON");
+		int response = end.open();
+		if (response == SWT.NO) {
+			display.dispose();
+			System.exit(0);
+		}
+		else
+		{
+			setUserCommand(2);
+			setChanged();
+			notifyObservers();
+		}
 		
 	}
 }

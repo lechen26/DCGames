@@ -13,7 +13,7 @@ public class State extends Canvas {
 	
 	public State(Composite parent, int style) {
 		super(parent,style);				
-		Font font = new Font(getDisplay(), getFont().getFontData()[0].getName(),15,SWT.BORDER);
+		Font font = new Font(getDisplay(), getFont().getFontData()[0].getName(),25,SWT.BORDER);
 		setFont(font);		
 		
 		addPaintListener(new PaintListener() {
@@ -22,7 +22,7 @@ public class State extends Canvas {
 				int stringWidth = e.gc.getFontMetrics().getAverageCharWidth();
 				int x = (getSize().x)/2  - (("" + value).length())*stringWidth/2;
 				int y = (getSize().y)/2 - (("" + value).length())*stringWidth/2;
-				if (value > 0 )
+				if ((value > 0 ) && (value != -1) && (value != 1))
 					e.gc.drawString("" + value, x, y);				
 			}			
 		});
