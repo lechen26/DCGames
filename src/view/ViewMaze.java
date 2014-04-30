@@ -64,7 +64,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (pressed > 2){
-					pressed=1;
+					pressed=0;
 				}
 				else 
 					pressed--;
@@ -84,10 +84,6 @@ public class ViewMaze extends Observable implements View,Runnable {
 						System.out.println("up pressed");
 						vertical++;
 						pressed++;
-						//what can we do with this ???
-//						if (e.stateMask == SWT.ARROW_LEFT) {
-//							
-//						}
 						break;
 					case SWT.ARROW_DOWN:
 						System.out.println("down pressed");
@@ -237,7 +233,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {	
 				System.out.println("user restart game");
-				userCommand=2;				
+				userCommand=2;
 				setChanged();
 				notifyObservers();			
 				shell.forceFocus();

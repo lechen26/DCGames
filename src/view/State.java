@@ -22,7 +22,7 @@ public class State extends Canvas {
 				int stringWidth = e.gc.getFontMetrics().getAverageCharWidth();
 				int x = (getSize().x)/2  - (("" + value).length())*stringWidth/2;
 				int y = (getSize().y)/2 - (("" + value).length())*stringWidth/2;
-				if ((value > 0 ) && (value != -1) && (value != 1))
+				if ((value > 0 ) && (value != -1) && (value != 1) && (value !=23))
 					e.gc.drawString("" + value, x, y);				
 			}			
 		});
@@ -95,7 +95,9 @@ public class State extends Canvas {
 			break;
 		case 1:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_GREEN));
-			break;		
+			break;
+		case 23: 
+			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));
 		}
 	}
 	

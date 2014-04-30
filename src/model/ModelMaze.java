@@ -37,7 +37,7 @@ public class ModelMaze extends Observable implements Model {
 	public Point getExitPoint(){
 		for (int i=0;i<mBoard[0].length;i++)
 			for (int j=0;j<mBoard.length;j++)
-				if (mBoard[i][j] == 2)
+				if (mBoard[i][j] == 23)
 					return new Point(i,j);
 		return (Point) null ; // didnt find the exit point
 	}
@@ -163,7 +163,7 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public void initializeBoard() {
 		createEmptyBoard(rows, cols);	
-		int[][] b = { { 2 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //1
+		int[][] b = { { 23 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //1
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //2
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //3
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //4
@@ -181,6 +181,7 @@ public class ModelMaze extends Observable implements Model {
 		{ -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , 1 }, //16
 		};
 		mBoard = b;
+		score=0;
 		setChanged();
 		notifyObservers();
 		undoBoards = new ArrayList<int[][]>();
@@ -231,7 +232,7 @@ public class ModelMaze extends Observable implements Model {
 	public boolean isGameWon(int x, int y){
 		int cPosX = x;
 		int cPosY = y;
-		if (mBoard[cPosX][cPosY] == 2 )
+		if (mBoard[cPosX][cPosY] == 23 )
 			return true;
 		else
 			return false;
@@ -270,15 +271,10 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 	@Override
-	public void saveGame() {
-		// TODO Auto-generated method stub
-		
+	public void saveGame() {	
 	}
 
 	@Override
 	public void loadGame() {
-		// TODO Auto-generated method stub
-		
 	}
-
 }
