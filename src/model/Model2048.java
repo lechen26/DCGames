@@ -458,27 +458,20 @@ public class Model2048 extends Observable implements Model {
         fileDialog.setFilterExtensions(new String[] { "*.xml" });
         fileDialog.setFilterNames(new String[] { "GameFile(*.xml)" });
         fileDialog.setFileName("currentGame.xml");
-        String outputFile = fileDialog.open();
-        System.out.println("Chosen to save to " + outputFile);        	        
-        MessageBox messageDialog = new MessageBox(fileShell,SWT.ICON_QUESTION | SWT.OK | SWT.CANCEL);
-        messageDialog.setText("Save & Load");
-        messageDialog.setMessage("Are You Sure?");
-        int returnCode = messageDialog.open();
-        if (returnCode == SWT.OK) {        	        	
-        	ObjectOutputStream out=null;
-        	try {
-        		out = new ObjectOutputStream(new FileOutputStream(outputFile));
-			} catch (IOException e) { 
-			System.out.println("I/O error while loading the target file. Error=" + e.getMessage());
-			try {
-				out.writeObject(mBoard);
-				out.writeInt(score);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}			
-			}	
-        }
+        String outputFile = fileDialog.open();             	        
+    	ObjectOutputStream out=null;
+    	try {
+    		out = new ObjectOutputStream(new FileOutputStream(outputFile)); 
+    	}catch (IOException e) {System.out.println("I/O Error ou target file " + e.getMessage());;}
+    	
+		try {
+			out.writeObject(mBoard);
+			out.writeObject(score);
+		}catch (IOException e) { System.out.println("Cannot write objects" + e.getMessage());;}
+		
+    	try {
+			out.close();
+		} catch (IOException e) {e.printStackTrace();}          
 	}
 	
 	public void loadGame() {
@@ -491,25 +484,32 @@ public class Model2048 extends Observable implements Model {
         System.out.println("Chosen to open " + sourceFile);        	        
         MessageBox messageDialog = new MessageBox(fileShell,SWT.ICON_QUESTION | SWT.OK | SWT.CANCEL);
         messageDialog.setText("Save & Load");
-        messageDialog.setMessage("Are You Sure?");
+        messageDialog.setMessage("Are You Sure? This will erase your current state");
         int returnCode = messageDialog.open();
         if (returnCode == SWT.OK) {        	
-        	//currState.put(score, mBoard);
         	ObjectInputStream in=null;
         	try {
-        		in = new ObjectInputStream(new FileInputStream(sourceFile));
-			} catch (IOException e) { 
-				System.out.println("I/O error while loading the source file. Error=" + e.getMessage());
-			}        	
+        		in = new ObjectInputStream(new FileInputStream(sourceFile));        		
+			} catch (IOException e) {
+				System.out.println("I/O error while loading the source file. Error " + e.getMessage());
+			}
+        	
 			try {					
-				int[][] currBoard = (int[][]) in.readObject();
-				int currScore = in.readInt();
-			} catch (IOException e1) {
-				e1.printStackTrace();
+				mBoard = (int[][]) in.readObject();
+				score = (Integer) in.readObject();
+			} catch (IOException e) {
+				System.out.println("I/O error while loading Objects " + e.getMessage());
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}			
+				System.out.println("cannot save Object " + e.getMessage());
+			}
+			
+			try {
+				in.close();
+			} catch (IOException e) {			
+				System.out.println("Cannot close source file " + e.getMessage());
+			}
         }
+        setChanged();
+        notifyObservers();
 	}
 }
