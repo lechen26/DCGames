@@ -8,5 +8,4 @@ public interface View {
 	public void gameOver();
 	public void gameWon();
 	public void undoEnd();
-	public void saveGame();
 }

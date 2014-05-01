@@ -1,9 +1,19 @@
 package model;
 
 import java.awt.Point;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 
 public class ModelMaze extends Observable implements Model {
@@ -269,12 +279,76 @@ public class ModelMaze extends Observable implements Model {
 	public int getScore() {
 		return this.score;
 	}
-
 	@Override
-	public void saveGame() {	
+	public void saveGame() {
+		Shell fileShell = new Shell();
+        FileDialog fileDialog = new FileDialog(fileShell,SWT.SAVE);        
+        fileDialog.setText("Select Target File");
+        fileDialog.setFilterExtensions(new String[] { "*.xml" });
+        fileDialog.setFilterNames(new String[] { "GameFile(*.xml)" });
+        fileDialog.setFileName("currentGame.xml");
+        String outputFile = fileDialog.open();
+        if (outputFile != null)
+        {
+	    	ObjectOutputStream out=null;
+	    	try {
+	    		out = new ObjectOutputStream(new FileOutputStream(outputFile)); 
+	    	}catch (IOException e) {System.out.println("I/O Error ou target file " + e.getMessage());;}
+	    	
+			try {
+				out.writeObject(mBoard);
+				out.writeObject(score);
+			}catch (IOException e) { System.out.println("Cannot write objects" + e.getMessage());;}
+			
+	    	try {
+				out.close();
+			} catch (IOException e) {e.printStackTrace();}
+        }else        
+        	fileShell.dispose();        
 	}
-
-	@Override
+	
 	public void loadGame() {
+		Shell fileShell = new Shell();
+        FileDialog fileDialog = new FileDialog(fileShell,SWT.OPEN);	  
+        fileDialog.setText("Select Source File");
+        fileDialog.setFilterExtensions(new String[] { "*.xml" });
+        fileDialog.setFilterNames(new String[] { "GameFile(*.xml)" });        
+        String sourceFile = fileDialog.open();
+        if (sourceFile != null)
+        {
+		  
+	        System.out.println("Chosen to open " + sourceFile);        	        
+	        MessageBox messageDialog = new MessageBox(fileShell,SWT.ICON_QUESTION | SWT.OK | SWT.CANCEL);
+	        messageDialog.setText("Save & Load");
+	        messageDialog.setMessage("Are You Sure? This will erase your current state");
+	        int returnCode = messageDialog.open();
+	        if (returnCode == SWT.OK) {        	
+	        	ObjectInputStream in=null;
+	        	try {
+	        		in = new ObjectInputStream(new FileInputStream(sourceFile));        		
+				} catch (IOException e) {
+					System.out.println("I/O error while loading the source file. Error " + e.getMessage());
+				}
+	        	
+				try {					
+					mBoard = (int[][]) in.readObject();
+					score = (Integer) in.readObject();
+				} catch (IOException e) {
+					System.out.println("I/O error while loading Objects " + e.getMessage());
+				} catch (ClassNotFoundException e) {
+					System.out.println("cannot save Object " + e.getMessage());
+				}
+				
+				try {
+					in.close();
+				} catch (IOException e) {			
+					System.out.println("Cannot close source file " + e.getMessage());
+				}
+	        }
+	        setChanged();
+	        notifyObservers();
+        }
+        else
+        	fileShell.dispose();      	  
 	}
 }

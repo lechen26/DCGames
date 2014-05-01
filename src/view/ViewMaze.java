@@ -311,4 +311,5 @@ public class ViewMaze extends Observable implements View,Runnable {
 		}
 		
 	}
+
 }
