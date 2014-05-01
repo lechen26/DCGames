@@ -52,7 +52,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 		
 	    //Defines the Score label
 	    score = new Label(shell, SWT.BORDER);
-		score.setText("Score:  " + scr);
+		score.setText("Score:      " + scr);
 		
 		
 		//Defines the board game
@@ -263,8 +263,8 @@ public class ViewMaze extends Observable implements View,Runnable {
 
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {	
-				System.out.println("user restart game");
-				userCommand=2;
+				setUserCommand(2);
+				System.out.println("user restart game and sent command is=" + getUserCommand());
 				setChanged();
 				notifyObservers();			
 				shell.forceFocus();

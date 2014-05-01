@@ -5,7 +5,7 @@ public interface Model  {
 	public int[][] getData();
 	public int getScore();
 	public void initializeBoard();
-	public void undoBoard();
+	public void undoBoard(boolean b);
 	public void saveGame();
 	public void loadGame();
 	public boolean moveUp(boolean quiet);

@@ -39,7 +39,7 @@ public class Model2048 extends Observable implements Model {
 	 * Undo the last operation and revert back to the board before it
 	 * if no operation was made, do nothing
 	 */
-	public void undoBoard() {
+	public void undoBoard(boolean b) {
 		if (undoBoards.isEmpty())
 		{
 			System.out.println("No Undo moves to perform");
