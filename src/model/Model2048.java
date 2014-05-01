@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.Point;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,8 +9,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Random;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 
 public class Model2048 extends Observable implements Model {
 	
@@ -426,56 +431,8 @@ public class Model2048 extends Observable implements Model {
 	private void initializeScore() {
 		this.score=0;
 	}
-	
-	public void loadGame() { 
-		ObjectInputStream in = null;
-		try {
-			in = new ObjectInputStream(new FileInputStream("resources/array.txt"));
-		} catch (FileNotFoundException e) {			// 
-			System.out.println("cannot Load the Game. source file does not exist");
-		} catch (IOException e) { 
-			System.out.println("I/O error while loading the source file. Error=" + e.getMessage());
-		}
-		try {
-			mBoard = (int[][]) in.readObject();
-		} catch (IOException e) {
-			System.out.println("I/O error while reading Object from file");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		
-		setChanged();
-		notifyObservers();
-		try {
-			in.close();
-		} catch (IOException e) {
-			System.out.println("Unable to close File.Error=" + e.getMessage());			
-		}
-	}
-	
-	public void saveGame() {
-		ObjectOutputStream out=null;
-		File outFile = new File("resources/array.txt");
-		if (!outFile.exists())
-			try {
-				out = new ObjectOutputStream(new FileOutputStream("array.txt"));
-			} catch (FileNotFoundException e) {
-				System.out.println("cannot Save the Game. cannot create output file");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		try {
-			out.writeObject(mBoard);
-		} catch (IOException e) {
-			System.out.println("CAnnot write the Board to the file");
-		}
-		try {
-			out.close();
-		} catch (IOException e) {
-			System.out.println("Cannot close the file. Error=" + e.getMessage());
-		}
-	}
-
+		
 	@Override
 	public void moveDiagonalRightUp(boolean b) {
 	}
@@ -493,4 +450,66 @@ public class Model2048 extends Observable implements Model {
 	public void moveDiagonalLeftDown(boolean b) {	
 	}
 
+	@Override
+	public void saveGame() {
+		Shell fileShell = new Shell();
+        FileDialog fileDialog = new FileDialog(fileShell,SWT.SAVE);	  
+        fileDialog.setText("Select Target File");
+        fileDialog.setFilterExtensions(new String[] { "*.xml" });
+        fileDialog.setFilterNames(new String[] { "GameFile(*.xml)" });
+        fileDialog.setFileName("currentGame.xml");
+        String outputFile = fileDialog.open();
+        System.out.println("Chosen to save to " + outputFile);        	        
+        MessageBox messageDialog = new MessageBox(fileShell,SWT.ICON_QUESTION | SWT.OK | SWT.CANCEL);
+        messageDialog.setText("Save & Load");
+        messageDialog.setMessage("Are You Sure?");
+        int returnCode = messageDialog.open();
+        if (returnCode == SWT.OK) {        	        	
+        	ObjectOutputStream out=null;
+        	try {
+        		out = new ObjectOutputStream(new FileOutputStream(outputFile));
+			} catch (IOException e) { 
+			System.out.println("I/O error while loading the target file. Error=" + e.getMessage());
+			try {
+				out.writeObject(mBoard);
+				out.writeInt(score);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}			
+			}	
+        }
+	}
+	
+	public void loadGame() {
+		Shell fileShell = new Shell();
+        FileDialog fileDialog = new FileDialog(fileShell,SWT.OPEN);	  
+        fileDialog.setText("Select Source File");
+        fileDialog.setFilterExtensions(new String[] { "*.xml" });
+        fileDialog.setFilterNames(new String[] { "GameFile(*.xml)" });        
+        String sourceFile = fileDialog.open();
+        System.out.println("Chosen to open " + sourceFile);        	        
+        MessageBox messageDialog = new MessageBox(fileShell,SWT.ICON_QUESTION | SWT.OK | SWT.CANCEL);
+        messageDialog.setText("Save & Load");
+        messageDialog.setMessage("Are You Sure?");
+        int returnCode = messageDialog.open();
+        if (returnCode == SWT.OK) {        	
+        	//currState.put(score, mBoard);
+        	ObjectInputStream in=null;
+        	try {
+        		in = new ObjectInputStream(new FileInputStream(sourceFile));
+			} catch (IOException e) { 
+				System.out.println("I/O error while loading the source file. Error=" + e.getMessage());
+			}        	
+			try {					
+				int[][] currBoard = (int[][]) in.readObject();
+				int currScore = in.readInt();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+        }
+	}
 }
