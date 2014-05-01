@@ -274,10 +274,38 @@ public class ViewMaze extends Observable implements View,Runnable {
 		Button loadButton=new Button(shell, SWT.PUSH);
 		loadButton.setText("Load Game");
 		loadButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		loadButton.addSelectionListener(new SelectionListener() {
+
+			@Override	
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+			
+			public void widgetSelected(SelectionEvent arg0) {
+				userCommand=3;
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();					
+			}
+		});
 		Button saveButton=new Button(shell, SWT.PUSH);
 		saveButton.setText("Save Game");	
 		saveButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		saveButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				// TODO Auto-generated method stub				
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {				
+				userCommand=4;
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();			}
+		});
 	}
+	
 
 	@Override
 	public void undoEnd() {
