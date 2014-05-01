@@ -29,6 +29,10 @@ public class ViewMaze extends Observable implements View,Runnable {
 	int horizental=0;
 	int vertical=0;
 	Label score;
+	boolean rightPressed=false;
+	boolean leftPressed=false;
+	boolean upPressed=false;
+	boolean downPressed=false;
 	
 	public ViewMaze(int rows, int cols) {
 		this.rows=rows;
@@ -63,13 +67,31 @@ public class ViewMaze extends Observable implements View,Runnable {
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (pressed > 2){
-					pressed=0;
-				}
-				else 
-					pressed--;
+				//Switch case on the Key Release 
+				switch (e.keyCode) {
+					case SWT.ARROW_UP:		
+						upPressed = false;
+						pressed--;
+						break;
+					case SWT.ARROW_DOWN:
+						downPressed = false;
+						pressed--;
+						break;
+					case SWT.ARROW_RIGHT:		
+						rightPressed = false;
+						pressed--;
+						break;
+					case SWT.ARROW_LEFT:	
+						leftPressed = false;
+						pressed--;
+						break;
+					default:
+						break;
+				}		
+				
 				setChanged();
-				userCommand=e.keyCode;		
+				userCommand=e.keyCode;
+				// support diagonal moves
 				if (pressed == 0) {
 					notifyObservers("" + horizental + "," + vertical);
 					horizental=0;
@@ -78,27 +100,36 @@ public class ViewMaze extends Observable implements View,Runnable {
 			}
 			
 			@Override
-			public void keyPressed(KeyEvent e) {			
+			public void keyPressed(KeyEvent e) {	
+				// switch case for the key pressed
 				switch (e.keyCode) {
 					case SWT.ARROW_UP:		
-						System.out.println("up pressed");
 						vertical++;
-						pressed++;
+						if (!upPressed){
+							pressed++;
+							upPressed=true;
+						}
 						break;
 					case SWT.ARROW_DOWN:
-						System.out.println("down pressed");
 						vertical--;
-						pressed++;
+						if (!downPressed){
+							pressed++;
+							downPressed=true;
+						}
 						break;
 					case SWT.ARROW_RIGHT:		
-						System.out.println("right pressed");
 						horizental++;
-						pressed++;
+						if (!rightPressed){
+							pressed++;
+							rightPressed=true;
+						}
 						break;
 					case SWT.ARROW_LEFT:	
-						System.out.println("left pressed");
 						horizental--;
-						pressed++;
+						if (!leftPressed){
+							pressed++;
+							leftPressed=true;
+						}
 						break;
 					default:
 						break;
