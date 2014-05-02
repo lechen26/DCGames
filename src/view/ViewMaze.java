@@ -317,12 +317,12 @@ public class ViewMaze extends Observable implements View,Runnable {
 	public void displayScore(int scr) {
 		score.setText("Score " + scr);
 	}
+	
 	/*
 	 * Display Game Won board 
 	 */
 	@Override
-	public void gameWon() {
-		System.out.println("I came to viewMaze !!! i win !!!");
+	public void gameWon() {		
 		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
 		end.setMessage("Your Are the MazeMaster,game won. do you wanna play another one?");
 		end.setText("GAME WON");
@@ -340,4 +340,26 @@ public class ViewMaze extends Observable implements View,Runnable {
 		
 	}
 
+	/*
+	 * Display Game Won board 
+	 */
+	@Override
+	public void gameFinish() {		
+		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
+		end.setMessage("You got to the END point but with high score then possible!. do you wanna play another one?");
+		end.setText("GAME FINISH");
+		int response = end.open();
+		if (response == SWT.NO) {
+			display.dispose();
+			System.exit(0);
+		}
+		else
+		{
+			setUserCommand(2);
+			setChanged();
+			notifyObservers();
+		}
+		
+	}
+	
 }

@@ -7,5 +7,6 @@ public interface View {
 	public int getUserCommand();
 	public void gameOver();
 	public void gameWon();
+	public void gameFinish();
 	public void undoEnd();
 }

@@ -13,6 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
+import maze.Maze;
+import maze.MazeDomain;
+import maze.MazeHeuristicDistance;
+import maze.MazeStandardDistance;
+import model.algorithms.Action;
+import model.algorithms.Searcher;
+import model.algorithms.a_star.Astar;
+import model.algorithms.bfs.BFS;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
@@ -27,7 +36,9 @@ public class ModelMaze extends Observable implements Model {
 	int rows,cols;
 	int score=0;
 	Point exitPosition;	
-
+	Point startPosition;
+	int minScore=0;
+	
 	public ModelMaze(int rows,int cols) {
 		mBoard=new int[rows][cols];
 	}
@@ -67,14 +78,20 @@ public class ModelMaze extends Observable implements Model {
 		}
 		setChanged();
 		notifyObservers();
-		if (isGameWon(newPos,cPosY)){
+		if (isGotToEndPoint(newPos,cPosY)){			
 			if (diagonal){
-				score-=5;
 				setChanged();
+				score-=5;				
 				notifyObservers();
 			}
-			setChanged();
-			notifyObservers("gameWon");
+			if (isGameWon()) {
+				setChanged();
+				notifyObservers("gameWon");
+			}
+			else{			
+				setChanged();
+				notifyObservers("gameFinish");
+			}
 		}
 		return move;
 	}	
@@ -98,14 +115,20 @@ public class ModelMaze extends Observable implements Model {
 		}
 		setChanged();
 		notifyObservers();
-		if (isGameWon(newPos,cPosY)){
+		if (isGotToEndPoint(newPos,cPosY)){			
 			if (diagonal){
-				score-=5;
 				setChanged();
+				score-=5;				
 				notifyObservers();
 			}
-			setChanged();
-			notifyObservers("gameWon");
+			if (isGameWon()) {
+				setChanged();
+				notifyObservers("gameWon");
+			}
+			else{			
+				setChanged();
+				notifyObservers("gameFinish");
+			}
 		}
 		return move;
 		
@@ -131,14 +154,20 @@ public class ModelMaze extends Observable implements Model {
 		}
 		setChanged();
 		notifyObservers();
-		if (isGameWon(cPosX,newPos)){
+		if (isGotToEndPoint(cPosX,newPos)){			
 			if (diagonal){
-				score-=5;
 				setChanged();
+				score-=5;				
 				notifyObservers();
 			}
-			setChanged();
-			notifyObservers("gameWon");
+			if (isGameWon()) {
+				setChanged();
+				notifyObservers("gameWon");
+			}
+			else{			
+				setChanged();
+				notifyObservers("gameFinish");
+			}		
 		}
 		return move;
 	}
@@ -161,14 +190,21 @@ public class ModelMaze extends Observable implements Model {
 		}
 		setChanged();
 		notifyObservers();
-		if (isGameWon(cPosX,newPos)){
+		
+		if (isGotToEndPoint(cPosX,newPos)){			
 			if (diagonal){
-				score-=5;
 				setChanged();
+				score-=5;				
 				notifyObservers();
 			}
-			setChanged();
-			notifyObservers("gameWon");
+			if (isGameWon()) {
+				setChanged();
+				notifyObservers("gameWon");
+			}
+			else{				
+				setChanged();
+				notifyObservers("gameFinish");
+			}
 		}
 		return move;
 	}
@@ -179,7 +215,7 @@ public class ModelMaze extends Observable implements Model {
 	public void initializeBoard() {
 		System.out.println("initialzeBaord");
 		undoBoards = new LinkedHashMap<Integer,int[][]>();
-		int[][] b = { { 23 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //1
+		/*int[][] b = { { 23 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //1
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //2
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //3
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //4
@@ -195,14 +231,21 @@ public class ModelMaze extends Observable implements Model {
 		{ -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , -1 , -1 , -1 }, //14	
 		{ -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0}, //15
 		{ -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , 1 }, //16
-		};
-		
+		};*/
+		int[][] b = { {23,0,0,0}, {-1,-1,0,0},{0,0,0,0},{0,0,0,1}};
+		setStartPosition(new Point(3,3));
 		setExitPosition(new Point(0,0));
 		mBoard = b;
 		setScore(0);
+		runAstar();
 		setChanged();
 		notifyObservers();
 	}
+
+	private void setStartPosition(Point point) {
+		this.startPosition=point;		
+	}
+
 
 	public void setScore(int score) {
 		this.score = score;
@@ -256,8 +299,17 @@ public class ModelMaze extends Observable implements Model {
 		
 	}
 
-	public boolean isGameWon(int currX, int currY){
-		if ((currX == getExitPosition().x) && (currY == getExitPosition().y)) 
+	public boolean isGotToEndPoint(int currX,int currY)
+	{
+		if ((currX == getExitPosition().x) && (currY == getExitPosition().y))
+			return true;
+		else
+			return false;
+	}
+	
+	public boolean isGameWon(){
+		System.out.println("Score is=" + score + "and minScore=" + minScore);
+		if (score ==  minScore)
 			return true;
 		else
 			return false;
@@ -379,5 +431,26 @@ public class ModelMaze extends Observable implements Model {
         }
         else
         	fileShell.dispose();      	  
+	}
+	
+	
+	
+	/*
+	 * BFS calculation (Manhatten move) for low value road
+	 */
+	public void runAstar() {
+		int[][] boardForMaze=copyBoard(mBoard);
+		for (int i=0;i<boardForMaze.length;++i){
+			for(int j=0;j<boardForMaze[0].length;++j) {
+				if ( boardForMaze[i][j] == 23 )
+					boardForMaze[i][j]=2;
+			}
+		}
+		Maze maze = new Maze(boardForMaze,startPosition,exitPosition);
+		Searcher as = new Astar(new MazeDomain(maze),new MazeHeuristicDistance(), new MazeStandardDistance());
+		//Searcher as = new BFS(new MazeDomain(maze), new MazeStandardDistance());
+		ArrayList<Action> actions  = as.search(maze.getStart(),maze.getGoal());
+		System.out.println("best=" + (int) maze.getStart().getF());
+		minScore = (int) maze.getStart().getF();		
 	}
 }

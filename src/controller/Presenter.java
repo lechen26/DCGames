@@ -34,6 +34,10 @@ public void update(Observable o, Object arg) {
 				System.out.println("Presenter: Won the game");
 				ui.gameWon();
 			}
+			else if (arg.equals("gameFinish")){
+				System.out.println("Presenter: you finish the game but it wasnt the best approach");
+				ui.gameFinish();
+			}
 			else if (arg.equals("undoEnd")){
 				ui.undoEnd();
 				}
