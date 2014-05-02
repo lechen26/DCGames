@@ -23,8 +23,7 @@ public class ModelMaze extends Observable implements Model {
 	
 	int rows,cols;
 	int score=0;
-	Point exitPosition;
-	Point startPosition;
+	Point exitPosition;	
 
 	public ModelMaze(int rows,int cols) {
 		mBoard=new int[rows][cols];
@@ -43,25 +42,17 @@ public class ModelMaze extends Observable implements Model {
 			for (int j=0;j<mBoard[0].length ; j++)
 				if (mBoard[i][j] == 1 )
 					return new Point(i,j);
-
 		return null; // din't find the mouse
-	}
-
-	public Point getExitPoint(){
-		for (int i=0;i<mBoard[0].length;i++)
-			for (int j=0;j<mBoard.length;j++)
-				if (mBoard[i][j] == 23)
-					return new Point(i,j);
-		return (Point) null ; // didnt find the exit point
 	}
 
 	/*
 	* move up method
 	*/
 	@Override
-	public boolean moveUp(boolean diagonal) {
+	public boolean moveUp(boolean diagonal) {		
 		boolean move=false;
-		undoBoards.add(copyBoard(mBoard));		
+		if (!diagonal)			
+			undoBoards.add(copyBoard(mBoard));
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX - 1;
@@ -84,13 +75,15 @@ public class ModelMaze extends Observable implements Model {
 		}
 		return move;
 	}	
+	
 	/*
 	* move down method
 	*/
 	@Override
 	public boolean moveDown(boolean diagonal) {
 		boolean move=false;
-		undoBoards.add(copyBoard(mBoard));	
+		if (!diagonal)
+			undoBoards.add(copyBoard(mBoard));	
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX + 1;
@@ -118,9 +111,12 @@ public class ModelMaze extends Observable implements Model {
 	* move left method
 	*/
 	@Override
-	public boolean moveLeft(boolean diagonal) {
+	public boolean moveLeft(boolean diagonal) {		
 		boolean move=false;
-		undoBoards.add(copyBoard(mBoard));	
+		if (!diagonal)
+			undoBoards.add(copyBoard(mBoard));		
+		else
+			System.out.println("left diagonal");
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY - 1;
@@ -149,7 +145,8 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public boolean moveRight(boolean diagonal) {
 		boolean move=false;
-		undoBoards.add(copyBoard(mBoard));	
+		if (!diagonal)
+			undoBoards.add(copyBoard(mBoard));	
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY + 1;
@@ -218,36 +215,12 @@ public class ModelMaze extends Observable implements Model {
 		this.exitPosition = exitPosition;
 	}
 
-
-	public Point getStartPosition() {
-		return startPosition;
-	}
-
-
-	public void setStartPosition(Point startPosition) {
-		this.startPosition = startPosition;
-	}
-
-
-	private void createEmptyBoard(int m,int n) {
-		for (int i=0 ; i<m ; i++)
-			for (int j=0 ; j<n ; j++){
-				mBoard[i][j] = 0;
-			}
-
-	}
-
 	public void displayBoard(int[][] mBoard) {	
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j)	
 				System.out.print(mBoard[i][j] + " ");	
 				System.out.println("\n");
 		}
-	}
-
-	private void copyBoard(int[][] source,int[][] target) {
-		for(int i=0;i<source.length;i++) 
-			 target[i] = Arrays.copyOf(source[i], source[i].length);				
 	}
 
 	public static int[][] copyBoard(int[][] source) {
@@ -259,26 +232,16 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 	@Override
-	public void undoBoard(boolean diagonal) {
+	public void undoBoard() {
 		if (undoBoards.isEmpty())
 			System.out.println("No Undo moves to perform");
-		else
-		{
-			if (diagonal) {	
-				System.out.println("undoing digonal");
-				mBoard=copyBoard(undoBoards.get(undoBoards.size()-2));
-				undoBoards.remove(undoBoards.size()-1);
-				undoBoards.remove(undoBoards.size()-1);
-			}
-			else{
-				System.out.println("undo regular");
-				mBoard=copyBoard(undoBoards.get(undoBoards.size()-1));
-				undoBoards.remove(undoBoards.size()-1);
-			}
-				
+		else{ 
+			mBoard=copyBoard(undoBoards.get(undoBoards.size()-1));
+			undoBoards.remove(undoBoards.size()-1);
+			setChanged();
+			notifyObservers();
+		
 		}
-		setChanged();
-		notifyObservers();
 	}
 
 	public boolean isGameWon(int currX, int currY){
@@ -289,8 +252,8 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 	@Override
-	public void moveDiagonalRightUp(boolean b) {		
-		if ((moveRight(b) && moveUp(b)) || (moveUp(b) && moveRight(b)) )
+	public void moveDiagonalRightUp() {		
+		if ((moveRight(false) && moveUp(true)) || (moveUp(false) && moveRight(true)) )
 		{
 			score-=5;
 			setChanged();
@@ -300,8 +263,8 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 	@Override
-	public void moveDiagonalRightDown(boolean b) {		
-		if ((moveRight(b) && moveDown(b)) || (moveDown(b) && moveRight(b)) )
+	public void moveDiagonalRightDown() {		
+		if ((moveRight(false) && moveDown(true)) || (moveDown(false) && moveRight(true)) )
 		{
 			score-=5;
 			setChanged();
@@ -310,20 +273,19 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 	@Override
-	public void moveDiagonalLeftUp(boolean b) {		
+	public void moveDiagonalLeftUp() {		
 		
-		if ((moveLeft(b) && moveUp(b)) || (moveUp(b) && moveLeft(b)) )
+		if  ( (moveLeft(false) && moveUp(true )) || (moveUp(false) && moveLeft(true)) ) 
 		{
-			
 			score-=5;
 			setChanged();
 			notifyObservers();
-		}
+		}			
 	}
 
 	@Override
-	public void moveDiagonalLeftDown(boolean b) {
-		if ((moveLeft(b) && moveDown(b)) || (moveDown(b) && moveLeft(b)) )
+	public void moveDiagonalLeftDown() {
+		if ( (moveDown(false) && moveLeft(true)) ||  (moveLeft(false) && moveDown(true)) )
 		{
 			score-=5;
 			setChanged();

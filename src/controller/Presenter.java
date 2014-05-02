@@ -15,7 +15,6 @@ public class Presenter implements Observer{
 Model mModel;
 View ui;	
 int horizental=0, vertical=0;
-boolean lastDiagonal=false;
 
 public Presenter(Model model,View view){
 	this.mModel = model;
@@ -48,87 +47,60 @@ public void update(Observable o, Object arg) {
 	}
 	if (o == ui)
 	{
-			
-		if (arg != null)
-		{
+		horizental=0;
+		vertical=0;					
+		//Retrieve argument notified for diagonal moves
+		if (arg != null){ 
 			String[] values = ((String) arg ).split(",");	
 			horizental=Integer.parseInt(values[0]);
 			vertical=Integer.parseInt(values[1]);
 		}
+		//Check for diagonal moves
 		if (horizental > 0 && vertical > 0){
-			mModel.moveDiagonalRightUp(true);
-			horizental=0;
-			vertical=0;
-			lastDiagonal=true;
-			System.out.println("diago is " + lastDiagonal);
-
+			mModel.moveDiagonalRightUp();
 			return;
 		}
 		else if (horizental > 0 && vertical < 0 ){
-			mModel.moveDiagonalRightDown(true);
-			horizental=0;
-			vertical=0;
-			lastDiagonal=true;
-			System.out.println("diago is " + lastDiagonal);
-
+			mModel.moveDiagonalRightDown();
 			return;
 		}
 		else if (horizental < 0 && vertical > 0 ){
-			mModel.moveDiagonalLeftUp(true);
-			horizental=0;
-			vertical=0;
-			lastDiagonal=true;
-			System.out.println("diago is " + lastDiagonal);
-
+			mModel.moveDiagonalLeftUp();
 			return;
 		}
 		else if (horizental < 0 && vertical < 0){
-			mModel.moveDiagonalLeftDown(true);	
-			horizental=0;
-			vertical=0;
-			lastDiagonal=true;
-			System.out.println("diago is " + lastDiagonal);
+			mModel.moveDiagonalLeftDown();	
 			return;
 		}
+		
 		int indexCMD = ui.getUserCommand();
-		System.out.println("command=" + indexCMD + "last diag was" + lastDiagonal);
-
 		switch (indexCMD) {
 			case 0: // new game
 				mModel.initializeBoard();
-				lastDiagonal=false;
 				break;
 			case 2: // restart game
-				mModel.initializeBoard();
-				lastDiagonal=false;
+				mModel.initializeBoard();				
 				break;
 			case 1 : // undo move
-				mModel.undoBoard(lastDiagonal);
-				lastDiagonal=false;
+				mModel.undoBoard();				
 				break;
 			case 3: // load game
-				mModel.loadGame();
-				lastDiagonal=false;
+				mModel.loadGame();				
 				break;
 			case 4: // save game 
-				mModel.saveGame();
-				lastDiagonal=false;
+				mModel.saveGame();				
 				break;
 			case SWT.ARROW_UP:
-				mModel.moveUp(false);
-				lastDiagonal=false;
+				mModel.moveUp(false);				
 				break;
 			case SWT.ARROW_DOWN:
-				mModel.moveDown(false);
-				lastDiagonal=false;
+				mModel.moveDown(false);				
 				break;
 			case SWT.ARROW_RIGHT:
-				mModel.moveRight(false);
-				lastDiagonal=false;
+				mModel.moveRight(false);				
 				break;
 			case SWT.ARROW_LEFT:
-				mModel.moveLeft(false);
-				lastDiagonal=false;
+				mModel.moveLeft(false);				
 				break;
 			default:
 				// no key pushed... will wait

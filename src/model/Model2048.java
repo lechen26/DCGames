@@ -39,7 +39,7 @@ public class Model2048 extends Observable implements Model {
 	 * Undo the last operation and revert back to the board before it
 	 * if no operation was made, do nothing
 	 */
-	public void undoBoard(boolean b) {
+	public void undoBoard() {
 		if (undoBoards.isEmpty())
 		{
 			System.out.println("No Undo moves to perform");
@@ -434,23 +434,6 @@ public class Model2048 extends Observable implements Model {
 		
 		
 	@Override
-	public void moveDiagonalRightUp(boolean b) {
-	}
-
-	@Override
-	public void moveDiagonalRightDown(boolean b) {
-	}
-
-	@Override
-	public void moveDiagonalLeftUp(boolean b) {
-
-	}
-
-	@Override
-	public void moveDiagonalLeftDown(boolean b) {	
-	}
-
-	@Override
 	public void saveGame() {
 		Shell fileShell = new Shell();
         FileDialog fileDialog = new FileDialog(fileShell,SWT.SAVE);        
@@ -521,5 +504,29 @@ public class Model2048 extends Observable implements Model {
         }
         else
         	fileShell.dispose();      	  
+	}
+
+	@Override
+	public void moveDiagonalRightUp() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveDiagonalRightDown() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveDiagonalLeftUp() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveDiagonalLeftDown() {
+		// TODO Auto-generated method stub
+		
 	}
 }
