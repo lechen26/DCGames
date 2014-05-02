@@ -1,12 +1,16 @@
 package view;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Tracker;
 
 public class State extends Canvas {		
 	int value=0;
@@ -26,6 +30,7 @@ public class State extends Canvas {
 					e.gc.drawString("" + value, x, y);				
 			}			
 		});
+
 	}
 	
 

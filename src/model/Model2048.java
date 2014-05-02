@@ -442,7 +442,7 @@ public class Model2048 extends Observable implements Model {
 		{
 			for(int j=0;j<mBoard.length;++j)
 			{
-				if (mBoard[i][j] == 8)
+				if (mBoard[i][j] == 2048)
 					return true;
 			}
 		}

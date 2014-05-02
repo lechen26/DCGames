@@ -5,9 +5,12 @@ import java.util.Observable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -17,6 +20,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Tracker;
 
 public class ViewMaze extends Observable implements View,Runnable {
 
@@ -136,8 +140,37 @@ public class ViewMaze extends Observable implements View,Runnable {
 				}		
 			}
 		});		
-	    shell.open();
-	}   
+	shell.open();
+	
+	board.forceFocus();
+	// mouse event listener
+	board.addMouseListener(new MouseListener() {
+
+		@Override
+		public void mouseDoubleClick(MouseEvent mousey) {
+		}
+
+		@Override
+		public void mouseDown(MouseEvent mousey) {
+			
+			System.out.println("mouse is clicked");
+			//Tracker tracker = new Tracker(shell, SWT.NONE);
+			int mouseXpos = mousey.x;
+			int mouseYpos = mousey.y;
+			System.out.println("mouse x : " + mouseXpos + "mouse y : " + mouseYpos);
+			
+			board.redraw();
+		}
+
+		@Override
+		public void mouseUp(MouseEvent mousey) {
+			System.out.println("mouse is released");
+			int newMouseXPos = mousey.x;
+			int newMouseYPos = mousey.y;
+			board.redraw();
+		}
+	});
+}
 	
 	@Override
 	public void run() { 		
