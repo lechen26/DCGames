@@ -2,14 +2,14 @@ package model;
 
 import java.awt.Point;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Observable;
 import java.util.Random;
 
@@ -21,8 +21,8 @@ import org.eclipse.swt.widgets.Shell;
 public class Model2048 extends Observable implements Model {
 	
 	int[][] mBoard;	
-	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
-	//HashSet<Integer,int[][]> undoBoards = new HashSet<Integer,int[][]>();
+	//ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
+	LinkedHashMap<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
 	int score=0;
 	int free=-2;
 	
@@ -48,8 +48,9 @@ public class Model2048 extends Observable implements Model {
 		}	
 		else
 		{
-			mBoard=copyBoard(undoBoards.get(undoBoards.size()-1));
-			undoBoards.remove(undoBoards.size()-1);			
+			List<Integer> list = new ArrayList<Integer>(undoBoards.keySet());
+			score=list.get(list.size()-1);
+			mBoard=copyBoard(undoBoards.remove(score));
 			setChanged();
 			notifyObservers();
 		}
@@ -64,9 +65,8 @@ public class Model2048 extends Observable implements Model {
 		System.out.println("Moved right on model");
 		boolean move=false;
 		//save board before operation for undo purposes
-		if (!quiet)
-			undoBoards.add(copyBoard(mBoard));
-			//undoBoards.put(score,copyBoard(mBoard));		
+		if (!quiet)		
+			undoBoards.put(score,copyBoard(mBoard));		
 		for(int i=0;i<mBoard.length;i++){		
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
 			for(int j=mBoard[0].length-1;j>0;j--){
@@ -122,9 +122,8 @@ public class Model2048 extends Observable implements Model {
 	 */
 	public boolean moveLeft(boolean quiet){		
 		//save board before operation for undo purposes
-		if (!quiet)
-			undoBoards.add(copyBoard(mBoard));
-			//undoBoards.put(score,copyBoard(mBoard));
+		if (!quiet)			
+			undoBoards.put(score,copyBoard(mBoard));
 		boolean move=false;	
 		for(int i=0;i<mBoard.length;i++){
 			ArrayList<Integer> merged = new ArrayList<Integer>();
@@ -180,9 +179,8 @@ public class Model2048 extends Observable implements Model {
 	 */
 	public boolean moveUp(boolean quiet){		
 		//save board before operation for undo purposes	
-		if (!quiet)
-			undoBoards.add(copyBoard(mBoard));
-			//undoBoards.put(score,copyBoard(mBoard));
+		if (!quiet)			
+			undoBoards.put(score,copyBoard(mBoard));
 		boolean move=false;	
 		for(int i=0;i<mBoard[0].length;i++){
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
@@ -239,9 +237,8 @@ public class Model2048 extends Observable implements Model {
 	 */
 	public boolean moveDown(boolean quiet){		
 		//save board before operation for undo purposes
-		if (! quiet)
-			undoBoards.add(copyBoard(mBoard));
-			//undoBoards.put(score,copyBoard(mBoard));
+		if (! quiet)			
+			undoBoards.put(score,copyBoard(mBoard));
 		boolean move=false;
 		for(int i=0;i<mBoard[0].length;i++){
 			ArrayList<Integer> merged = new ArrayList<Integer>();
@@ -312,9 +309,8 @@ public class Model2048 extends Observable implements Model {
 				mBoard[i][j]=free;
 				//Create state with 0?
 			}
-		}
-		undoBoards = new ArrayList<int[][]>();
-		//undoBoards = new HashMap<Integer,int[][]>();
+		}		
+		undoBoards = new LinkedHashMap<Integer,int[][]>();
 	}
 	
 	/*

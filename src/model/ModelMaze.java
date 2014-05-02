@@ -8,6 +8,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 
 import org.eclipse.swt.SWT;
@@ -19,7 +22,7 @@ import org.eclipse.swt.widgets.Shell;
 public class ModelMaze extends Observable implements Model {
 
 	int[][] mBoard;	
-	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
+	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
 	
 	int rows,cols;
 	int score=0;
@@ -52,7 +55,7 @@ public class ModelMaze extends Observable implements Model {
 	public boolean moveUp(boolean diagonal) {		
 		boolean move=false;
 		if (!diagonal)			
-			undoBoards.add(copyBoard(mBoard));
+			undoBoards.put(score,copyBoard(mBoard));
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX - 1;
@@ -83,7 +86,7 @@ public class ModelMaze extends Observable implements Model {
 	public boolean moveDown(boolean diagonal) {
 		boolean move=false;
 		if (!diagonal)
-			undoBoards.add(copyBoard(mBoard));	
+			undoBoards.put(score,copyBoard(mBoard));	
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX + 1;
@@ -114,7 +117,7 @@ public class ModelMaze extends Observable implements Model {
 	public boolean moveLeft(boolean diagonal) {		
 		boolean move=false;
 		if (!diagonal)
-			undoBoards.add(copyBoard(mBoard));		
+			undoBoards.put(score,copyBoard(mBoard));			
 		else
 			System.out.println("left diagonal");
 		int cPosX = getCurrentPosition().x;
@@ -146,7 +149,7 @@ public class ModelMaze extends Observable implements Model {
 	public boolean moveRight(boolean diagonal) {
 		boolean move=false;
 		if (!diagonal)
-			undoBoards.add(copyBoard(mBoard));	
+			undoBoards.put(score,copyBoard(mBoard));	
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY + 1;
@@ -175,7 +178,7 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public void initializeBoard() {
 		System.out.println("initialzeBaord");
-		undoBoards = new ArrayList<int[][]>();
+		undoBoards = new LinkedHashMap<Integer,int[][]>();
 		int[][] b = { { 23 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //1
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //2
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //3
@@ -231,17 +234,26 @@ public class ModelMaze extends Observable implements Model {
 	    return copy;
 	}
 
-	@Override
+	/*
+	 * Undo the last operation and revert back to the board before it
+	 * if no operation was made, do nothing
+	 */
 	public void undoBoard() {
 		if (undoBoards.isEmpty())
+		{
 			System.out.println("No Undo moves to perform");
-		else{ 
-			mBoard=copyBoard(undoBoards.get(undoBoards.size()-1));
-			undoBoards.remove(undoBoards.size()-1);
+			setChanged();
+			notifyObservers("undoEnd");
+		}	
+		else
+		{
+			List<Integer> list = new ArrayList<Integer>(undoBoards.keySet());
+			score=list.get(list.size()-1);
+			mBoard=copyBoard(undoBoards.remove(score));
 			setChanged();
 			notifyObservers();
-		
 		}
+		
 	}
 
 	public boolean isGameWon(int currX, int currY){
