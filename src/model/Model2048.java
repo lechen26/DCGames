@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Shell;
 public class Model2048 extends Observable implements Model {
 	
 	int[][] mBoard;	
-	//ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
 	LinkedHashMap<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
 	int score=0;
 	int free=-2;
@@ -30,13 +29,17 @@ public class Model2048 extends Observable implements Model {
 		mBoard = new int[rows][cols];		
 	}
 	
+	/*
+	 * Get Board data
+	 */
 	@Override
 	public int[][] getData() {
 		return mBoard;
 	}
 
+	
 	/*
-	 * Undo the last operation and revert back to the board before it
+	 * Undo the last operation and revert back to the board before it (including score)
 	 * if no operation was made, do nothing
 	 */
 	public void undoBoard() {
@@ -62,7 +65,6 @@ public class Model2048 extends Observable implements Model {
 	 Output: boolean - if we have possible movements or not.
 	 */
 	public boolean moveRight(boolean quiet){
-		System.out.println("Moved right on model");
 		boolean move=false;
 		//save board before operation for undo purposes
 		if (!quiet)		
@@ -101,17 +103,22 @@ public class Model2048 extends Observable implements Model {
 		if (!quiet)
 		{			
 			setChanged();
-			if (isGameOver())
+			notifyObservers();
+			if (isGameOver()){
+				setChanged();
 				notifyObservers("gameOver");
-			else if (isGameWon())
+			}
+			else if (isGameWon()) {
+				System.out.println("game won on move");
+				setChanged();			
 				notifyObservers("gameWon");
-			else
-			{
+			}else
+			{	
 				generateState();
 				notifyObservers();
+				
 			}
-		}
-		return move;
+		}return move;
 	}
 
 	
@@ -159,18 +166,20 @@ public class Model2048 extends Observable implements Model {
 		}
 		if (!quiet)
 		{			
-			setChanged();
-			if (isGameOver())
+			setChanged();		
+			notifyObservers();
+			if (isGameOver()){
+				setChanged();
 				notifyObservers("gameOver");
-			else if (isGameWon())
+			}
+			else if (isGameWon()) {			
+				setChanged();			
 				notifyObservers("gameWon");
-			else
-			{
+			}else {
 				generateState();
 				notifyObservers();
 			}
-		}
-		return move;
+		}return move;
 	}
 	
 	/* Move all possible cells to the Up and merge cells if needed
@@ -216,18 +225,20 @@ public class Model2048 extends Observable implements Model {
 		}
 		if (!quiet)
 		{			
-			setChanged();
-			if (isGameOver())
+			setChanged();		
+			notifyObservers();
+			if (isGameOver()){
+				setChanged();
 				notifyObservers("gameOver");
-			else if (isGameWon())
+			}
+			else if (isGameWon()) {				
+				setChanged();			
 				notifyObservers("gameWon");
-			else
-			{
+			}else {
 				generateState();
 				notifyObservers();
 			}
-		}
-		return move;
+		}return move;
 	}
 
 
@@ -273,13 +284,16 @@ public class Model2048 extends Observable implements Model {
 		}
 		if (!quiet)
 		{			
-			setChanged();
-			if (isGameOver())
+			setChanged();		
+			notifyObservers();
+			if (isGameOver()){
+				setChanged();
 				notifyObservers("gameOver");
-			else if (isGameWon())
+			}
+			else if (isGameWon()) {				
+				setChanged();			
 				notifyObservers("gameWon");
-			else
-			{
+			}else {
 				generateState();
 				notifyObservers();
 			}
@@ -345,6 +359,18 @@ public class Model2048 extends Observable implements Model {
 		}
 	}
 	
+	public void generateState2() {
+		int freeSize=getFreeStates().size();
+		if (freeSize != 0 )
+		{
+			ArrayList<Point> freeStates = getFreeStates();			
+			int cellIndex = new Random().nextInt(freeStates.size());
+			int cellX = freeStates.get(cellIndex).x;
+			int cellY = freeStates.get(cellIndex).y;		
+			mBoard[cellX][cellY]=2048;
+			freeStates.remove(cellIndex);
+		}
+	}
 	/*
 	 * Initialize Board: all board with 0 besides 2 cells with random score(2/4)
 	 */
@@ -361,7 +387,6 @@ public class Model2048 extends Observable implements Model {
 			mBoard[cellX][cellY]=score;
 			freeStates.remove(cellIndex);
 		}
-		//mBoard = new int[][]{{2,4,16,32},{4,8,32,16},{2,16,64,128},{16,8,32,512}};
 		setChanged();
 		notifyObservers();
 	}
@@ -417,7 +442,7 @@ public class Model2048 extends Observable implements Model {
 		{
 			for(int j=0;j<mBoard.length;++j)
 			{
-				if (mBoard[i][j] == 2048)
+				if (mBoard[i][j] == 8)
 					return true;
 			}
 		}
@@ -465,9 +490,7 @@ public class Model2048 extends Observable implements Model {
         fileDialog.setFilterNames(new String[] { "GameFile(*.xml)" });        
         String sourceFile = fileDialog.open();
         if (sourceFile != null)
-        {
-		  
-	        System.out.println("Chosen to open " + sourceFile);        	        
+        {		  	                	      
 	        MessageBox messageDialog = new MessageBox(fileShell,SWT.ICON_QUESTION | SWT.OK | SWT.CANCEL);
 	        messageDialog.setText("Save & Load");
 	        messageDialog.setMessage("Are You Sure? This will erase your current state");

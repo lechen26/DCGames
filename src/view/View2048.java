@@ -112,9 +112,20 @@ public class View2048 extends Observable implements View,Runnable {
 	/*
 	 * Display game Winning board
 	 */
-	public void gameWon() {		
-		display.dispose();
-		System.exit(0);
+	public void gameWon() {	
+		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
+		end.setMessage("You Won!!!! . do you want to play another one?");
+		end.setText("gameWon");
+		int response = end.open();
+		if (response == SWT.NO) {
+			display.dispose();
+			System.exit(0);
+		}
+		if (response == SWT.YES){
+			setUserCommand(2);
+			setChanged();
+			notifyObservers();	
+		}
 	}
 	
 	/*
