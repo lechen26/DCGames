@@ -57,6 +57,23 @@ public class ModelMaze extends Observable implements Model {
 		return null; // din't find the mouse
 	}
 
+	private void checkAndNotify(int x,int y,boolean diagonal)
+	{
+		if (isGotToEndPoint(x,y)){			
+			if (diagonal){
+				score-=5;
+				setChanged();						
+				notifyObservers();
+			} if (isGameWon()) {
+				setChanged();
+				notifyObservers("gameWon");
+			}else {			
+				setChanged();
+				notifyObservers("gameFinish");
+			}
+		}
+	}
+	
 	/*
 	* move up method
 	*/
@@ -78,21 +95,7 @@ public class ModelMaze extends Observable implements Model {
 			numOfMoves++;
 		setChanged();
 		notifyObservers();
-		if (isGotToEndPoint(newPos,cPosY)){			
-			if (diagonal){
-				setChanged();
-				score-=5;				
-				notifyObservers();
-			}
-			if (isGameWon()) {
-				setChanged();
-				notifyObservers("gameWon");
-			}
-			else{			
-				setChanged();
-				notifyObservers("gameFinish");
-			}
-		}		
+		checkAndNotify(newPos,cPosY,diagonal);
 		return move;
 	}	
 	
@@ -117,21 +120,7 @@ public class ModelMaze extends Observable implements Model {
 			numOfMoves++;
 		setChanged();
 		notifyObservers();
-		if (isGotToEndPoint(newPos,cPosY)){			
-			if (diagonal){
-				setChanged();
-				score-=5;				
-				notifyObservers();
-			}
-			if (isGameWon()) {
-				setChanged();
-				notifyObservers("gameWon");
-			}
-			else{			
-				setChanged();
-				notifyObservers("gameFinish");
-			}
-		}	
+		checkAndNotify(newPos,cPosY,diagonal);		
 		return move;
 		
 	}
@@ -158,23 +147,11 @@ public class ModelMaze extends Observable implements Model {
 			numOfMoves++;
 		setChanged();
 		notifyObservers();
-		if (isGotToEndPoint(cPosX,newPos)){			
-			if (diagonal){
-				setChanged();
-				score-=5;				
-				notifyObservers();
-			}
-			if (isGameWon()) {
-				setChanged();
-				notifyObservers("gameWon");
-			}
-			else{			
-				setChanged();
-				notifyObservers("gameFinish");
-			}		
-		}		
+		checkAndNotify(cPosX,newPos,diagonal);
 		return move;
 	}
+	
+	
 	/*
 	* move right method
 	*/
@@ -195,22 +172,8 @@ public class ModelMaze extends Observable implements Model {
 		if ((move) && (!diagonal))
 			numOfMoves++;
 		setChanged();
-		notifyObservers();		
-		if (isGotToEndPoint(cPosX,newPos)){			
-			if (diagonal){
-				setChanged();
-				score-=5;				
-				notifyObservers();
-			}
-			if (isGameWon()) {
-				setChanged();
-				notifyObservers("gameWon");
-			}
-			else{				
-				setChanged();
-				notifyObservers("gameFinish");
-			}
-		}		
+		notifyObservers();
+		checkAndNotify(cPosX,newPos,diagonal);
 		return move;
 	}
 

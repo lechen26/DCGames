@@ -22,16 +22,13 @@ public void update(Observable o, Object arg) {
 	if (o == mModel){	
 		if (arg != null)
 		{
-			if (arg.equals("gameOver")){
-				System.out.println("Presenter: Game is over");
+			if (arg.equals("gameOver")){				
 				ui.gameOver();
 			}
-			else if (arg.equals("gameWon")){
-				System.out.println("Presenter: Won the game");
+			else if (arg.equals("gameWon")){				
 				ui.gameWon();
 			}		
-			else if (arg.equals("gameFinish")){
-				System.out.println("Presenter: you finish the game but it wasnt the best approach");
+			else if (arg.equals("gameFinish")){				
 				ui.gameFinish();
 			}
 			else if (arg.equals("undoEnd")){

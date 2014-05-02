@@ -60,6 +60,25 @@ public class Model2048 extends Observable implements Model {
 		
 	}
 	
+	/*
+	 * Helper method to check GameOver and Win and notify after specific move
+	 */
+	private void checkAndNotify() {
+		if (isGameOver()){
+			setChanged();
+			notifyObservers("gameOver");
+		}  else if (isGameWon()) {
+			setChanged();			
+			notifyObservers("gameWon");		
+		}
+		else{
+			setChanged();
+			generateState();
+			notifyObservers();
+		}
+	}
+	
+	
 	/* Move all possible cells to the Right and merge cells if needed
 	 Input: boolean quiet - if true, do not move states, only see if we have possible movements.
 	 Output: boolean - if we have possible movements or not.
@@ -100,25 +119,12 @@ public class Model2048 extends Observable implements Model {
 				}
 			}
 		}		
-		if (!quiet)
-		{			
+		if (!quiet) {			
 			setChanged();
 			notifyObservers();
-			if (isGameOver()){
-				setChanged();
-				notifyObservers("gameOver");
-			}
-			else if (isGameWon()) {
-				System.out.println("game won on move");
-				setChanged();			
-				notifyObservers("gameWon");
-			}else
-			{	
-				generateState();
-				notifyObservers();
-				
-			}
-		}return move;
+			checkAndNotify();
+		}
+		return move;
 	}
 
 	
@@ -168,17 +174,7 @@ public class Model2048 extends Observable implements Model {
 		{			
 			setChanged();		
 			notifyObservers();
-			if (isGameOver()){
-				setChanged();
-				notifyObservers("gameOver");
-			}
-			else if (isGameWon()) {			
-				setChanged();			
-				notifyObservers("gameWon");
-			}else {
-				generateState();
-				notifyObservers();
-			}
+			checkAndNotify();
 		}return move;
 	}
 	
@@ -223,21 +219,10 @@ public class Model2048 extends Observable implements Model {
 					}
 				}
 		}
-		if (!quiet)
-		{			
+		if (!quiet){			
 			setChanged();		
 			notifyObservers();
-			if (isGameOver()){
-				setChanged();
-				notifyObservers("gameOver");
-			}
-			else if (isGameWon()) {				
-				setChanged();			
-				notifyObservers("gameWon");
-			}else {
-				generateState();
-				notifyObservers();
-			}
+			checkAndNotify();
 		}return move;
 	}
 
@@ -286,19 +271,8 @@ public class Model2048 extends Observable implements Model {
 		{			
 			setChanged();		
 			notifyObservers();
-			if (isGameOver()){
-				setChanged();
-				notifyObservers("gameOver");
-			}
-			else if (isGameWon()) {				
-				setChanged();			
-				notifyObservers("gameWon");
-			}else {
-				generateState();
-				notifyObservers();
-			}
-		}
-		return move;
+			checkAndNotify();
+		}return move;
 	}
 
 
