@@ -12,7 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
-
 import maze.Maze;
 import maze.MazeDomain;
 import maze.MazeHeuristicDistance;
@@ -20,8 +19,6 @@ import maze.MazeStandardDistance;
 import model.algorithms.Action;
 import model.algorithms.Searcher;
 import model.algorithms.a_star.Astar;
-import model.algorithms.bfs.BFS;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
@@ -37,7 +34,8 @@ public class ModelMaze extends Observable implements Model {
 	int score=0;
 	Point exitPosition;	
 	Point startPosition;
-	int minScore=0;
+	int numOfMoves=0;
+	int minMoves=0;
 	
 	public ModelMaze(int rows,int cols) {
 		mBoard=new int[rows][cols];
@@ -76,6 +74,8 @@ public class ModelMaze extends Observable implements Model {
 			mBoard[cPosX][cPosY] = 0 ;
 			score += 10;
 		}
+		if ((move) && (!diagonal))
+			numOfMoves++;
 		setChanged();
 		notifyObservers();
 		if (isGotToEndPoint(newPos,cPosY)){			
@@ -92,7 +92,7 @@ public class ModelMaze extends Observable implements Model {
 				setChanged();
 				notifyObservers("gameFinish");
 			}
-		}
+		}		
 		return move;
 	}	
 	
@@ -100,7 +100,7 @@ public class ModelMaze extends Observable implements Model {
 	* move down method
 	*/
 	@Override
-	public boolean moveDown(boolean diagonal) {
+	public boolean moveDown(boolean diagonal) {		
 		boolean move=false;
 		if (!diagonal)
 			undoBoards.put(score,copyBoard(mBoard));	
@@ -113,6 +113,8 @@ public class ModelMaze extends Observable implements Model {
 			mBoard[cPosX][cPosY] = 0 ;
 			score += 10;
 		}
+		if ((move) && (!diagonal))
+			numOfMoves++;
 		setChanged();
 		notifyObservers();
 		if (isGotToEndPoint(newPos,cPosY)){			
@@ -129,7 +131,7 @@ public class ModelMaze extends Observable implements Model {
 				setChanged();
 				notifyObservers("gameFinish");
 			}
-		}
+		}	
 		return move;
 		
 	}
@@ -152,6 +154,8 @@ public class ModelMaze extends Observable implements Model {
 			mBoard[cPosX][cPosY] = 0 ;
 			score += 10;
 		}
+		if ((move) && (!diagonal))
+			numOfMoves++;
 		setChanged();
 		notifyObservers();
 		if (isGotToEndPoint(cPosX,newPos)){			
@@ -168,14 +172,14 @@ public class ModelMaze extends Observable implements Model {
 				setChanged();
 				notifyObservers("gameFinish");
 			}		
-		}
+		}		
 		return move;
 	}
 	/*
 	* move right method
 	*/
 	@Override
-	public boolean moveRight(boolean diagonal) {
+	public boolean moveRight(boolean diagonal) {		
 		boolean move=false;
 		if (!diagonal)
 			undoBoards.put(score,copyBoard(mBoard));	
@@ -188,9 +192,10 @@ public class ModelMaze extends Observable implements Model {
 			mBoard[cPosX][cPosY] = 0 ;
 			score += 10;
 		}
+		if ((move) && (!diagonal))
+			numOfMoves++;
 		setChanged();
-		notifyObservers();
-		
+		notifyObservers();		
 		if (isGotToEndPoint(cPosX,newPos)){			
 			if (diagonal){
 				setChanged();
@@ -205,7 +210,7 @@ public class ModelMaze extends Observable implements Model {
 				setChanged();
 				notifyObservers("gameFinish");
 			}
-		}
+		}		
 		return move;
 	}
 
@@ -215,7 +220,7 @@ public class ModelMaze extends Observable implements Model {
 	public void initializeBoard() {
 		System.out.println("initialzeBaord");
 		undoBoards = new LinkedHashMap<Integer,int[][]>();
-		/*int[][] b = { { 23 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //1
+		int[][] b = { { 23 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //1
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //2
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //3
 		{ 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0 }, //4
@@ -231,16 +236,27 @@ public class ModelMaze extends Observable implements Model {
 		{ -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , -1 , -1 , -1 }, //14	
 		{ -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , 0}, //15
 		{ -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , 1 }, //16
-		};*/
-		int[][] b = { {23,0,0,0}, {-1,-1,0,0},{0,0,0,0},{0,0,0,1}};
-		setStartPosition(new Point(3,3));
+		};
+		//int[][] b = { {23,0,0,0}, {-1,-1,0,0},{0,0,0,0},{0,0,0,1}};
+		setStartPosition(new Point(15,15));
 		setExitPosition(new Point(0,0));
-		mBoard = b;
+		mBoard = copyBoard(b);
 		setScore(0);
+		setNumOfMoves(0);
 		runAstar();
 		setChanged();
 		notifyObservers();
 	}
+
+	public int getNumOfMoves() {
+		return numOfMoves;
+	}
+
+
+	public void setNumOfMoves(int numOfMoves) {
+		this.numOfMoves = numOfMoves;
+	}
+
 
 	private void setStartPosition(Point point) {
 		this.startPosition=point;		
@@ -308,8 +324,8 @@ public class ModelMaze extends Observable implements Model {
 	}
 	
 	public boolean isGameWon(){
-		System.out.println("Score is=" + score + "and minScore=" + minScore);
-		if (score ==  minScore)
+		System.out.println("Moves are=" + numOfMoves + "and minMoves=" + minMoves);
+		if (numOfMoves ==  minMoves)
 			return true;
 		else
 			return false;
@@ -318,7 +334,7 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public void moveDiagonalRightUp() {		
 		if ((moveRight(false) && moveUp(true)) || (moveUp(false) && moveRight(true)) )
-		{
+		{		
 			score-=5;
 			setChanged();
 			notifyObservers();
@@ -329,7 +345,7 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public void moveDiagonalRightDown() {		
 		if ((moveRight(false) && moveDown(true)) || (moveDown(false) && moveRight(true)) )
-		{
+		{		
 			score-=5;
 			setChanged();
 			notifyObservers();
@@ -340,7 +356,7 @@ public class ModelMaze extends Observable implements Model {
 	public void moveDiagonalLeftUp() {		
 		
 		if  ( (moveLeft(false) && moveUp(true )) || (moveUp(false) && moveLeft(true)) ) 
-		{
+		{			
 			score-=5;
 			setChanged();
 			notifyObservers();
@@ -350,7 +366,7 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public void moveDiagonalLeftDown() {
 		if ( (moveDown(false) && moveLeft(true)) ||  (moveLeft(false) && moveDown(true)) )
-		{
+		{		
 			score-=5;
 			setChanged();
 			notifyObservers();
@@ -438,7 +454,8 @@ public class ModelMaze extends Observable implements Model {
 	/*
 	 * BFS calculation (Manhatten move) for low value road
 	 */
-	public void runAstar() {
+	public void runAstar() {	
+		//Change Cheeze value to be as implementd on Astar
 		int[][] boardForMaze=copyBoard(mBoard);
 		for (int i=0;i<boardForMaze.length;++i){
 			for(int j=0;j<boardForMaze[0].length;++j) {
@@ -447,10 +464,9 @@ public class ModelMaze extends Observable implements Model {
 			}
 		}
 		Maze maze = new Maze(boardForMaze,startPosition,exitPosition);
-		Searcher as = new Astar(new MazeDomain(maze),new MazeHeuristicDistance(), new MazeStandardDistance());
-		//Searcher as = new BFS(new MazeDomain(maze), new MazeStandardDistance());
+		Searcher as = new Astar(new MazeDomain(maze),new MazeHeuristicDistance(), new MazeStandardDistance());		
 		ArrayList<Action> actions  = as.search(maze.getStart(),maze.getGoal());
-		System.out.println("best=" + (int) maze.getStart().getF());
-		minScore = (int) maze.getStart().getF();		
+		if (actions != null)		
+			minMoves=actions.size();		
 	}
 }

@@ -346,7 +346,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 	@Override
 	public void gameFinish() {		
 		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
-		end.setMessage("You got to the END point but with high score then possible!. do you wanna play another one?");
+		end.setMessage("You got to the END point but with More moves then possible! do you wanna play another one?");
 		end.setText("GAME FINISH");
 		int response = end.open();
 		if (response == SWT.NO) {

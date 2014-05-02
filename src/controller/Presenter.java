@@ -2,12 +2,8 @@ package controller;
 
 import java.util.Observable;
 import java.util.Observer;
-
 import model.Model;
-
 import org.eclipse.swt.SWT;
-
-import view.View;
 import view.View;
 
 public class Presenter implements Observer{
@@ -33,14 +29,14 @@ public void update(Observable o, Object arg) {
 			else if (arg.equals("gameWon")){
 				System.out.println("Presenter: Won the game");
 				ui.gameWon();
-			}
+			}		
 			else if (arg.equals("gameFinish")){
 				System.out.println("Presenter: you finish the game but it wasnt the best approach");
 				ui.gameFinish();
 			}
 			else if (arg.equals("undoEnd")){
 				ui.undoEnd();
-				}
+			}
 		}
 		else{
 			int[][] b=mModel.getData();	
