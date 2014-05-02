@@ -22,7 +22,7 @@ public class Board extends Canvas {
 		super(parent,style);	
 		boardData = new int[rows][cols];
 		setLayout(new GridLayout(cols,true));
-		states = new State[rows][cols];
+		states = new State  [rows][cols];
 		for(int i=0;i< boardData.length; ++i)
 		{
 				for(int j=0; j < boardData[0].length; ++j)

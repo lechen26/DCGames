@@ -13,7 +13,7 @@ public class State extends Canvas {
 	
 	public State(Composite parent, int style) {
 		super(parent,style);				
-		Font font = new Font(getDisplay(), getFont().getFontData()[0].getName(),25,SWT.BORDER);
+		Font font = new Font(getDisplay(), getFont().getFontData()[0].getName(),25,SWT.NONE);
 		setFont(font);		
 		
 		addPaintListener(new PaintListener() {
