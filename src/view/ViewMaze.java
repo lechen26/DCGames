@@ -88,7 +88,6 @@ public class ViewMaze extends Observable implements View,Runnable {
 					default:
 						break;
 				}		
-				
 				setChanged();
 				userCommand=e.keyCode;
 				// support diagonal moves

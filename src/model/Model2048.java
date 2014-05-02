@@ -24,9 +24,12 @@ public class Model2048 extends Observable implements Model {
 	LinkedHashMap<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
 	int score=0;
 	int free=-2;
+	int winNumber;
+	boolean win=false;
 	
-	public Model2048(int rows,int cols) {		
-		mBoard = new int[rows][cols];		
+	public Model2048(int rows,int cols,int winNumber) {		
+		mBoard = new int[rows][cols];	
+		this.winNumber=winNumber;
 	}
 	
 	/*
@@ -67,7 +70,7 @@ public class Model2048 extends Observable implements Model {
 		if (isGameOver()){
 			setChanged();
 			notifyObservers("gameOver");
-		}  else if (isGameWon()) {
+		}  else if ((!win) && (isGameWon())){
 			setChanged();			
 			notifyObservers("gameWon");		
 		}
@@ -407,6 +410,7 @@ public class Model2048 extends Observable implements Model {
 		return ((!isMovesAvailable()) && (getFreeStates().size() == 0) );	
 	}
 	
+	
 	/*
 	 * Check if we won the game. if we have a cell with 2048 value
 	 */
@@ -416,8 +420,11 @@ public class Model2048 extends Observable implements Model {
 		{
 			for(int j=0;j<mBoard.length;++j)
 			{
-				if (mBoard[i][j] == 8)
+				if (mBoard[i][j] == this.winNumber)
+				{	
+					win=true;
 					return true;
+				}
 			}
 		}
 		return false;
