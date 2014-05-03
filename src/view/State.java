@@ -5,6 +5,8 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
@@ -14,8 +16,7 @@ public class State extends Canvas {
 	public State(Composite parent, int style) {
 		super(parent,style);				
 		Font font = new Font(getDisplay(), getFont().getFontData()[0].getName(),25,SWT.NONE);
-		setFont(font);		
-		
+		setFont(font);				
 		addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {				
@@ -23,7 +24,23 @@ public class State extends Canvas {
 				int x = (getSize().x)/2  - (("" + value).length())*stringWidth/2;
 				int y = (getSize().y)/2 - (("" + value).length())*stringWidth/2;
 				if ((value > 0 ) && (value != -1) && (value != 1) && (value !=23))
-					e.gc.drawString("" + value, x, y);				
+					e.gc.drawString("" + value, x, y);
+				if (value == 1)
+				{					
+					x=((Canvas) e.widget).getBounds().width;
+					y=((Canvas) e.widget).getBounds().height;
+					Image mouse = new Image(getDisplay(),"resources/mouse.jpg");
+					Image scaledMouse = new Image(getDisplay(),mouse.getImageData().scaledTo(x, y));
+					e.gc.drawImage(scaledMouse,0,0);					
+				}
+				if (value == 23)
+				{
+					x=((Canvas) e.widget).getBounds().width;
+					y=((Canvas) e.widget).getBounds().height;
+					Image cheeze = new Image(getDisplay(),"resources/cheeze.jpg");
+					Image scaledMouse = new Image(getDisplay(),cheeze.getImageData().scaledTo(x, y));
+					e.gc.drawImage(scaledMouse,0,0);
+				}
 			}			
 		});
 	}
@@ -93,9 +110,11 @@ public class State extends Canvas {
 		case -1:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
 			break;
+			/*
 		case 1:
-			setBackground(getDisplay().getSystemColor(SWT.COLOR_GREEN));
-			break;
+			//setBackground(getDisplay().getSystemColor(SWT.COLOR_GREEN));			
+			setBackgroundImage(img);			
+			break;*/
 		case 23: 
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));
 		}
