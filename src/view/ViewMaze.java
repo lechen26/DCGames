@@ -5,9 +5,12 @@ import java.util.Observable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -17,6 +20,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Tracker;
 
 public class ViewMaze extends Observable implements View,Runnable {
 
@@ -130,11 +134,101 @@ public class ViewMaze extends Observable implements View,Runnable {
 							leftPressed=true;
 						}
 						break;
+				
 					default:
 						break;
 				}		
 			}
 		});		
+		 //mouse event listener
+		for (int i=0 ; i < rows ; i++)
+			for (int j=0 ; j< cols ; j++)
+			{
+//				if (board.states[i][j].value == 1){
+					 board.states[i][j].addMouseListener(new MouseListener() {
+						int mouseCurXpos;
+						int mouseCurYpos;
+						int mouseNewXpos;
+						int mouseNewYpos;
+			
+						public void mouseDown(MouseEvent mousey) {
+							System.out.println("view maze :: mouse is clicked");
+						
+							mouseCurXpos = mousey.x;
+							mouseCurYpos = mousey.y;
+						    System.out.println("mouse curr x : " + mouseCurXpos + " mouse curr y : " + mouseCurYpos );
+							
+						}
+			
+						public void mouseUp(MouseEvent mousey) {
+							// all the movement occurs when the mouse is released ...
+							System.out.println("mouse is released");
+							mouseNewXpos = mousey.x;
+							mouseNewYpos = mousey.y;
+							System.out.println("mouse last place (" + mouseCurXpos + "," + mouseCurYpos + ")"  );
+							System.out.println("mouse new  place (" + mouseNewXpos + "," + mouseNewYpos + ")"  );
+							if ( (mouseNewXpos > 0) && (mouseNewXpos < 29 )&& (mouseNewYpos < 0)) {
+								//this means we move up ...
+								setChanged();
+								userCommand=SWT.ARROW_UP;
+								notifyObservers();
+							}
+							else if ((mouseNewXpos < 0) && (mouseNewYpos > 0) && (mouseNewYpos < 30)){
+								//this means we move left ..
+								setChanged();
+								userCommand=SWT.ARROW_LEFT;
+								notifyObservers();
+							}
+							else if ((mouseNewXpos >= 30) && (mouseNewYpos > 0)&& (mouseNewYpos < 29)){
+								//this means we moved right
+								setChanged();
+								userCommand=SWT.ARROW_RIGHT;
+								notifyObservers();
+							}
+							else if ((mouseNewXpos > 0) && (mouseNewXpos < 29) && (mouseNewYpos >= 30)){
+								//this means we moved down
+								setChanged();
+								userCommand=SWT.ARROW_DOWN;
+								notifyObservers();
+							}
+							else if ((mouseNewXpos <0) && (mouseNewYpos < 0)){
+								//this means we moved diagonal left up 
+								setChanged();
+								horizental = -1;
+								vertical = 1;
+								notifyObservers("" + horizental + "," + vertical);
+							}
+							else if ((mouseNewXpos >30) && (mouseNewYpos < 0)){
+								//this means we moved diagonal right up 
+								setChanged();
+								horizental = 1;
+								vertical = 1;
+								notifyObservers("" + horizental + "," + vertical);
+							}
+							else if ((mouseNewXpos >30 ) && (mouseNewYpos > 30)){
+								//this means we moved diagonal right down
+								setChanged();
+								horizental = 1;
+								vertical = -1;
+								notifyObservers("" + horizental + "," + vertical);
+							}
+							else if ((mouseNewXpos <0) && (mouseNewYpos >30)){
+								//this means we moved diagonal left down 
+								setChanged();
+								horizental = -1;
+								vertical = -1;
+								notifyObservers("" + horizental + "," + vertical);
+							}
+							 
+						}
+
+						@Override
+						public void mouseDoubleClick(MouseEvent arg0) {
+						}
+				
+					 	});	
+			}
+		
 	    shell.open();
 	}   
 	
@@ -244,7 +338,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {				
-				userCommand=1;
+				userCommand=11;
 				setChanged();
 				notifyObservers();	
 				shell.forceFocus();
@@ -298,7 +392,7 @@ public class ViewMaze extends Observable implements View,Runnable {
 
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {				
-				userCommand=4;
+				userCommand=44;
 				setChanged();
 				notifyObservers();
 				shell.forceFocus();			}

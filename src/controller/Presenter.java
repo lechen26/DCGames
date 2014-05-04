@@ -78,13 +78,13 @@ public void update(Observable o, Object arg) {
 			case 2: // restart game
 				mModel.initializeBoard();				
 				break;
-			case 1 : // undo move
+			case 11 : // undo move
 				mModel.undoBoard();				
 				break;
 			case 3: // load game
 				mModel.loadGame();				
 				break;
-			case 4: // save game 
+			case 44: // save game 
 				mModel.saveGame();				
 				break;
 			case SWT.ARROW_UP:
