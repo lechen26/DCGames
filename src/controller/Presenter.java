@@ -18,7 +18,7 @@ public Presenter(Model model,View view){
 }
 
 @Override
-public void update(Observable o, Object arg) {	
+public void update(Observable o, Object arg ) {	
 	if (o == mModel){	
 		if (arg != null)
 		{
@@ -27,7 +27,7 @@ public void update(Observable o, Object arg) {
 			}
 			else if (arg.equals("gameWon")){				
 				ui.gameWon();
-			}		
+			}					
 			else if (arg.equals("gameFinish")){				
 				ui.gameFinish();
 			}
@@ -88,6 +88,8 @@ public void update(Observable o, Object arg) {
 			case 4: // save game 
 				mModel.saveGame();				
 				break;
+			case 5:
+				mModel.setWinNumber();	
 			case SWT.ARROW_UP:
 				mModel.moveUp(false);				
 				break;

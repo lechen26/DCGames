@@ -32,6 +32,20 @@ public class Model2048 extends Observable implements Model {
 		this.winNumber=winNumber;
 	}
 	
+	public int getWinNumber() {
+		return winNumber;
+	}
+
+	/*
+	 * Update winNumber
+	 * if we won and chose to contiue playing, the Win number will be double of current number
+	 */
+	public void setWinNumber() {
+		this.winNumber = winNumber*2;
+		win=false;
+		System.out.println("New Win number is=" + this.winNumber);
+	}
+
 	/*
 	 * Get Board data
 	 */

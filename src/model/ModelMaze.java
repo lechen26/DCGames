@@ -437,4 +437,11 @@ public class ModelMaze extends Observable implements Model {
 		if (actions != null)		
 			minMoves=actions.size();		
 	}
+
+
+	@Override
+	public void setWinNumber() {
+		// TODO Auto-generated method stub
+		
+	}
 }

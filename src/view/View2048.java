@@ -117,11 +117,12 @@ public class View2048 extends Observable implements View,Runnable {
 		end.setMessage("You Won! by Default game will continue. do you want to start a new Game? ");
 		end.setText("gameWon");		
 		int response = end.open();
-		if (response == SWT.YES) {
-			//display.dispose();
-			//System.exit(0);
-		}
 		if (response == SWT.NO){
+			setUserCommand(5);
+			setChanged();
+			notifyObservers();
+		}
+		if (response == SWT.YES){
 			setUserCommand(2);
 			setChanged();
 			notifyObservers();	

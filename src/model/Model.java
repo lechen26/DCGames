@@ -8,6 +8,7 @@ public interface Model  {
 	public void undoBoard();
 	public void saveGame();
 	public void loadGame();
+	public void setWinNumber();
 	public boolean moveUp(boolean quiet);
 	public boolean moveDown(boolean quiet);
 	public boolean moveLeft(boolean quiet);
