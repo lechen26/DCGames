@@ -27,11 +27,14 @@ public class ExternalShell {
     int shx, shy; //positions of image
 	String shellMessage;
 	String imagePath;
+	int sizex,sizey;
 	
-	public ExternalShell(Display display,String msg,String img) {	
+	public ExternalShell(Display display,String msg,String img,int sizex,int sizey) {	
 		this.display=display;
 		this.shellMessage=msg;
 		this.imagePath=img;
+		this.sizex=sizex;
+		this.sizey=sizey;
 	}
   
   
@@ -40,7 +43,7 @@ public class ExternalShell {
 	 */
 	public void run()  {	
 		Shell shell = new Shell(display);
-		shell.setSize(400,400);
+		shell.setSize(sizex,sizey);
 		shell.setText(shellMessage);
 		createContents(shell);
 		shell.open();
@@ -56,11 +59,18 @@ public class ExternalShell {
 		// Launch the timer
 		display.timerExec(TIMER_INTERVAL, runnable);
     	
-		while (!shell.isDisposed()) {
-			if (count >= 12 ){        	
-				shell.dispose();
-				break;
-			}
+		while (!shell.isDisposed()) {			
+			if (shell.getBounds().width < 400){				
+				if (count >= 15 ){        	
+					shell.dispose();
+					break;
+				}
+			}else {
+				if (count >= 7 ){        	
+					shell.dispose();
+					break;
+				}
+			}			
 			if (!display.readAndDispatch()) {
 				display.sleep();
 			}

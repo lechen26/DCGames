@@ -395,7 +395,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	@Override
 	public void gameWon() {
-		new ExternalShell(display,"Game Won","resources/win.jpg").run();
+		new ExternalShell(display,"Game Won","resources/win.jpg",shell.getBounds().width/2,shell.getBounds().height/2).run();
 		MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		end.setMessage("Mini is so Happy!!!:)  do you wanna play another one?");
 		end.setText("GAME WON");
@@ -417,7 +417,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	@Override
 	public void gameFinish() {
-		new ExternalShell(display,"Finito la comedia","resources/gotToEnd.jpg").run();
+		new ExternalShell(display,"Finito la comedia","resources/gotToEnd.jpg",shell.getBounds().width/2,shell.getBounds().height/2).run();
 	 	MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		end.setMessage("Next Time, try better for mini, ha? you got to the END point but with More moves then possible! do you wanna play another one?");
 		end.setText("GAME FINISH");
