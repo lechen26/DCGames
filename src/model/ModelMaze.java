@@ -132,8 +132,6 @@ public class ModelMaze extends Observable implements Model {
 		boolean move=false;
 		if (!diagonal)
 			undoBoards.put(score,copyBoard(mBoard));			
-		else
-			System.out.println("left diagonal");
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY - 1;

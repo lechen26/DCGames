@@ -153,8 +153,6 @@ public class ViewMaze extends Observable implements View, Runnable {
 					public void mouseDown(MouseEvent event) {
 						mouseCurXpos = event.x;
 						mouseCurYpos = event.y;
-						System.out.println("mouse Pressed. X= " + mouseCurXpos + " Y= " + mouseCurYpos);
-
 					}
 
 					@Override
@@ -162,8 +160,6 @@ public class ViewMaze extends Observable implements View, Runnable {
 						mouseNewXpos = event.x;
 						mouseNewYpos = event.y;
 						Rectangle stateBound = ((State) event.widget).getBounds();
-						System.out.println("mouse Released. X= " + mouseNewXpos + " Y= " + mouseNewYpos);
-
 						if ((mouseNewXpos < 0) && (mouseNewYpos < 0)) { // Diagonal Left up
 							setChanged();
 							horizental = -1;
