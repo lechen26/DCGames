@@ -37,7 +37,12 @@ public class ModelMaze extends Observable implements Model {
 	int numOfMoves=0;
 	int minMoves=0;
 	
-	public ModelMaze(int rows,int cols) {
+	public ModelMaze(int rows,int cols) {		
+		if ((rows != 16) | (cols != 16))
+		{
+			System.out.println("Sorry. Currenly we do not support different size then 16.");
+			System.exit(0);
+		}
 		mBoard=new int[rows][cols];
 	}
 
