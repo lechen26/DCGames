@@ -18,7 +18,7 @@ public class ExternalShell {
 	private Display display;
   
 	private static final int IMAGE_WIDTH = 250; // Image width
-	private static final int TIMER_INTERVAL = 5; 	//Time interval for image animation
+	private int TIMER_INTERVAL = 15; 	//Time interval for image animation
 	private int DIM_W;	//current image bounderies
 	private int DIM_H;
 	private int count=0;
@@ -27,27 +27,29 @@ public class ExternalShell {
     int shx, shy; //positions of image
 	String shellMessage;
 	String imagePath;
-	int sizex,sizey;
+	int sizex=300,sizey=300;
 	
-	public ExternalShell(Display display,String msg,String img,int sizex,int sizey) {	
+	public ExternalShell(Display display,String msg,String img) {	
 		this.display=display;
 		this.shellMessage=msg;
-		this.imagePath=img;
-		this.sizex=sizex;
-		this.sizey=sizey;
+		this.imagePath=img;		
 	}
   
   
 	/*
 	 * Execute the shell on different thread and Set Timer for animation processing
 	 */
-	public void run()  {	
+	public void run()  {
+		System.out.println("Run external shell");
 		Shell shell = new Shell(display);
 		shell.setSize(sizex,sizey);
 		shell.setText(shellMessage);
+		Rectangle parentShellSize =display.getShells()[0].getBounds();
+		int offsetX = 100;
+		shell.setLocation(parentShellSize.x + parentShellSize.width/2 - sizex/2+ 50,parentShellSize.y + parentShellSize.height/2-sizey/2);
 		createContents(shell);
 		shell.open();
- 
+		
 		//Set up the timer for the animation
 		Runnable runnable = new Runnable() {
 			public void run() {
@@ -59,18 +61,11 @@ public class ExternalShell {
 		// Launch the timer
 		display.timerExec(TIMER_INTERVAL, runnable);
     	
-		while (!shell.isDisposed()) {			
-			if (shell.getBounds().width < 400){				
-				if (count >= 15 ){        	
+		while (!shell.isDisposed()) {
+				if (count >= 10 ){        	
 					shell.dispose();
 					break;
-				}
-			}else {
-				if (count >= 7 ){        	
-					shell.dispose();
-					break;
-				}
-			}			
+				}					
 			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
@@ -102,11 +97,11 @@ public class ExternalShell {
 	    if (shy < 0) {
 	      shy = 0;
 	      count++;
-	      directionY = 1;
-	      count++;
+	      directionY = 1;	      
 	    } else if (shy > rect.height - IMAGE_WIDTH) {
 	      shy = rect.height - IMAGE_WIDTH;
 	      directionY = -1;
+	      count++;
 	    }
 
 	    // Force a redraw
@@ -121,12 +116,13 @@ public class ExternalShell {
 	  shell.setLayout(new FillLayout());
     
 	  // Create the canvas for drawing
-	  canvas = new Canvas(shell, SWT.NO_BACKGROUND);
+	  canvas = new Canvas(shell, SWT.BORDER);
 	  canvas.addPaintListener(new PaintListener() {    	
 	      public void paintControl(PaintEvent event) {    	  
 	    	  Image img=new Image(display,imagePath);;
 	    	  DIM_W=img.getBounds().width;
-	    	  DIM_H=img.getBounds().height;    	   
+	    	  DIM_H=img.getBounds().height;
+	    	  event.gc.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
 	    	  event.gc.fillRectangle(canvas.getBounds());          
 	          event.gc.drawImage(img,shx,shy);
 	        }
