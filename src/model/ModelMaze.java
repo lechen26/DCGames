@@ -60,8 +60,8 @@ public class ModelMaze extends Observable implements Model {
 	private void checkAndNotify(int x,int y,boolean diagonal)
 	{
 		if (isGotToEndPoint(x,y)){			
-			if (diagonal){
-				score-=5;
+			if (diagonal){				
+				score-=5;				
 				setChanged();						
 				notifyObservers();
 			} if (isGameWon()) {
@@ -178,8 +178,7 @@ public class ModelMaze extends Observable implements Model {
 
 	// initialize the Maze Board
 	@Override
-	public void initializeBoard() {
-		System.out.println("initialzeBaord");
+	public void initializeBoard() {		
 		undoBoards = new LinkedHashMap<Integer,int[][]>();
 		int[][] b = { { -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , 23 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //1
 		{ -1 , 0 , 0, 0 , 0 , 0 , 0 , 0 , 0 , -1 ,0 , 0 , 0 , 0 , 0 , -1 }, //2
@@ -206,7 +205,7 @@ public class ModelMaze extends Observable implements Model {
 		setNumOfMoves(0);
 		runAstar();
 		setChanged();
-		notifyObservers();
+		notifyObservers();		
 	}
 
 	public int getNumOfMoves() {
@@ -284,8 +283,7 @@ public class ModelMaze extends Observable implements Model {
 			return false;
 	}
 	
-	public boolean isGameWon(){
-		System.out.println("Moves are=" + numOfMoves + "and minMoves=" + minMoves);
+	public boolean isGameWon(){		
 		if (numOfMoves ==  minMoves)
 			return true;
 		else
@@ -295,8 +293,9 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public void moveDiagonalRightUp() {		
 		if ((moveRight(false) && moveUp(true)) || (moveUp(false) && moveRight(true)) )
-		{		
-			score-=5;
+		{					
+			if (score!=0)
+				score-=5;
 			setChanged();
 			notifyObservers();
 		}
@@ -306,8 +305,9 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public void moveDiagonalRightDown() {		
 		if ((moveRight(false) && moveDown(true)) || (moveDown(false) && moveRight(true)) )
-		{		
-			score-=5;
+		{	
+			if (score!=0)
+				score-=5;
 			setChanged();
 			notifyObservers();
 		}
@@ -318,7 +318,8 @@ public class ModelMaze extends Observable implements Model {
 		
 		if  ( (moveLeft(false) && moveUp(true )) || (moveUp(false) && moveLeft(true)) ) 
 		{			
-			score-=5;
+			if (score!=0)
+				score-=5;
 			setChanged();
 			notifyObservers();
 		}			
@@ -328,7 +329,8 @@ public class ModelMaze extends Observable implements Model {
 	public void moveDiagonalLeftDown() {
 		if ( (moveDown(false) && moveLeft(true)) ||  (moveLeft(false) && moveDown(true)) )
 		{		
-			score-=5;
+			if (score!=0)
+				score-=5;
 			setChanged();
 			notifyObservers();
 		}

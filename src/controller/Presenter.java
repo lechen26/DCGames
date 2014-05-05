@@ -37,10 +37,11 @@ public void update(Observable o, Object arg) {
 		}
 		else{
 			int[][] b=mModel.getData();	
-			ui.displayData(b);	
-			int scr = mModel.getScore();	
+			ui.displayData(b);
+			int scr = mModel.getScore();			
 			ui.displayScore(scr);
-		}
+			
+			}
 	}
 	if (o == ui)
 	{
@@ -53,7 +54,7 @@ public void update(Observable o, Object arg) {
 			vertical=Integer.parseInt(values[1]);
 		}
 		//Check for diagonal moves
-		if (horizental > 0 && vertical > 0){
+		if (horizental > 0 && vertical > 0){			
 			mModel.moveDiagonalRightUp();
 			return;
 		}
@@ -84,7 +85,7 @@ public void update(Observable o, Object arg) {
 			case 3: // load game
 				mModel.loadGame();				
 				break;
-			case 44: // save game 
+			case 4: // save game 
 				mModel.saveGame();				
 				break;
 			case SWT.ARROW_UP:

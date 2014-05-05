@@ -91,8 +91,8 @@ public class ViewMaze extends Observable implements View, Runnable {
 				default:
 					break;
 				}
-				setChanged();
 				userCommand = e.keyCode;
+				setChanged();				
 				// support diagonal moves
 				if (pressed == 0) {
 					notifyObservers("" + horizental + "," + vertical);
@@ -368,7 +368,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				userCommand = 44;
+				userCommand = 4;
 				setChanged();
 				notifyObservers();
 				shell.forceFocus();
@@ -385,6 +385,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	@Override
 	public void displayScore(int scr) {
 		score.setText("Score " + scr);
+		score.redraw();
 	}
 
 	
@@ -402,8 +403,9 @@ public class ViewMaze extends Observable implements View, Runnable {
 		if (response == SWT.NO) {
 			display.dispose();
 			System.exit(0);
-		} else {
+		} else {			
 			setUserCommand(2);
+			System.out.println("Current scor is=" + score);
 			setChanged();
 			notifyObservers();
 		}
