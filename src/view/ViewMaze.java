@@ -47,7 +47,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 		display = new Display();
 		shell = new Shell(display);
 		shell.setLayout(new GridLayout(2, false));
-		shell.setSize(600, 500);
+		shell.setSize(600, 600);
 		shell.setText("Levi and Duvid's Maze Game");
 
 		// Defines menu game
