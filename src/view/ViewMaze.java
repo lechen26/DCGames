@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -36,7 +37,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	boolean leftPressed = false;
 	boolean upPressed = false;
 	boolean downPressed = false;
-
+	
 	public ViewMaze(int rows, int cols) {
 		this.rows = rows;
 		this.cols = cols;
@@ -390,13 +391,16 @@ public class ViewMaze extends Observable implements View, Runnable {
 		score.setText("Score " + scr);
 	}
 
+	
+
 	/*
 	 * Display Game Won board 
 	 */
 	@Override
 	public void gameWon() {
+		new ExternalShell(display,"Game Won","resources/win.jpg").run();
 		MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		end.setMessage("Your Are the MazeMaster,game won. do you wanna play another one?");
+		end.setMessage("Mini is so Happy!!!:)  do you wanna play another one?");
 		end.setText("GAME WON");
 		int response = end.open();
 		if (response == SWT.NO) {
@@ -407,16 +411,17 @@ public class ViewMaze extends Observable implements View, Runnable {
 			setChanged();
 			notifyObservers();
 		}
-
 	}
-
-	/*
+	
+		
+	/*}
 	 * Display Game Won board 
 	 */
 	@Override
 	public void gameFinish() {
-		MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		end.setMessage("You got to the END point but with More moves then possible! do you wanna play another one?");
+		new ExternalShell(display,"Finito la comedia","resources/gotToEnd.jpg").run();
+	 	MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		end.setMessage("Next Time, try better for mini, ha? you got to the END point but with More moves then possible! do you wanna play another one?");
 		end.setText("GAME FINISH");
 		int response = end.open();
 		if (response == SWT.NO) {
