@@ -113,8 +113,7 @@ public class ExternalShell {
    * Create the shell content and PaintControl for drawing the image
    */
   private void createContents(final Shell shell) {
-	  shell.setLayout(new FillLayout());
-	  shell.setAlpha(SWT.TRANSPARENT);
+	  shell.setLayout(new FillLayout());	  
 	  // Create the canvas for drawing
 	  canvas = new Canvas(shell, SWT.BORDER);
 	  canvas.addPaintListener(new PaintListener() {    	
@@ -122,7 +121,7 @@ public class ExternalShell {
 	    	  Image img=new Image(display,imagePath);;
 	    	  DIM_W=img.getBounds().width;
 	    	  DIM_H=img.getBounds().height;
-	    	  event.gc.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
+	    	  event.gc.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
 	    	  event.gc.fillRectangle(canvas.getBounds());          
 	          event.gc.drawImage(img,shx,shy);
 	        }
