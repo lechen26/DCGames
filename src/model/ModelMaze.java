@@ -80,7 +80,7 @@ public class ModelMaze extends Observable implements Model {
 				notifyObservers("gameWon");
 			}else {			
 				setChanged();
-				notifyObservers("gameFinish");
+				notifyObservers("gameOver");
 			}
 		}
 	}
@@ -317,6 +317,9 @@ public class ModelMaze extends Observable implements Model {
 	 */
 	public boolean isGotToEndPoint(int currX,int currY)
 	{
+		System.out.println("Got to end");
+		System.out.println("currX=" + currX + "currY=" + currY);
+		System.out.println("exit=" + getExitPosition().x + "exitY=" + getExitPosition().y);
 		if ((currX == getExitPosition().x) && (currY == getExitPosition().y))
 			return true;
 		else

@@ -114,8 +114,7 @@ public class View2048 extends Observable implements View,Runnable {
 	 * Display game Winning board
 	 */
 	public void gameWon() {		
-		shell.update();
-		
+		shell.update();		
 		//Current board location and Preparation for Transparent Shell addition
 		Point location = new Point(shell.getLocation().x + board.getLocation().x,shell.getLocation().y + board.getLocation().y);
 		String[] msgs = {"You won the game!", "now go to Study!"};		
@@ -143,7 +142,6 @@ public class View2048 extends Observable implements View,Runnable {
 	 */
 	public void gameOver() {
 		shell.update();
-		//board.setBoardGameOver();
 		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
 		end.setMessage("You have lost the game. do you want to play another one?");
 		end.setText("gameOver");
@@ -299,10 +297,4 @@ public class View2048 extends Observable implements View,Runnable {
 	
 	public void saveGame() {			
 	}
-
-	@Override
-	public void gameFinish() {
-		// TODO Auto-generated method stub
-		
-	}		
 }

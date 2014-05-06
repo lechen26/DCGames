@@ -23,20 +23,21 @@ public class State extends Canvas {
 				int x = (getSize().x) / 2 - (("" + value).length()) * stringWidth / 2;
 				int y = (getSize().y) / 2 - (("" + value).length()) * stringWidth / 2;
 				if (value > 0 )
-					e.gc.drawString("" + value, x, y);				
+					e.gc.drawString("" + value, x, y);
+				
 				// Draw relevant images
 				switch(value) {								
 					case -2: 
-							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/mouse.jpg", e);
+							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/maze/mickey.jpg", e);
 							break;
 					case -3: 
-							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/cheeze.jpg", e);
+							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/maze/mini.jpg", e);
 							break;
 					case -4: 
-							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/fire_meaney.gif", e);
+							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/maze/fireWall.jpg", e);
 							break;
 					case -100: 
-							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/gameOverImg.jpg", e);
+							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/2048/end.jpg", e);
 							break;
 				}
 			}
