@@ -22,7 +22,7 @@ public class State extends Canvas {
 				int stringWidth = e.gc.getFontMetrics().getAverageCharWidth();
 				int x = (getSize().x) / 2 - (("" + value).length()) * stringWidth / 2;
 				int y = (getSize().y) / 2 - (("" + value).length()) * stringWidth / 2;
-				if ((value > 0) && (value != -1) && (value != 1) && (value != 23) && (value != 99))
+				if ((value > 0) && (value != -1) && (value != 1) && (value != 23) && (value != 99) && (value != 100))
 					e.gc.drawString("" + value, x, y);
 				if (value == 1) {
 					x = ((Canvas) e.widget).getBounds().width;
@@ -44,6 +44,13 @@ public class State extends Canvas {
 					Image fire = new Image(getDisplay(), "resources/fire_meaney.gif");
 					Image scaledMouse = new Image(getDisplay(), fire.getImageData().scaledTo(x, y));
 					e.gc.drawImage(scaledMouse, 0, 0);
+				}
+				if (value == 100) {
+					x = ((Canvas) e.widget).getBounds().width;
+					y = ((Canvas) e.widget).getBounds().height;
+					Image over = new Image(getDisplay(), "resources/gameOverImg.jpg");
+					Image scaledOver = new Image(getDisplay(), over.getImageData().scaledTo(x, y));
+					e.gc.drawImage(scaledOver, 0, 0);
 				}
 			}
 		});

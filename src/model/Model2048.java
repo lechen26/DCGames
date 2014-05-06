@@ -50,7 +50,6 @@ public class Model2048 extends Observable implements Model {
 	 */
 	@Override
 	public int[][] getData() {
-		displayBoard(mBoard);
 		return mBoard;
 	}
 
@@ -77,11 +76,23 @@ public class Model2048 extends Observable implements Model {
 		
 	}
 	
+	
+	private void setGameOver() {
+		for(int i=0;i< mBoard.length; ++i) {		
+			for(int j=0; j < mBoard[0].length; ++j) {																	
+				mBoard[i][j]=100;		
+			}
+		}
+		setChanged();
+		notifyObservers();		
+	}
+	
 	/*
 	 * Helper method to check GameOver and Win and notify after specific move
 	 */
 	private void checkAndNotify() {			
 		if (isGameOver()){
+			setGameOver();
 			setChanged();
 			notifyObservers("gameOver");
 		}  else if ((!win) && (isGameWon())){			
@@ -421,7 +432,7 @@ public class Model2048 extends Observable implements Model {
 	 * Check if the game is over. 
 	 * if we got no possible moves and if we got no free cells
 	 */
-	public boolean isGameOver() {				
+	public boolean isGameOver() {		
 		return ((!isMovesAvailable()) && (getFreeStates().size() == 0) );	
 	}
 	

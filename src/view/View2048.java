@@ -143,6 +143,7 @@ public class View2048 extends Observable implements View,Runnable {
 	 */
 	public void gameOver() {
 		shell.update();
+		//board.setBoardGameOver();
 		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
 		end.setMessage("You have lost the game. do you want to play another one?");
 		end.setText("gameOver");

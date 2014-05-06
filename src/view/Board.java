@@ -61,6 +61,7 @@ public class Board extends Composite {
 	    }
 	    return copy;
 	}
+	
 	/*
 	 * update array Board with the given array data
 	 */
@@ -73,5 +74,9 @@ public class Board extends Composite {
 				states[i][j].setValue(boardData[i][j]);
 			}
 		}		
-	}	
+	}
+	
+	public void setBoardGameOver() {
+		
+	}
 }
