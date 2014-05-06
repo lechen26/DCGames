@@ -7,10 +7,8 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
 
@@ -45,18 +43,17 @@ public class Board extends Composite {
 		this.addDisposeListener(new DisposeListener() {
 			@Override
 			public void widgetDisposed(DisposeEvent e) {
-				System.out.println("Disposng each line");
 				for(int i=0;i< boardData.length; ++i)
-				{				
+				{
 					for(int j=0; j < boardData[0].length; ++j)								
 						states[i][j].dispose();					
 				}
-				dispose();
 			}
 		});
 		
 	}
-		
+	
+	
 	private static int[][] copyBoard(int[][] source) {
 	    int[][] copy = new int[source.length][];
 	    for (int i = 0; i < source.length; i++) {
@@ -64,15 +61,6 @@ public class Board extends Composite {
 	    }
 	    return copy;
 	}
-	
-	
-	public void setBoardOver(final Image img) {		
-		for(int i=0;i< boardData.length; ++i)		
-			for(int j=0; j < boardData[0].length; ++j)						
-				states[i][j].setValue(100);					
-	}
-	
-	
 	/*
 	 * update array Board with the given array data
 	 */

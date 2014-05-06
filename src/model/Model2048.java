@@ -421,9 +421,8 @@ public class Model2048 extends Observable implements Model {
 	 * Check if the game is over. 
 	 * if we got no possible moves and if we got no free cells
 	 */
-	public boolean isGameOver() {
-		//return true;
-	return ((!isMovesAvailable()) && (getFreeStates().size() == 0) );	
+	public boolean isGameOver() {				
+		return ((!isMovesAvailable()) && (getFreeStates().size() == 0) );	
 	}
 	
 	
