@@ -93,7 +93,8 @@ public class View2048 extends Observable implements View,Runnable {
 	 */
 	public void displayData(int[][] data) {				
 		board.setBoard(data);
-		board.redraw();		
+		board.redraw();
+		
 	}
 	
 
@@ -296,5 +297,11 @@ public class View2048 extends Observable implements View,Runnable {
 	}
 	
 	public void saveGame() {			
+	}
+
+	@Override
+	public void gameFinish() {
+		// TODO Auto-generated method stub
+		
 	}
 }
