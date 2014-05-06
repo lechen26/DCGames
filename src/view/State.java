@@ -24,47 +24,42 @@ public class State extends Canvas {
 				int y = (getSize().y) / 2 - (("" + value).length()) * stringWidth / 2;
 				if ((value > 0) && (value != -1) && (value != 1) && (value != 23) && (value != 99) && (value != 100))
 					e.gc.drawString("" + value, x, y);
-				if (value == 1) {
-					x = ((Canvas) e.widget).getBounds().width;
-					y = ((Canvas) e.widget).getBounds().height;
-					Image mouse = new Image(getDisplay(), "resources/mouse.jpg");
-					Image scaledMouse = new Image(getDisplay(), mouse.getImageData().scaledTo(x, y));
-					e.gc.drawImage(scaledMouse, 0, 0);
-				}
-				if (value == 23) {
-					x = ((Canvas) e.widget).getBounds().width;
-					y = ((Canvas) e.widget).getBounds().height;
-					Image cheeze = new Image(getDisplay(), "resources/cheeze.jpg");
-					Image scaledMouse = new Image(getDisplay(), cheeze.getImageData().scaledTo(x, y));
-					e.gc.drawImage(scaledMouse, 0, 0);
-				}
-				if (value == 99) {
-					x = ((Canvas) e.widget).getBounds().width;
-					y = ((Canvas) e.widget).getBounds().height;
-					Image fire = new Image(getDisplay(), "resources/fire_meaney.gif");
-					Image scaledMouse = new Image(getDisplay(), fire.getImageData().scaledTo(x, y));
-					e.gc.drawImage(scaledMouse, 0, 0);
-				}
-				if (value == 100) {
-					x = ((Canvas) e.widget).getBounds().width;
-					y = ((Canvas) e.widget).getBounds().height;
-					Image over = new Image(getDisplay(), "resources/gameOverImg.jpg");
-					Image scaledOver = new Image(getDisplay(), over.getImageData().scaledTo(x, y));
-					e.gc.drawImage(scaledOver, 0, 0);
-				}
+				
+				if (value == 1) 
+					drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/mouse.jpg", e);				
+				if (value == 23) 
+					drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/cheeze.jpg", e);				
+				if (value == 99) 
+					drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/fire_meaney.gif", e);				
+				if (value == 100) 
+					drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/gameOverImg.jpg", e);				
 			}
 		});
 	}
 
+	/*
+	 * Draw image on Canvas
+	 */
+	private void drawImage(int x,int y, String imgPath,PaintEvent e){
+		Image img = new Image(getDisplay(), imgPath);
+		Image scaledImg = new Image(getDisplay(), img.getImageData().scaledTo(x, y));
+		e.gc.drawImage(scaledImg, 0, 0);
+	}
+	
+	/*
+	 * Update value of state
+	 */
 	public void setValue(int value) {
 		this.value = value;
 		changeBackground(value);
 		redraw();
-
 	}
-
+	
+	/*
+	 *  Update Background color of State
+	 */
 	public void changeBackground(int val) {
-		switch (val) {
+		switch (val) {			
 		case -2:
 			Color bgColor0 = new Color(getDisplay(), 238, 228, 218);
 			setBackground(bgColor0);
@@ -122,15 +117,8 @@ public class State extends Canvas {
 		case 99:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));
 			break;
-		// case 1:
-
-		/*
-		case 1:
-		//setBackground(getDisplay().getSystemColor(SWT.COLOR_GREEN));			
-		setBackgroundImage(img);			
-		break;*/
 		case 23:
-			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));
+			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));		
 		}
 	}
 
