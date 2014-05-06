@@ -22,17 +22,23 @@ public class State extends Canvas {
 				int stringWidth = e.gc.getFontMetrics().getAverageCharWidth();
 				int x = (getSize().x) / 2 - (("" + value).length()) * stringWidth / 2;
 				int y = (getSize().y) / 2 - (("" + value).length()) * stringWidth / 2;
-				if ((value > 0) && (value != -1) && (value != 1) && (value != 23) && (value != 99) && (value != 100))
-					e.gc.drawString("" + value, x, y);
-				
-				if (value == 1) 
-					drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/mouse.jpg", e);				
-				if (value == 23) 
-					drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/cheeze.jpg", e);				
-				if (value == 99) 
-					drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/fire_meaney.gif", e);				
-				if (value == 100) 
-					drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/gameOverImg.jpg", e);				
+				if (value > 0 )
+					e.gc.drawString("" + value, x, y);				
+				// Draw relevant images
+				switch(value) {								
+					case -2: 
+							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/mouse.jpg", e);
+							break;
+					case -3: 
+							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/cheeze.jpg", e);
+							break;
+					case -4: 
+							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/fire_meaney.gif", e);
+							break;
+					case -100: 
+							drawImage(((Canvas) e.widget).getBounds().width, ((Canvas) e.widget).getBounds().height, "resources/gameOverImg.jpg", e);
+							break;
+				}
 			}
 		});
 	}
@@ -55,12 +61,14 @@ public class State extends Canvas {
 		redraw();
 	}
 	
+	
 	/*
 	 *  Update Background color of State
 	 */
 	public void changeBackground(int val) {
-		switch (val) {			
-		case -2:
+		switch (val) {
+		//Empty on 2048Board
+		case -5:
 			Color bgColor0 = new Color(getDisplay(), 238, 228, 218);
 			setBackground(bgColor0);
 			break;
@@ -108,17 +116,13 @@ public class State extends Canvas {
 			Color bgColor2048 = new Color(getDisplay(), 237, 194, 46);
 			setBackground(bgColor2048);
 			break;
+		//Maze Game Backgrounds
 		case 0:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			break;
 		case -1:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
 			break;
-		case 99:
-			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));
-			break;
-		case 23:
-			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));		
 		}
 	}
 

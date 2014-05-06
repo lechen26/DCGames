@@ -22,10 +22,11 @@ public class Model2048 extends Observable implements Model {
 	
 	int[][] mBoard;	
 	LinkedHashMap<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
-	int score=0;
-	int free=-2;
+	int score=0;	
 	int winNumber;
 	boolean win=false;
+	//Define static definition for free component	
+	private final static int free=-5;
 	
 	public Model2048(int rows,int cols,int winNumber) {		
 		mBoard = new int[rows][cols];	

@@ -29,13 +29,20 @@ public class ModelMaze extends Observable implements Model {
 
 	int[][] mBoard;	
 	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
-    ArrayList<Point> fireWalls = new ArrayList<Point>();
+    ArrayList<Point> fireWalls = new ArrayList<Point>();    
 	int rows,cols;
 	int score=0;
-	Point exitPosition;	
+	Point exitPosition;
 	Point startPosition;
 	int numOfMoves=0;
 	int minMoves=0;
+	
+	//Define Static definitions for Maze Game components
+	private final static int mickey=-2;
+	private final static int mini=-3;
+	private final static int fireWall=-4;
+	private final static int wall=-1;
+	
 	
 	public ModelMaze(int rows,int cols) {		
 		if ((rows != 16) | (cols != 16))
@@ -57,7 +64,7 @@ public class ModelMaze extends Observable implements Model {
 
 		for (int i=0; i<mBoard.length; i++)
 			for (int j=0;j<mBoard[0].length ; j++)
-				if (mBoard[i][j] == 1 )
+				if (mBoard[i][j] == mickey )
 					return new Point(i,j);
 		return null; // din't find the mouse
 	}
@@ -98,7 +105,7 @@ public class ModelMaze extends Observable implements Model {
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX - 1;
-		if((newPos >= 0) && (mBoard[newPos][cPosY] != -1) && (mBoard[newPos][cPosY] != 99)){
+		if((newPos >= 0) && (mBoard[newPos][cPosY] != wall) && (mBoard[newPos][cPosY] != fireWall)){
 			move=true;
 			mBoard[newPos][cPosY] = mBoard[cPosX][cPosY];
 			mBoard[cPosX][cPosY] = 0 ;
@@ -124,7 +131,7 @@ public class ModelMaze extends Observable implements Model {
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX + 1;
-		if((newPos < mBoard.length) && (mBoard[newPos][cPosY] != -1) && (mBoard[newPos][cPosY] != 99)){
+		if((newPos < mBoard.length) && (mBoard[newPos][cPosY] != wall) && (mBoard[newPos][cPosY] != fireWall)){
 			move=true;
 			mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
@@ -150,7 +157,7 @@ public class ModelMaze extends Observable implements Model {
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY - 1;
-		if((newPos >= 0 ) &&(mBoard[cPosX][newPos] != -1) && (mBoard[cPosX][newPos] != 99)){
+		if((newPos >= 0 ) &&(mBoard[cPosX][newPos] != wall) && (mBoard[cPosX][newPos] != fireWall)){
 			move=true;
 			mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
@@ -177,7 +184,7 @@ public class ModelMaze extends Observable implements Model {
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY + 1;
-		if((newPos < mBoard[0].length) &&(mBoard[cPosX][newPos] != -1) && (mBoard[cPosX][newPos] != 99)){
+		if((newPos < mBoard[0].length) &&(mBoard[cPosX][newPos] != wall) && (mBoard[cPosX][newPos] != fireWall)){
 			move=true;
 			mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
@@ -197,24 +204,23 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public void initializeBoard() {		
 		undoBoards = new LinkedHashMap<Integer,int[][]>();
-		int[][] b = { { -1 , -1 , -1 , -1 , -1 , -1 , -1 , 99 , 23 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //1
+		int[][] b = { { -1 , -1 , -1 , -1 , -1 , -1 , -1 , -4 , -3 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //1
 		{ -1 , 0 , 0, 0 , 0 , 0 , 0 , 0 , 0 , -1 ,0 , 0 , 0 , 0 , 0 , -1 }, //2
 		{ -1 , 0 , -1 , 0 , -1 , -1 , -1 , 0 , -1 , -1 ,-1 , -1 , 0 , -1 , 0 , -1 }, //3
 		{ -1 , 0 , -1 , 0 , -1 , 0 , 0 , 0 , -1 , 0 ,0 , 0 , 0 , -1 , 0 , -1 }, //4
-		{ -1 , 0 , 99 , 0 , -1 , -1 , -1 , -1 , -1 , 0 ,99 , -1 , -1 , -1 , 0 , -1 }, //5
+		{ -1 , 0 , -4 , 0 , -1 , -1 , -1 , -1 , -1 , 0 ,-4 , -1 , -1 , -1 , 0 , -1 }, //5
 		{ -1 , 0 , -1 , 0 , 0 , 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , -1 }, //6
-		{ -1 , -1 , -1 , -1 , -1 , 0 , 99 , 0 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //7
+		{ -1 , -1 , -1 , -1 , -1 , 0 , -4 , 0 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //7
 		{ -1 , 0 , 0 , 0 , 0, 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , -1 }, //8
 		{ -1 , 0 , -1 , -1 , -1 , 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , -1 }, //9
 		{ -1 , 0 , 0 , -1 , 0 , 0 , 0 , -1 , -1 , -1 ,-1 , -1 , -1 , 0 , -1 , -1 }, //10
-		{ -1 , -1 , 0 , -1 , 0 , 0 , 0 , 99 , 0 , 0 ,0 , 0 , 0 , -1 , 0 , -1 }, //11
+		{ -1 , -1 , 0 , -1 , 0 , 0 , 0 , -4 , 0 , 0 ,0 , 0 , 0 , -1 , 0 , -1 }, //11
 		{ -1 , 0 , 0 , -1 , 0 , 0 , 0 , -1 , -1 , -1 ,-1 , 0 , 0 , -1 , 0 , -1 }, //12
 		{ -1 , 0 , -1 , -1 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , -1 , -1 , 0 , 0 }, //13
-		{ -1 , 0 , 0 , -1 , -1 , -1 , 0 , -1 , -1 , -1 ,-1 , 0 , 0 , 99 , -1 , -1 }, //14	
+		{ -1 , 0 , 0 , -1 , -1 , -1 , 0 , -1 , -1 , -1 ,-1 , 0 , 0 , -4 , -1 , -1 }, //14	
 		{ -1 , -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , -1 , 0 , 0 , 0 , 0}, //15
-		{ -1 , 99 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , 1 }, //16
-		};
-		//int[][] b = { {23,0,0,0}, {-1,-1,0,0},{0,0,0,0},{0,0,0,1}};
+		{ -1 , -4 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -2 }, //16
+		};		
 		setStartPosition(new Point(15,15));
 		setExitPosition(new Point(0,8));
 		mBoard = copyBoard(b);
@@ -256,7 +262,7 @@ public class ModelMaze extends Observable implements Model {
 	public ArrayList<Point> getFireWallPosition(){
 		for (int i=0; i< mBoard.length ; i++)
 			for (int j=0 ;j<mBoard[0].length ; j++){
-				if (mBoard[i][j] == 99){
+				if (mBoard[i][j] == fireWall){
 					Point p = new Point(i,j);
 					fireWalls.add(p);
 				}
@@ -467,7 +473,7 @@ public class ModelMaze extends Observable implements Model {
 		int[][] boardForMaze=copyBoard(mBoard);
 		for (int i=0;i<boardForMaze.length;++i){
 			for(int j=0;j<boardForMaze[0].length;++j) {
-				if ( boardForMaze[i][j] == 23 )
+				if ( boardForMaze[i][j] == mini )
 					boardForMaze[i][j]=2;
 			}
 		}
