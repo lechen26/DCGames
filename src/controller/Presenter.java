@@ -21,11 +21,11 @@ public Presenter(Model model,View view){
 public void update(Observable o, Object arg ) {	
 	if (o == mModel){	
 		if (arg != null)
-		{
+		{				
 			if (arg.equals("gameOver")){				
 				ui.gameOver();
 			}
-			else if (arg.equals("gameWon")){				
+			else if (arg.equals("gameWon")){
 				ui.gameWon();
 			}					
 			else if (arg.equals("gameFinish")){				
@@ -35,12 +35,11 @@ public void update(Observable o, Object arg ) {
 				ui.undoEnd();
 			}
 		}
-		else{
-			int[][] b=mModel.getData();	
+		else{							
+			int[][] b=mModel.getData();				
 			ui.displayData(b);
 			int scr = mModel.getScore();			
 			ui.displayScore(scr);
-			
 			}
 	}
 	if (o == ui)
@@ -88,7 +87,7 @@ public void update(Observable o, Object arg ) {
 			case 4: // save game 
 				mModel.saveGame();				
 				break;
-			case 5:
+			case 15:
 				mModel.setWinNumber();	
 			case SWT.ARROW_UP:
 				mModel.moveUp(false);				

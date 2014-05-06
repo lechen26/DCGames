@@ -4,22 +4,15 @@ import java.util.Observable;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
@@ -62,7 +55,6 @@ public class View2048 extends Observable implements View,Runnable {
 		//Defines Key Listener
 		shell.forceFocus();
 		shell.addKeyListener(new KeyListener() {						
-			
 			@Override
 			public void keyReleased(KeyEvent e) {				
 			}
@@ -99,9 +91,9 @@ public class View2048 extends Observable implements View,Runnable {
 	/*
 	 * Display the Board with the given data
 	 */
-	public void displayData(int[][] data) {		
+	public void displayData(int[][] data) {				
 		board.setBoard(data);
-		board.redraw();			
+		board.redraw();		
 	}
 	
 
@@ -116,19 +108,26 @@ public class View2048 extends Observable implements View,Runnable {
 	public void setUserCommand(int command) {
 		this.userCommand = command;
 	}	
+
 	
 	/*
 	 * Display game Winning board
 	 */
-	public void gameWon() {
-		String[] msgs = {"You won the game!", "now go to Study!"};
-		new TransparentShell(display,msgs,board.getBounds()).run();
+	public void gameWon() {		
+		shell.update();
+		
+		//Current board location and Preparation for Transparent Shell addition
+		Point location = new Point(shell.getLocation().x + board.getLocation().x,shell.getLocation().y + board.getLocation().y);
+		String[] msgs = {"You won the game!", "now go to Study!"};		
+		new TransparentShell(display, msgs, board.getBounds(), location).run();		
+		
+		//MessageBox
 		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
 		end.setMessage("You Won! by Default game will continue. do you want to start a new Game? ");
-		end.setText("gameWon");		
+		end.setText("gameWon");
 		int response = end.open();
 		if (response == SWT.NO){
-			setUserCommand(5);
+			//setUserCommand(5);
 			setChanged();
 			notifyObservers();
 		}
@@ -142,7 +141,8 @@ public class View2048 extends Observable implements View,Runnable {
 	/*
 	 * Display Game over board 
 	 */
-	public void gameOver() {				
+	public void gameOver() {
+		shell.update();
 		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
 		end.setMessage("You have lost the game. do you want to play another one?");
 		end.setText("gameOver");

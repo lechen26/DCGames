@@ -50,6 +50,7 @@ public class Model2048 extends Observable implements Model {
 	 */
 	@Override
 	public int[][] getData() {
+		displayBoard(mBoard);
 		return mBoard;
 	}
 
@@ -79,17 +80,17 @@ public class Model2048 extends Observable implements Model {
 	/*
 	 * Helper method to check GameOver and Win and notify after specific move
 	 */
-	private void checkAndNotify() {
+	private void checkAndNotify() {			
 		if (isGameOver()){
 			setChanged();
 			notifyObservers("gameOver");
-		}  else if ((!win) && (isGameWon())){
+		}  else if ((!win) && (isGameWon())){			
 			setChanged();			
 			notifyObservers("gameWon");		
 		}
 		else{
-			setChanged();
 			generateState();
+			setChanged();
 			notifyObservers();
 		}
 	}
@@ -135,9 +136,9 @@ public class Model2048 extends Observable implements Model {
 				}
 			}
 		}		
-		if (!quiet) {			
+		if (!quiet) {
 			setChanged();
-			notifyObservers();
+			notifyObservers();									
 			checkAndNotify();
 		}
 		return move;
@@ -185,13 +186,13 @@ public class Model2048 extends Observable implements Model {
 					}
 				}
 			}
-		}
-		if (!quiet)
-		{			
-			setChanged();		
-			notifyObservers();
+		}		
+		if (!quiet){
+			setChanged();
+			notifyObservers();		
 			checkAndNotify();
-		}return move;
+		}
+		return move;
 	}
 	
 	/* Move all possible cells to the Up and merge cells if needed
@@ -235,11 +236,12 @@ public class Model2048 extends Observable implements Model {
 					}
 				}
 		}
-		if (!quiet){			
+		if (!quiet){
 			setChanged();		
-			notifyObservers();
+			notifyObservers();			
 			checkAndNotify();
-		}return move;
+		}
+		return move;
 	}
 
 
@@ -283,12 +285,12 @@ public class Model2048 extends Observable implements Model {
 				}
 			}
 		}
-		if (!quiet)
-		{			
+		if (!quiet){
 			setChanged();		
-			notifyObservers();
+			notifyObservers();			
 			checkAndNotify();
-		}return move;
+		}
+		return move;
 	}
 
 
