@@ -42,8 +42,7 @@ public class Model2048 extends Observable implements Model {
 	 */
 	public void setWinNumber() {
 		this.winNumber = winNumber*2;
-		win=false;
-		System.out.println("New Win number is=" + this.winNumber);
+		win=false;	
 	}
 
 	/*

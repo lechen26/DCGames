@@ -114,7 +114,7 @@ public class ExternalShell {
    */
   private void createContents(final Shell shell) {
 	  shell.setLayout(new FillLayout());
-    
+	  shell.setAlpha(SWT.TRANSPARENT);
 	  // Create the canvas for drawing
 	  canvas = new Canvas(shell, SWT.BORDER);
 	  canvas.addPaintListener(new PaintListener() {    	
