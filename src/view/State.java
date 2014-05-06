@@ -16,7 +16,6 @@ public class State extends Canvas {
 		super(parent, style);
 		Font font = new Font(getDisplay(), getFont().getFontData()[0].getName(), 25, SWT.NONE);
 		setFont(font);
-		
 		addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
@@ -25,7 +24,6 @@ public class State extends Canvas {
 				int y = (getSize().y) / 2 - (("" + value).length()) * stringWidth / 2;
 				if ((value > 0) && (value != -1) && (value != 1) && (value != 23) && (value != 99))
 					e.gc.drawString("" + value, x, y);
-				//Maze additions
 				if (value == 1) {
 					x = ((Canvas) e.widget).getBounds().width;
 					y = ((Canvas) e.widget).getBounds().height;
@@ -47,7 +45,7 @@ public class State extends Canvas {
 					Image scaledMouse = new Image(getDisplay(), fire.getImageData().scaledTo(x, y));
 					e.gc.drawImage(scaledMouse, 0, 0);
 				}
-				if (value == 300)
+				if (value == 100)
 					x = ((Canvas) e.widget).getBounds().width;
 					y = ((Canvas) e.widget).getBounds().height;
 					Image over = new Image(getDisplay(), "resources/gameOverImg.jpeg");

@@ -351,6 +351,18 @@ public class Model2048 extends Observable implements Model {
 		}
 	}
 	
+	public void generateState2() {
+		int freeSize=getFreeStates().size();
+		if (freeSize != 0 )
+		{
+			ArrayList<Point> freeStates = getFreeStates();			
+			int cellIndex = new Random().nextInt(freeStates.size());
+			int cellX = freeStates.get(cellIndex).x;
+			int cellY = freeStates.get(cellIndex).y;		
+			mBoard[cellX][cellY]=2048;
+			freeStates.remove(cellIndex);
+		}
+	}
 	/*
 	 * Initialize Board: all board with 0 besides 2 cells with random score(2/4)
 	 */

@@ -106,12 +106,10 @@ public class View2048 extends Observable implements View,Runnable {
 		return userCommand;
 	}
 	
-	/*
-	 *  Set user command
-	 */	
 	public void setUserCommand(int command) {
 		this.userCommand = command;
 	}	
+
 	
 	
 	/*
@@ -144,7 +142,9 @@ public class View2048 extends Observable implements View,Runnable {
 	/*
 	 * Display Game over board 
 	 */
-	 public void gameOver(){ 	
+	public void gameOver() {					
+		//board.setBoardOver(backImg);
+		shell.update();
 		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
 		end.setMessage("You have lost the game. do you want to play another one?");
 		end.setText("gameOver");
