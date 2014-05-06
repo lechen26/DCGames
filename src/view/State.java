@@ -45,7 +45,13 @@ public class State extends Canvas {
 					Image scaledMouse = new Image(getDisplay(), fire.getImageData().scaledTo(x, y));
 					e.gc.drawImage(scaledMouse, 0, 0);
 				}
-			}
+				if (value == 100)
+					x = ((Canvas) e.widget).getBounds().width;
+					y = ((Canvas) e.widget).getBounds().height;
+					Image over = new Image(getDisplay(), "resources/gameOverImg.jpeg");
+					Image scaledOver = new Image(getDisplay(), over.getImageData().scaledTo(x, y));
+					e.gc.drawImage(scaledOver, 0, 0);
+				}
 		});
 	}
 
@@ -55,7 +61,7 @@ public class State extends Canvas {
 		redraw();
 
 	}
-
+	
 	public void changeBackground(int val) {
 		switch (val) {
 		case -2:

@@ -7,6 +7,7 @@ import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -110,12 +111,12 @@ public class View2048 extends Observable implements View,Runnable {
 	}	
 
 	
+	
 	/*
 	 * Display game Winning board
 	 */
 	public void gameWon() {		
-		shell.update();
-		
+		shell.update();		
 		//Current board location and Preparation for Transparent Shell addition
 		Point location = new Point(shell.getLocation().x + board.getLocation().x,shell.getLocation().y + board.getLocation().y);
 		String[] msgs = {"You won the game!", "now go to Study!"};		
@@ -141,7 +142,8 @@ public class View2048 extends Observable implements View,Runnable {
 	/*
 	 * Display Game over board 
 	 */
-	public void gameOver() {
+	public void gameOver() {					
+		//board.setBoardOver(backImg);
 		shell.update();
 		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
 		end.setMessage("You have lost the game. do you want to play another one?");
@@ -151,10 +153,10 @@ public class View2048 extends Observable implements View,Runnable {
 			display.dispose();
 			System.exit(0);
 		}
-		if (response == SWT.YES){
+		if (response == SWT.YES){					
 			setUserCommand(2);
 			setChanged();
-			notifyObservers();	
+			notifyObservers();			
 		}
 	}
 	
@@ -170,7 +172,7 @@ public class View2048 extends Observable implements View,Runnable {
 	 * Initialize Board canvas
 	 */
 	private void initializeBoard() {		
-		board = new Board(shell, SWT.BORDER,rows,cols,SWT.BORDER);		
+		board = new Board(shell, SWT.BORDER,rows,cols,SWT.BORDER);
 		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
 		shell.forceFocus();
