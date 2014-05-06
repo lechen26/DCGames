@@ -127,7 +127,7 @@ public class View2048 extends Observable implements View,Runnable {
 		end.setText("gameWon");
 		int response = end.open();
 		if (response == SWT.NO){
-			//setUserCommand(5);
+			setUserCommand(5);
 			setChanged();
 			notifyObservers();
 		}

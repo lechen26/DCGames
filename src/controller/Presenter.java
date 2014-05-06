@@ -87,8 +87,9 @@ public void update(Observable o, Object arg ) {
 			case 4: // save game 
 				mModel.saveGame();				
 				break;
-			case 15:
+			case 5:				
 				mModel.setWinNumber();	
+				break;
 			case SWT.ARROW_UP:
 				mModel.moveUp(false);				
 				break;
