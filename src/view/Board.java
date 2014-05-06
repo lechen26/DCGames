@@ -76,7 +76,4 @@ public class Board extends Composite {
 		}		
 	}
 	
-	public void setBoardGameOver() {
-		
-	}
 }
