@@ -245,10 +245,6 @@ public class ViewMaze extends Observable implements View, Runnable {
 		this.userCommand = command;
 	}
 
-	/*
-	 */
-	public void gameOver() {
-	}
 
 	/*
 	 * Initialize Board canvas
@@ -432,5 +428,25 @@ public class ViewMaze extends Observable implements View, Runnable {
 		}
 
 	}
+	
+	public void gameOver() {
+		new ExternalShell(display,"Finito la comedia","resources/gotToEnd.jpg").run();
+	 	MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		end.setMessage("Next Time, try better for mini, ha? do you wanna play another one?");
+		end.setText("GAME FINISH");
+		int response = end.open();
+		if (response == SWT.NO) {
+			display.dispose();
+			System.exit(0);
+		} else {
+			setUserCommand(2);
+			setChanged();
+			notifyObservers();
+		}
+
+	}
+
+	
+	
 
 }

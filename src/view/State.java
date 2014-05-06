@@ -22,7 +22,7 @@ public class State extends Canvas {
 				int stringWidth = e.gc.getFontMetrics().getAverageCharWidth();
 				int x = (getSize().x) / 2 - (("" + value).length()) * stringWidth / 2;
 				int y = (getSize().y) / 2 - (("" + value).length()) * stringWidth / 2;
-				if ((value > 0) && (value != -1) && (value != 1) && (value != 23))
+				if ((value > 0) && (value != -1) && (value != 1) && (value != 23) && (value != 99))
 					e.gc.drawString("" + value, x, y);
 				if (value == 1) {
 					x = ((Canvas) e.widget).getBounds().width;
@@ -36,6 +36,13 @@ public class State extends Canvas {
 					y = ((Canvas) e.widget).getBounds().height;
 					Image cheeze = new Image(getDisplay(), "resources/cheeze.jpg");
 					Image scaledMouse = new Image(getDisplay(), cheeze.getImageData().scaledTo(x, y));
+					e.gc.drawImage(scaledMouse, 0, 0);
+				}
+				if (value == 99) {
+					x = ((Canvas) e.widget).getBounds().width;
+					y = ((Canvas) e.widget).getBounds().height;
+					Image fire = new Image(getDisplay(), "resources/fire_meaney.gif");
+					Image scaledMouse = new Image(getDisplay(), fire.getImageData().scaledTo(x, y));
 					e.gc.drawImage(scaledMouse, 0, 0);
 				}
 			}
@@ -104,6 +111,9 @@ public class State extends Canvas {
 			break;
 		case -1:
 			setBackground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+			break;
+		case 99:
+			setBackground(getDisplay().getSystemColor(SWT.COLOR_RED));
 			break;
 		// case 1:
 
