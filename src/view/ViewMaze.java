@@ -14,7 +14,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -144,15 +143,11 @@ public class ViewMaze extends Observable implements View, Runnable {
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++) {
 				board.states[i][j].addMouseListener(new MouseListener() {
-					int mouseCurXpos;
-					int mouseCurYpos;
 					int mouseNewXpos;
 					int mouseNewYpos;
 
 					@Override
 					public void mouseDown(MouseEvent event) {
-						mouseCurXpos = event.x;
-						mouseCurYpos = event.y;
 					}
 
 					@Override
