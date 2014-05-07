@@ -74,7 +74,7 @@ public void update(Observable o, Object arg ) {
 			case 2: // restart game
 				mModel.initializeBoard();				
 				break;
-			case 11 : // undo move
+			case 1 : // undo move
 				mModel.undoBoard();				
 				break;
 			case 3: // load game

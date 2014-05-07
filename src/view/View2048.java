@@ -97,7 +97,6 @@ public class View2048 extends Observable implements View,Runnable {
 		board.redraw();
 		
 	}
-	
 
 	/*
 	 *  Get user command
@@ -107,6 +106,9 @@ public class View2048 extends Observable implements View,Runnable {
 		return userCommand;
 	}
 	
+	/*
+	 * Set user Command
+	 */
 	public void setUserCommand(int command) {
 		this.userCommand = command;
 	}	
@@ -159,6 +161,9 @@ public class View2048 extends Observable implements View,Runnable {
 		}
 	}
 	
+	/*
+	 * Display Undo Message
+	 */
 	public void undoEnd()
 	{
 		MessageBox end = new MessageBox(shell,SWT.POP_UP);		
@@ -176,6 +181,7 @@ public class View2048 extends Observable implements View,Runnable {
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
 		shell.forceFocus();
 	}
+	
 	
 	/*
 	 * Initialize Menu bottons 

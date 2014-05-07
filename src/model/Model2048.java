@@ -8,8 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Observable;
 import java.util.Random;
 
@@ -20,7 +18,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class Model2048 extends Observable implements Model {
 	
-	LinkedHashMap<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
+	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
+	ArrayList<Integer>undoScores = new ArrayList<Integer>();
 	int[][] mBoard;		
 	int score=0;	
 	int winNumber;
@@ -73,9 +72,10 @@ public class Model2048 extends Observable implements Model {
 		}	
 		else
 		{
-			List<Integer> list = new ArrayList<Integer>(undoBoards.keySet());
-			score=list.get(list.size()-1);
-			mBoard=copyBoard(undoBoards.remove(score));
+			mBoard = copyBoard(undoBoards.remove(undoBoards.size()-1));
+			System.out.println("Score before undo=" + score);
+			score=undoScores.remove(undoScores.size()-1);
+			System.out.println("Score after undo=" + score);
 			setChanged();
 			notifyObservers();
 		}
@@ -124,8 +124,10 @@ public class Model2048 extends Observable implements Model {
 	public boolean moveRight(boolean quiet){
 		boolean move=false;
 		//save board before operation for undo purposes
-		if (!quiet)		
-			undoBoards.put(score,copyBoard(mBoard));		
+		if (!quiet)		{			
+			undoBoards.add(copyBoard(mBoard));
+			undoScores.add(score);
+		}
 		for(int i=0;i<mBoard.length;i++){		
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
 			for(int j=mBoard[0].length-1;j>0;j--){
@@ -173,8 +175,10 @@ public class Model2048 extends Observable implements Model {
 	 */
 	public boolean moveLeft(boolean quiet){		
 		//save board before operation for undo purposes
-		if (!quiet)			
-			undoBoards.put(score,copyBoard(mBoard));
+		if (!quiet)		{			
+			undoBoards.add(copyBoard(mBoard));
+			undoScores.add(score);
+		}
 		boolean move=false;	
 		for(int i=0;i<mBoard.length;i++){
 			ArrayList<Integer> merged = new ArrayList<Integer>();
@@ -222,8 +226,10 @@ public class Model2048 extends Observable implements Model {
 	 */
 	public boolean moveUp(boolean quiet){		
 		//save board before operation for undo purposes	
-		if (!quiet)			
-			undoBoards.put(score,copyBoard(mBoard));
+		if (!quiet)		{			
+			undoBoards.add(copyBoard(mBoard));
+			undoScores.add(score);
+		}
 		boolean move=false;	
 		for(int i=0;i<mBoard[0].length;i++){
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
@@ -272,8 +278,10 @@ public class Model2048 extends Observable implements Model {
 	 */
 	public boolean moveDown(boolean quiet){		
 		//save board before operation for undo purposes
-		if (! quiet)			
-			undoBoards.put(score,copyBoard(mBoard));
+		if (!quiet)		{			
+			undoBoards.add(copyBoard(mBoard));
+			undoScores.add(score);
+		}
 		boolean move=false;
 		for(int i=0;i<mBoard[0].length;i++){
 			ArrayList<Integer> merged = new ArrayList<Integer>();
@@ -314,17 +322,6 @@ public class Model2048 extends Observable implements Model {
 		return move;
 	}
 
-
-	/*
-	 * print Board array
-	 */
-	private void displayBoard(int[][] mBoard) {		
-		for(int i=0;i<mBoard.length;++i){
-			for(int j=0;j<mBoard[0].length;++j)				
-				System.out.print(mBoard[i][j] + " ");			
-			System.out.println("\n");
-		}
-	}
 	
 	/*
 	 *  Initialize Board array with 0 values
@@ -337,7 +334,8 @@ public class Model2048 extends Observable implements Model {
 				//Create state with 0?
 			}
 		}		
-		undoBoards = new LinkedHashMap<Integer,int[][]>();
+		undoBoards = new ArrayList<int[][]>();
+		undoScores = new ArrayList<Integer>();
 	}
 	
 	
