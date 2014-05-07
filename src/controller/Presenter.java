@@ -28,19 +28,15 @@ public void update(Observable o, Object arg ) {
 			else if (arg.equals("gameWon")){
 				ui.gameWon();
 			}					
-			//else if (arg.equals("gameFinish")){				
-		//		ui.gameFinish();
-		//	}
 			else if (arg.equals("undoEnd")){
 				ui.undoEnd();
 			}
-		}
-		else{							
+		}else{							
 			int[][] b=mModel.getData();				
 			ui.displayData(b);
 			int scr = mModel.getScore();			
 			ui.displayScore(scr);
-			}
+		}
 	}
 	if (o == ui)
 	{

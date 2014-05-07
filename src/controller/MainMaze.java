@@ -11,13 +11,6 @@ public class MainMaze {
 		Presenter p = new Presenter(m,ui);
 		m.addObserver(p);
 		ui.addObserver(p);			
-		//Thread th = new Thread(ui);
-		//th.start();
 		ui.run();
-		 
-		//m.initializeBoard();
-
-
-	}
-
+		}
 }
