@@ -351,8 +351,7 @@ public class ModelMaze extends Observable implements Model {
 	 * Undo the last operation and revert back to the board before it
 	 * if no operation was made, do nothing
 	 */
-	public void undoBoard() {
-		System.out.println("Undo operation");
+	public void undoBoard() {		
 		if (undoBoards.isEmpty())
 		{			
 			setChanged();
