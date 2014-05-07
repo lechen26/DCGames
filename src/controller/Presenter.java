@@ -32,8 +32,8 @@ public void update(Observable o, Object arg ) {
 				ui.undoEnd();
 			}
 		}else{							
-			int[][] b=mModel.getData();				
-			ui.displayData(b);
+			int[][] b=mModel.getBoard();				
+			ui.displayBoard(b);
 			int scr = mModel.getScore();			
 			ui.displayScore(scr);
 		}

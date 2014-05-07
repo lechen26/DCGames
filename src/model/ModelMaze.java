@@ -27,8 +27,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ModelMaze extends Observable implements Model {
 
-	int[][] mBoard;	
-	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();       
+	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
+	int[][] mBoard;		       
 	int rows,cols;
 	int score=0;
 	Point exitPosition;
@@ -52,14 +52,56 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 
+	/*
+	 * Get Board data
+	 */
 	@Override
-	public int[][] getData() {
+	public int[][] getBoard() {
 		return mBoard;
 	}
 
 
+	/*
+	 * Set number of moves
+	 */
+	private void setNumOfMoves(int numOfMoves) {
+		this.numOfMoves = numOfMoves;
+	}
+
+	/*
+	 * Set start position
+	 */
+	public void setStartPosition(Point point) {
+		this.startPosition=point;		
+	}
+
 	
-	public Point getCurrentPosition(){
+	/*
+	 * Set Exit position
+	 */
+	public void setExitPosition(Point exitPosition) {
+		this.exitPosition = exitPosition;
+	}
+
+	/*
+	 * Set current score
+	 */
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	
+	/* 
+	 * return exit Position
+	 */
+	public Point getExitPosition() {
+		return exitPosition;
+	}
+
+	/*
+	 * Get current Position on the Maze
+	 */
+	private Point getCurrentPosition(){
 
 		for (int i=0; i<mBoard.length; i++)
 			for (int j=0;j<mBoard[0].length ; j++)
@@ -68,6 +110,7 @@ public class ModelMaze extends Observable implements Model {
 		return null; // din't find the mouse
 	}
 
+	
 	/*
 	 * Check if we won or lost after we got to the EndPoint
 	 */
@@ -86,18 +129,6 @@ public class ModelMaze extends Observable implements Model {
 			}
 		}
 	}
-	
-	/*
-	 * check fireWalls
-	 *  ** Feature for next assignment **
-	 *
-	private void checkIfFireWall(int x,int y , boolean diagonal){
-		if (isGotToFireWall(x,y)){
-			setChanged();
-			notifyObservers("gameOver");
-		}	
-	}
-	*/
 	
 	/*
 	* move up method
@@ -201,7 +232,9 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 
-
+	/*
+	 * Move diagonal Right and Up
+	 */
 	@Override
 	public void moveDiagonalRightUp() {		
 		if ((moveRight(false) && moveUp(true)) || (moveUp(false) && moveRight(true)) )
@@ -214,6 +247,9 @@ public class ModelMaze extends Observable implements Model {
 	
 	}
 
+	/*
+	 * Move diagonal Right and Down
+	 */
 	@Override
 	public void moveDiagonalRightDown() {		
 		if ((moveRight(false) && moveDown(true)) || (moveDown(false) && moveRight(true)) )
@@ -224,7 +260,10 @@ public class ModelMaze extends Observable implements Model {
 			notifyObservers();
 		}
 	}
-
+	
+	/*
+	* Move diagonal Left and Up
+	*/
 	@Override
 	public void moveDiagonalLeftUp() {		
 		
@@ -237,6 +276,9 @@ public class ModelMaze extends Observable implements Model {
 		}			
 	}
 
+	/*
+	* Move diagonal Left and Down
+	*/
 	@Override
 	public void moveDiagonalLeftDown() {
 		if ( (moveDown(false) && moveLeft(true)) ||  (moveLeft(false) && moveDown(true)) )
@@ -248,7 +290,10 @@ public class ModelMaze extends Observable implements Model {
 		}
 	}
 
-	// initialize the Maze Board
+	
+	/*
+	 *  initialize the Maze Board 
+	 */
 	@Override
 	public void initializeBoard() {		
 		undoBoards = new LinkedHashMap<Integer,int[][]>();
@@ -279,51 +324,10 @@ public class ModelMaze extends Observable implements Model {
 		notifyObservers();		
 	}
 
-	public int getNumOfMoves() {
-		return numOfMoves;
-	}
 
-
-	public void setNumOfMoves(int numOfMoves) {
-		this.numOfMoves = numOfMoves;
-	}
-
-
-	private void setStartPosition(Point point) {
-		this.startPosition=point;		
-	}
-
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-
-	public Point getExitPosition() {
-		return exitPosition;
-	}
-	
-	
 	/*
-	 * this method is returning an arraylist of fire walls
-	 *  ** feature for next assignment 
-	 *
-	public ArrayList<Point> getFireWallPosition(){
-		for (int i=0; i< mBoard.length ; i++)
-			for (int j=0 ;j<mBoard[0].length ; j++){
-				if (mBoard[i][j] == fireWall){
-					Point p = new Point(i,j);
-					fireWalls.add(p);
-				}
-			}
-		return fireWalls;
-	}*/
-
-
-	public void setExitPosition(Point exitPosition) {
-		this.exitPosition = exitPosition;
-	}
-
+	 * Display Board
+	 */
 	public void displayBoard(int[][] mBoard) {	
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j)	
@@ -332,6 +336,9 @@ public class ModelMaze extends Observable implements Model {
 		}
 	}
 
+	/*
+	 * Copy Board and return the copy
+	 */
 	public static int[][] copyBoard(int[][] source) {
 	    int[][] copy = new int[source.length][];
 	    for (int i = 0; i < source.length; i++) {
@@ -361,10 +368,11 @@ public class ModelMaze extends Observable implements Model {
 		}
 		
 	}
+	
 	/*
 	 * boolean method that returns if game is won
 	 */
-	public boolean isGotToEndPoint(int currX,int currY)
+	private boolean isGotToEndPoint(int currX,int currY)
 	{
 		System.out.println("Got to end");
 		System.out.println("currX=" + currX + "currY=" + currY);
@@ -374,19 +382,7 @@ public class ModelMaze extends Observable implements Model {
 		else
 			return false;
 	}
-	/*
-	 * boolean method that returns if we got into a fire wall
-	 * ** Feature for next assignment ** 
-	 *
-	public boolean isGotToFireWall(int currX,int currY){
-		for (Point s : fireWalls){
-			//System.out.println("point is : ("+ s.x + "," + s.y +")");
-			if ((currX == s.x) && (currY == s.y))
-				return true;
-		}
-		return false;
-	}
-	*/
+		
 	
 	/*
 	 * check if we Won the game
@@ -398,10 +394,17 @@ public class ModelMaze extends Observable implements Model {
 			return false;
 	}
 
-		@Override
+	/*
+	 * Return score
+	 */
+	@Override
 	public int getScore() {
 		return this.score;
 	}
+		
+	/*
+	 * Save the game to chosen file
+	 */
 	@Override
 	public void saveGame() {
 		Shell fileShell = new Shell();
@@ -430,6 +433,9 @@ public class ModelMaze extends Observable implements Model {
         	fileShell.dispose();        
 	}
 	
+	/*
+	 * Load the game from chosen file
+	 */
 	public void loadGame() {
 		Shell fileShell = new Shell();
         FileDialog fileDialog = new FileDialog(fileShell,SWT.OPEN);	  
@@ -499,7 +505,6 @@ public class ModelMaze extends Observable implements Model {
 
 	@Override
 	public void setWinNumber() {
-		// TODO Auto-generated method stub
-		
 	}
+
 }

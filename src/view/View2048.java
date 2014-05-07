@@ -72,6 +72,7 @@ public class View2048 extends Observable implements View,Runnable {
 	    shell.open();
 	}   
 	
+	
 	@Override
 	public void run() { 		
 		initComponents();
@@ -91,7 +92,7 @@ public class View2048 extends Observable implements View,Runnable {
 	/*
 	 * Display the Board with the given data
 	 */
-	public void displayData(int[][] data) {				
+	public void displayBoard(int[][] data) {				
 		board.setBoard(data);
 		board.redraw();
 		

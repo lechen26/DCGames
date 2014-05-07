@@ -20,26 +20,31 @@ import org.eclipse.swt.widgets.Shell;
 
 public class Model2048 extends Observable implements Model {
 	
-	int[][] mBoard;	
 	LinkedHashMap<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
+	int[][] mBoard;		
 	int score=0;	
 	int winNumber;
 	boolean win=false;
+	
 	//Define static definition for free component	
 	private final static int free=-5;
+	
 	
 	public Model2048(int rows,int cols,int winNumber) {		
 		mBoard = new int[rows][cols];	
 		this.winNumber=winNumber;
 	}
 	
+	/*
+	 * Get Winning number
+	 */
 	public int getWinNumber() {
 		return winNumber;
 	}
 
 	/*
 	 * Update winNumber
-	 * if we won and chose to contiue playing, the Win number will be double of current number
+	 * if we won and chose to continue playing, the Win number will be double of current number
 	 */
 	public void setWinNumber() {
 		this.winNumber = winNumber*2;
@@ -50,7 +55,7 @@ public class Model2048 extends Observable implements Model {
 	 * Get Board data
 	 */
 	@Override
-	public int[][] getData() {
+	public int[][] getBoard() {
 		return mBoard;
 	}
 
@@ -78,6 +83,9 @@ public class Model2048 extends Observable implements Model {
 	}
 	
 	
+	/*
+	 * set GameOver Board
+	 */
 	private void setGameOver() {
 		for(int i=0;i< mBoard.length; ++i) {		
 			for(int j=0; j < mBoard[0].length; ++j) {																	
@@ -87,6 +95,7 @@ public class Model2048 extends Observable implements Model {
 		setChanged();
 		notifyObservers();		
 	}
+	
 	
 	/*
 	 * Helper method to check GameOver and Win and notify after specific move
@@ -331,6 +340,7 @@ public class Model2048 extends Observable implements Model {
 		undoBoards = new LinkedHashMap<Integer,int[][]>();
 	}
 	
+	
 	/*
 	 * Gets all free cells (0 value)
 	 * Output: returns a list of Points
@@ -363,18 +373,6 @@ public class Model2048 extends Observable implements Model {
 		}
 	}
 	
-	public void generateState2() {
-		int freeSize=getFreeStates().size();
-		if (freeSize != 0 )
-		{
-			ArrayList<Point> freeStates = getFreeStates();			
-			int cellIndex = new Random().nextInt(freeStates.size());
-			int cellX = freeStates.get(cellIndex).x;
-			int cellY = freeStates.get(cellIndex).y;		
-			mBoard[cellX][cellY]=2048;
-			freeStates.remove(cellIndex);
-		}
-	}
 	/*
 	 * Initialize Board: all board with 0 besides 2 cells with random score(2/4)
 	 */
@@ -407,12 +405,14 @@ public class Model2048 extends Observable implements Model {
 	    return copy;
 	}
 	
+	
 	/*
 	 * Returns user Score (The maximum value on the board)
 	 */
 	public int getScore() {
 		return this.score;
 	}
+	
 	
 	/*
 	 * generate the next score which will be 2 or 4 (90-10)
@@ -421,6 +421,7 @@ public class Model2048 extends Observable implements Model {
 		return Math.random() < 0.9 ? 2 : 4;		
 	}
 
+	
 	/*
 	 * Verify if we have any possible move on the game 
 	 * check each operation(right,left,down,up) in quiet mode and see if we have possible movements there
@@ -457,11 +458,17 @@ public class Model2048 extends Observable implements Model {
 		return false;
 	}
 	
+	/*
+	 * Initialize Score
+	 */
 	private void initializeScore() {
 		this.score=0;
 	}
 		
 		
+	/*
+	 * Save game to chosen file
+	 */
 	@Override
 	public void saveGame() {
 		Shell fileShell = new Shell();
@@ -490,6 +497,9 @@ public class Model2048 extends Observable implements Model {
         	fileShell.dispose();        
 	}
 	
+	/*
+	 * Load game from chosen file
+	 */
 	public void loadGame() {
 		Shell fileShell = new Shell();
         FileDialog fileDialog = new FileDialog(fileShell,SWT.OPEN);	  
@@ -535,25 +545,17 @@ public class Model2048 extends Observable implements Model {
 
 	@Override
 	public void moveDiagonalRightUp() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void moveDiagonalRightDown() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void moveDiagonalLeftUp() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void moveDiagonalLeftDown() {
-		// TODO Auto-generated method stub
-		
 	}
 }

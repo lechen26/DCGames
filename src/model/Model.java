@@ -2,7 +2,7 @@ package model;
 
 public interface Model  {
 
-	public int[][] getData();
+	public int[][] getBoard();
 	public int getScore();
 	public void initializeBoard();
 	public void undoBoard();
