@@ -28,8 +28,7 @@ import org.eclipse.swt.widgets.Shell;
 public class ModelMaze extends Observable implements Model {
 
 	int[][] mBoard;	
-	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
-    ArrayList<Point> fireWalls = new ArrayList<Point>();    
+	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();       
 	int rows,cols;
 	int score=0;
 	Point exitPosition;
@@ -39,8 +38,7 @@ public class ModelMaze extends Observable implements Model {
 	
 	//Define Static definitions for Maze Game components
 	private final static int mickey=-2;
-	private final static int mini=-3;
-	private final static int fireWall=-4;
+	private final static int mini=-3;	
 	private final static int wall=-1;
 	
 	
@@ -60,6 +58,7 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 
+	
 	public Point getCurrentPosition(){
 
 		for (int i=0; i<mBoard.length; i++)
@@ -69,6 +68,9 @@ public class ModelMaze extends Observable implements Model {
 		return null; // din't find the mouse
 	}
 
+	/*
+	 * Check if we won or lost after we got to the EndPoint
+	 */
 	private void checkAndNotify(int x,int y,boolean diagonal){
 		if (isGotToEndPoint(x,y)){			
 			if (diagonal){				
@@ -85,14 +87,17 @@ public class ModelMaze extends Observable implements Model {
 		}
 	}
 	
+	/*
+	 * check fireWalls
+	 *  ** Feature for next assignment **
+	 *
 	private void checkIfFireWall(int x,int y , boolean diagonal){
-		//System.out.println("im in fire wall check");
 		if (isGotToFireWall(x,y)){
 			setChanged();
 			notifyObservers("gameOver");
 		}	
 	}
-	
+	*/
 	
 	/*
 	* move up method
@@ -105,7 +110,7 @@ public class ModelMaze extends Observable implements Model {
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX - 1;
-		if((newPos >= 0) && (mBoard[newPos][cPosY] != wall) && (mBoard[newPos][cPosY] != fireWall)){
+		if((newPos >= 0) && (mBoard[newPos][cPosY] != wall)){
 			move=true;
 			mBoard[newPos][cPosY] = mBoard[cPosX][cPosY];
 			mBoard[cPosX][cPosY] = 0 ;
@@ -114,8 +119,7 @@ public class ModelMaze extends Observable implements Model {
 		if ((move) && (!diagonal))
 			numOfMoves++;
 		setChanged();
-		notifyObservers();
-		checkIfFireWall(newPos, cPosY, diagonal);
+		notifyObservers();		
 		checkAndNotify(newPos,cPosY,diagonal);
 		return move;
 	}	
@@ -131,7 +135,7 @@ public class ModelMaze extends Observable implements Model {
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX + 1;
-		if((newPos < mBoard.length) && (mBoard[newPos][cPosY] != wall) && (mBoard[newPos][cPosY] != fireWall)){
+		if((newPos < mBoard.length) && (mBoard[newPos][cPosY] != wall)){
 			move=true;
 			mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
@@ -140,8 +144,7 @@ public class ModelMaze extends Observable implements Model {
 		if ((move) && (!diagonal))
 			numOfMoves++;
 		setChanged();
-		notifyObservers();
-		checkIfFireWall(newPos, cPosY, diagonal);
+		notifyObservers();		
 		checkAndNotify(newPos,cPosY,diagonal);		
 		return move;
 		
@@ -157,7 +160,7 @@ public class ModelMaze extends Observable implements Model {
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY - 1;
-		if((newPos >= 0 ) &&(mBoard[cPosX][newPos] != wall) && (mBoard[cPosX][newPos] != fireWall)){
+		if((newPos >= 0 ) &&(mBoard[cPosX][newPos] != wall)){
 			move=true;
 			mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
@@ -166,8 +169,7 @@ public class ModelMaze extends Observable implements Model {
 		if ((move) && (!diagonal))
 			numOfMoves++;
 		setChanged();
-		notifyObservers();
-		checkIfFireWall(cPosX, newPos, diagonal);
+		notifyObservers();		
 		checkAndNotify(cPosX,newPos,diagonal);
 		return move;
 	}
@@ -184,7 +186,7 @@ public class ModelMaze extends Observable implements Model {
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY + 1;
-		if((newPos < mBoard[0].length) &&(mBoard[cPosX][newPos] != wall) && (mBoard[cPosX][newPos] != fireWall)){
+		if((newPos < mBoard[0].length) &&(mBoard[cPosX][newPos] != wall)){
 			move=true;
 			mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
@@ -193,38 +195,83 @@ public class ModelMaze extends Observable implements Model {
 		if ((move) && (!diagonal))
 			numOfMoves++;
 		setChanged();
-		notifyObservers();
-		checkIfFireWall(cPosX, newPos, diagonal);
+		notifyObservers();		
 		checkAndNotify(cPosX,newPos,diagonal);
 			return move;
 	}
 
 
+
+	@Override
+	public void moveDiagonalRightUp() {		
+		if ((moveRight(false) && moveUp(true)) || (moveUp(false) && moveRight(true)) )
+		{					
+			if (score!=0)
+				score-=5;
+			setChanged();
+			notifyObservers();
+		}
+	
+	}
+
+	@Override
+	public void moveDiagonalRightDown() {		
+		if ((moveRight(false) && moveDown(true)) || (moveDown(false) && moveRight(true)) )
+		{	
+			if (score!=0)
+				score-=5;
+			setChanged();
+			notifyObservers();
+		}
+	}
+
+	@Override
+	public void moveDiagonalLeftUp() {		
+		
+		if  ( (moveLeft(false) && moveUp(true )) || (moveUp(false) && moveLeft(true)) ) 
+		{			
+			if (score!=0)
+				score-=5;
+			setChanged();
+			notifyObservers();
+		}			
+	}
+
+	@Override
+	public void moveDiagonalLeftDown() {
+		if ( (moveDown(false) && moveLeft(true)) ||  (moveLeft(false) && moveDown(true)) )
+		{		
+			if (score!=0)
+				score-=5;
+			setChanged();
+			notifyObservers();
+		}
+	}
+
 	// initialize the Maze Board
 	@Override
 	public void initializeBoard() {		
 		undoBoards = new LinkedHashMap<Integer,int[][]>();
-		int[][] b = { { -1 , -1 , -1 , -1 , -1 , -1 , -1 , -4 , -3 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //1
+		int[][] b = { { -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -3 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //1
 		{ -1 , 0 , 0, 0 , 0 , 0 , 0 , 0 , 0 , -1 ,0 , 0 , 0 , 0 , 0 , -1 }, //2
 		{ -1 , 0 , -1 , 0 , -1 , -1 , -1 , 0 , -1 , -1 ,-1 , -1 , 0 , -1 , 0 , -1 }, //3
 		{ -1 , 0 , -1 , 0 , -1 , 0 , 0 , 0 , -1 , 0 ,0 , 0 , 0 , -1 , 0 , -1 }, //4
-		{ -1 , 0 , -4 , 0 , -1 , -1 , -1 , -1 , -1 , 0 ,-4 , -1 , -1 , -1 , 0 , -1 }, //5
+		{ -1 , 0 , -1 , 0 , -1 , -1 , -1 , -1 , -1 , 0 ,-1 , -1 , -1 , -1 , 0 , -1 }, //5
 		{ -1 , 0 , -1 , 0 , 0 , 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , -1 }, //6
-		{ -1 , -1 , -1 , -1 , -1 , 0 , -4 , 0 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //7
+		{ -1 , -1 , -1 , -1 , -1 , 0 , -1 , 0 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //7
 		{ -1 , 0 , 0 , 0 , 0, 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , -1 }, //8
 		{ -1 , 0 , -1 , -1 , -1 , 0 , -1 , 0 , 0 , 0 ,0 , 0 , 0 , 0 , 0 , -1 }, //9
 		{ -1 , 0 , 0 , -1 , 0 , 0 , 0 , -1 , -1 , -1 ,-1 , -1 , -1 , 0 , -1 , -1 }, //10
-		{ -1 , -1 , 0 , -1 , 0 , 0 , 0 , -4 , 0 , 0 ,0 , 0 , 0 , -1 , 0 , -1 }, //11
+		{ -1 , -1 , 0 , -1 , 0 , 0 , 0 , -1 , 0 , 0 ,0 , 0 , 0 , -1 , 0 , -1 }, //11
 		{ -1 , 0 , 0 , -1 , 0 , 0 , 0 , -1 , -1 , -1 ,-1 , 0 , 0 , -1 , 0 , -1 }, //12
 		{ -1 , 0 , -1 , -1 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , 0 , -1 , -1 , 0 , 0 }, //13
-		{ -1 , 0 , 0 , -1 , -1 , -1 , 0 , -1 , -1 , -1 ,-1 , 0 , 0 , -4 , -1 , -1 }, //14	
+		{ -1 , 0 , 0 , -1 , -1 , -1 , 0 , -1 , -1 , -1 ,-1 , 0 , 0 , -1 , -1 , -1 }, //14	
 		{ -1 , -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , -1 , 0 , 0 , 0 , 0}, //15
-		{ -1 , -4 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -2 }, //16
+		{ -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -2 }, //16
 		};		
 		setStartPosition(new Point(15,15));
 		setExitPosition(new Point(0,8));
 		mBoard = copyBoard(b);
-		getFireWallPosition();
 		setScore(0);
 		setNumOfMoves(0);
 		runAstar();
@@ -256,9 +303,11 @@ public class ModelMaze extends Observable implements Model {
 		return exitPosition;
 	}
 	
+	
 	/*
-	 * this method is returning an arraylist of fire walls 
-	 */
+	 * this method is returning an arraylist of fire walls
+	 *  ** feature for next assignment 
+	 *
 	public ArrayList<Point> getFireWallPosition(){
 		for (int i=0; i< mBoard.length ; i++)
 			for (int j=0 ;j<mBoard[0].length ; j++){
@@ -268,7 +317,7 @@ public class ModelMaze extends Observable implements Model {
 				}
 			}
 		return fireWalls;
-	}
+	}*/
 
 
 	public void setExitPosition(Point exitPosition) {
@@ -327,7 +376,8 @@ public class ModelMaze extends Observable implements Model {
 	}
 	/*
 	 * boolean method that returns if we got into a fire wall
-	 */
+	 * ** Feature for next assignment ** 
+	 *
 	public boolean isGotToFireWall(int currX,int currY){
 		for (Point s : fireWalls){
 			//System.out.println("point is : ("+ s.x + "," + s.y +")");
@@ -336,7 +386,11 @@ public class ModelMaze extends Observable implements Model {
 		}
 		return false;
 	}
+	*/
 	
+	/*
+	 * check if we Won the game
+	 */
 	public boolean isGameWon(){		
 		if (numOfMoves ==  minMoves)
 			return true;
@@ -344,52 +398,7 @@ public class ModelMaze extends Observable implements Model {
 			return false;
 	}
 
-	@Override
-	public void moveDiagonalRightUp() {		
-		if ((moveRight(false) && moveUp(true)) || (moveUp(false) && moveRight(true)) )
-		{					
-			if (score!=0)
-				score-=5;
-			setChanged();
-			notifyObservers();
-		}
-	
-	}
-
-	@Override
-	public void moveDiagonalRightDown() {		
-		if ((moveRight(false) && moveDown(true)) || (moveDown(false) && moveRight(true)) )
-		{	
-			if (score!=0)
-				score-=5;
-			setChanged();
-			notifyObservers();
-		}
-	}
-
-	@Override
-	public void moveDiagonalLeftUp() {		
-		
-		if  ( (moveLeft(false) && moveUp(true )) || (moveUp(false) && moveLeft(true)) ) 
-		{			
-			if (score!=0)
-				score-=5;
-			setChanged();
-			notifyObservers();
-		}			
-	}
-
-	@Override
-	public void moveDiagonalLeftDown() {
-		if ( (moveDown(false) && moveLeft(true)) ||  (moveLeft(false) && moveDown(true)) )
-		{		
-			if (score!=0)
-				score-=5;
-			setChanged();
-			notifyObservers();
-		}
-	}
-	@Override
+		@Override
 	public int getScore() {
 		return this.score;
 	}

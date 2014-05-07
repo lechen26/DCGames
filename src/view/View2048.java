@@ -298,10 +298,4 @@ public class View2048 extends Observable implements View,Runnable {
 	
 	public void saveGame() {			
 	}
-
-	@Override
-	public void gameFinish() {
-		// TODO Auto-generated method stub
-		
-	}
 }
