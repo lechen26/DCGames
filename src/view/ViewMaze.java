@@ -310,7 +310,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				userCommand = 11;
+				userCommand = 1;
 				setChanged();
 				notifyObservers();
 				shell.forceFocus();
@@ -374,8 +374,10 @@ public class ViewMaze extends Observable implements View, Runnable {
 
 	@Override
 	public void undoEnd() {
-		// TODO Auto-generated method stub
-
+		MessageBox end = new MessageBox(shell,SWT.POP_UP);		
+		end.setMessage("This is the First state of the game");
+		end.setText("Undo");
+		end.open();		
 	}
 
 	@Override

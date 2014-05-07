@@ -27,7 +27,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ModelMaze extends Observable implements Model {
 
-	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
+	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
+	ArrayList<Integer>undoScores = new ArrayList<Integer>();	
 	int[][] mBoard;		       
 	int rows,cols;
 	int score=0;
@@ -136,8 +137,10 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public boolean moveUp(boolean diagonal) {		
 		boolean move=false;
-		if (!diagonal)			
-			undoBoards.put(score,copyBoard(mBoard));
+		if (!diagonal){
+			undoBoards.add(copyBoard(mBoard));
+			undoScores.add(score);
+		}
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX - 1;
@@ -161,8 +164,10 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public boolean moveDown(boolean diagonal) {		
 		boolean move=false;
-		if (!diagonal)
-			undoBoards.put(score,copyBoard(mBoard));	
+		if (!diagonal){
+			undoBoards.add(copyBoard(mBoard));
+			undoScores.add(score);
+		}	
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX + 1;
@@ -186,8 +191,10 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public boolean moveLeft(boolean diagonal) {		
 		boolean move=false;
-		if (!diagonal)
-			undoBoards.put(score,copyBoard(mBoard));			
+		if (!diagonal){
+			undoBoards.add(copyBoard(mBoard));
+			undoScores.add(score);
+		}			
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY - 1;
@@ -212,8 +219,10 @@ public class ModelMaze extends Observable implements Model {
 	@Override
 	public boolean moveRight(boolean diagonal) {		
 		boolean move=false;
-		if (!diagonal)
-			undoBoards.put(score,copyBoard(mBoard));	
+		if (!diagonal){
+			undoBoards.add(copyBoard(mBoard));
+			undoScores.add(score);
+		}	
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY + 1;
@@ -296,7 +305,6 @@ public class ModelMaze extends Observable implements Model {
 	 */
 	@Override
 	public void initializeBoard() {		
-		undoBoards = new LinkedHashMap<Integer,int[][]>();
 		int[][] b = { { -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -3 , -1 ,-1 , -1 , -1 , -1 , -1 , -1 }, //1
 		{ -1 , 0 , 0, 0 , 0 , 0 , 0 , 0 , 0 , -1 ,0 , 0 , 0 , 0 , 0 , -1 }, //2
 		{ -1 , 0 , -1 , 0 , -1 , -1 , -1 , 0 , -1 , -1 ,-1 , -1 , 0 , -1 , 0 , -1 }, //3
@@ -313,7 +321,9 @@ public class ModelMaze extends Observable implements Model {
 		{ -1 , 0 , 0 , -1 , -1 , -1 , 0 , -1 , -1 , -1 ,-1 , 0 , 0 , -1 , -1 , -1 }, //14	
 		{ -1 , -1 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,0 , -1 , 0 , 0 , 0 , 0}, //15
 		{ -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 , -1 ,-1 , -1 , -1 , -1 , -1 , -2 }, //16
-		};		
+		};
+		undoBoards = new ArrayList<int[][]>();
+		undoScores = new ArrayList<Integer>();		
 		setStartPosition(new Point(15,15));
 		setExitPosition(new Point(0,8));
 		mBoard = copyBoard(b);
@@ -353,19 +363,17 @@ public class ModelMaze extends Observable implements Model {
 	 */
 	public void undoBoard() {
 		if (undoBoards.isEmpty())
-		{
-			System.out.println("No Undo moves to perform");
+		{			
 			setChanged();
 			notifyObservers("undoEnd");
 		}	
 		else
 		{
-			List<Integer> list = new ArrayList<Integer>(undoBoards.keySet());
-			score=list.get(list.size()-1);
-			mBoard=copyBoard(undoBoards.remove(score));
+			mBoard = copyBoard(undoBoards.remove(undoBoards.size()-1));			
+			score=undoScores.remove(undoScores.size()-1);			
 			setChanged();
 			notifyObservers();
-		}
+	}
 		
 	}
 	

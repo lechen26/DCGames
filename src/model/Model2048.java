@@ -65,17 +65,14 @@ public class Model2048 extends Observable implements Model {
 	 */
 	public void undoBoard() {
 		if (undoBoards.isEmpty())
-		{
-			System.out.println("No Undo moves to perform");
+		{			
 			setChanged();
 			notifyObservers("undoEnd");
 		}	
 		else
 		{
-			mBoard = copyBoard(undoBoards.remove(undoBoards.size()-1));
-			System.out.println("Score before undo=" + score);
-			score=undoScores.remove(undoScores.size()-1);
-			System.out.println("Score after undo=" + score);
+			mBoard = copyBoard(undoBoards.remove(undoBoards.size()-1));			
+			score=undoScores.remove(undoScores.size()-1);			
 			setChanged();
 			notifyObservers();
 		}
