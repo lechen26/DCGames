@@ -23,6 +23,7 @@ public class Model2048 extends Observable implements Model {
 	int[][] mBoard;		
 	int score=0;	
 	int winNumber;
+	int originalWin;
 	boolean win=false;
 	
 	//Define static definition for free component	
@@ -32,6 +33,7 @@ public class Model2048 extends Observable implements Model {
 	public Model2048(int rows,int cols,int winNumber) {		
 		mBoard = new int[rows][cols];	
 		this.winNumber=winNumber;
+		this.originalWin=winNumber;
 	}
 	
 	/*
@@ -42,14 +44,21 @@ public class Model2048 extends Observable implements Model {
 	}
 
 	/*
-	 * Update winNumber
-	 * if we won and chose to continue playing, the Win number will be double of current number
+	 * set WinNumber
+	 * 
 	 */
-	public void setWinNumber() {
-		this.winNumber = winNumber*2;
-		win=false;	
+	public void setWinNumber(int number) {
+		this.winNumber = number;		
 	}
 
+	/*
+	 * if we won and chose to continue playing, the Win number will be double of current number 
+	 */
+	public void doubleWinNumber(){
+		this.winNumber=winNumber*2;
+		win=false;
+	}
+	
 	/*
 	 * Get Board data
 	 */
@@ -327,8 +336,7 @@ public class Model2048 extends Observable implements Model {
 	private void createEmptyBoard() {
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j){				
-				mBoard[i][j]=free;
-				//Create state with 0?
+				mBoard[i][j]=free;			
 			}
 		}		
 		undoBoards = new ArrayList<int[][]>();
@@ -374,6 +382,7 @@ public class Model2048 extends Observable implements Model {
 	public void initializeBoard() {			
 		initializeScore();
 		createEmptyBoard();
+		setWinNumber(originalWin);
 		ArrayList<Point> freeStates = getFreeStates();			
 		for(int i=0;i<2;++i)
 		{
@@ -384,6 +393,7 @@ public class Model2048 extends Observable implements Model {
 			mBoard[cellX][cellY]=score;
 			freeStates.remove(cellIndex);
 		}
+		win=false;
 		setChanged();
 		notifyObservers();
 	}

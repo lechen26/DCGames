@@ -502,7 +502,7 @@ public class ModelMaze extends Observable implements Model {
 
 
 	@Override
-	public void setWinNumber() {
+	public void doubleWinNumber() {
 	}
 
 }
