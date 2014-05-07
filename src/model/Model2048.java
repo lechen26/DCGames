@@ -86,7 +86,7 @@ public class Model2048 extends Observable implements Model {
 	private void setGameOver() {
 		for(int i=0;i< mBoard.length; ++i) {		
 			for(int j=0; j < mBoard[0].length; ++j) {																	
-				mBoard[i][j]=100;		
+				mBoard[i][j]=-100;		
 			}
 		}
 		setChanged();
