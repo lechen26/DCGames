@@ -19,8 +19,6 @@ public class ExternalShell {
   
 	private static final int IMAGE_WIDTH = 250; // Image width
 	private int TIMER_INTERVAL = 15; 	//Time interval for image animation
-	private int DIM_W;	//current image bounderies
-	private int DIM_H;
 	private int count=0;
 	private int directionX = 1; //Direction of Image	
 	private int directionY = 1;		
@@ -39,13 +37,11 @@ public class ExternalShell {
 	/*
 	 * Execute the shell on different thread and Set Timer for animation processing
 	 */
-	public void run()  {
-		System.out.println("Run external shell");
+	public void run()  {		
 		Shell shell = new Shell(display);
 		shell.setSize(sizex,sizey);
 		shell.setText(shellMessage);
-		Rectangle parentShellSize =display.getShells()[0].getBounds();
-		int offsetX = 100;
+		Rectangle parentShellSize =display.getShells()[0].getBounds();		
 		shell.setLocation(parentShellSize.x + parentShellSize.width/2 - sizex/2+ 50,parentShellSize.y + parentShellSize.height/2-sizey/2);
 		createContents(shell);
 		shell.open();
@@ -119,8 +115,6 @@ public class ExternalShell {
 	  canvas.addPaintListener(new PaintListener() {    	
 	      public void paintControl(PaintEvent event) {    	  
 	    	  Image img=new Image(display,imagePath);;
-	    	  DIM_W=img.getBounds().width;
-	    	  DIM_H=img.getBounds().height;
 	    	  event.gc.setBackground(display.getSystemColor(SWT.COLOR_BLACK));
 	    	  event.gc.fillRectangle(canvas.getBounds());          
 	          event.gc.drawImage(img,shx,shy);
