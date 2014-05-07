@@ -402,8 +402,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 			display.dispose();
 			System.exit(0);
 		} else {			
-			setUserCommand(2);
-			System.out.println("Current scor is=" + score);
+			setUserCommand(2);			
 			setChanged();
 			notifyObservers();
 		}
