@@ -16,10 +16,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Random;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+
+import common.Constants;
+import common.RemoteInt;
 
 
 public class Model2048 extends Observable implements Model, Serializable, Cloneable {	

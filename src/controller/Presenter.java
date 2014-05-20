@@ -2,7 +2,6 @@ package controller;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import model.Model;

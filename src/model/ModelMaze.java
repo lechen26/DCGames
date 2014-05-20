@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+
 import maze.Maze;
 import maze.MazeDomain;
 import maze.MazeHeuristicDistance;
@@ -24,11 +25,14 @@ import maze.MazeStandardDistance;
 import model.algorithms.Action;
 import model.algorithms.Searcher;
 import model.algorithms.a_star.Astar;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+
+import common.Constants;
+import common.RemoteInt;
 
 
 public class ModelMaze extends Observable implements Model, Serializable , Runnable{

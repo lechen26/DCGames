@@ -1,9 +1,10 @@
-package model;
+package common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+import model.Model;
 import model.algorithms.Action;
 
 
