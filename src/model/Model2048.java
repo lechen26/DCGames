@@ -6,11 +6,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Random;
+
+import model.algorithms.Action;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
@@ -608,5 +614,37 @@ public class Model2048 extends Observable implements Model {
 	        	mBoard[i][j]=value;	            
 	        }
 	    }	 
+
+		public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
+			System.out.println("Client of 2048");
+			Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
+			System.out.println("Client bounded to registry");		
+			RemoteInt lookup=null;
+			try {
+				lookup = (RemoteInt) registry.lookup("Server2048");
+			} catch (NotBoundException e) {
+				System.out.println("Unable to lookup Server on registry , Error " + e);
+			}
+			String result = lookup.getHint(this);
+			System.out.println("Message from server: " + result);
+			move(result,false);
+		}
+
+		
+		public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {
+			System.out.println("Clie nt of 2048");
+			Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
+			System.out.println("Client bounded to registry");		
+			RemoteInt lookup=null;
+			try {
+				lookup = (RemoteInt) registry.lookup("Server2048");
+			} catch (NotBoundException e) {
+				System.out.println("Unable to lookup Server on registry , Error " + e);
+			}
+			ArrayList<Action> result = lookup.solveGame(this);
+			System.out.println("Message from server: " + result);
+			
+		}
+
 	
 }
