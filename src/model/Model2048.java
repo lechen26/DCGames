@@ -16,20 +16,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Random;
-
-import model.algorithms.Action;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 
-public class Model2048 extends Observable implements Model, Serializable, Cloneable, Runnable {
-	
+public class Model2048 extends Observable implements Model, Serializable, Cloneable {	
 	private static final long serialVersionUID = 1L;
 	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
-	ArrayList<Integer>undoScores = new ArrayList<Integer>();
+	ArrayList<Integer> undoScores = new ArrayList<Integer>();
 	int[][] mBoard;		
 	int score=0;	
 	int winNumber;
@@ -38,8 +34,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	
 	//Define static definition for free component	
 	private final static int free=-5;
-	
-	
+		
 	public Model2048(int rows,int cols,int winNumber) {		
 		mBoard = new int[rows][cols];	
 		this.winNumber=winNumber;
@@ -48,21 +43,24 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	
 	/*
 	 * Get Winning number
+	 * @return the winning number for the game
 	 */
 	public int getWinNumber() {
 		return winNumber;
 	}
 
 	/*
-	 * set WinNumber
-	 * 
+	 * set Winning Number
+	 * @param the winning number for the game
 	 */
 	public void setWinNumber(int number) {
 		this.winNumber = number;		
 	}
 
+	
 	/*
-	 * if we won and chose to continue playing, the Win number will be double of current number 
+	 * double the winning number if we want to continue the game after winning
+	 * also set the win boolean to false
 	 */
 	public void doubleWinNumber(){
 		this.winNumber=winNumber*2;
@@ -71,12 +69,17 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	
 	/*
 	 * Get Board data
+	 * @return the board data
 	 */
 	@Override
 	public int[][] getBoard() {
 		return mBoard;
 	}
 
+	/*
+	 * Set Board data
+	 * @param board to set
+	 */
 	public void setBoard(int[][] board) {
 		this.mBoard = board;
 	}
@@ -136,9 +139,10 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	}
 	
 	
-	/* Move all possible cells to the Right and merge cells if needed
-	 Input: boolean quiet - if true, do not move states, only see if we have possible movements.
-	 Output: boolean - if we have possible movements or not.
+	/* 
+	 * Move all possible cells to the Right and merge cells if needed
+	 * @param quiet boolean parameter. indicate wheather to execute operation for real or not
+	 * @return true or false indicate if this operation is possible or not	 
 	 */
 	public boolean moveRight(boolean quiet){
 		boolean move=false;
@@ -188,9 +192,10 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 
 	
 
-	/* Move all possible cells to the Left and merge cells if needed
-	 Input: boolean quiet - if true, do not move states, only see if we have possible movements. (such as preview)
-	 Output: boolean - if we have possible movements or not.
+	/* 
+	 * Move all possible cells to the Left and merge cells if needed
+	 * @param quiet boolean parameter. indicate wheather to execute operation for real or not
+	 * @return true or false indicate if this operation is possible or not	 
 	 */
 	public boolean moveLeft(boolean quiet){		
 		//save board before operation for undo purposes
@@ -239,9 +244,10 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 		return move;
 	}
 	
-	/* Move all possible cells to the Up and merge cells if needed
-	 Input: boolean quiet - if true, do not move states, only see if we have possible movements. (such as preview)
-	 Output: boolean - if we have possible movements or not.
+	/*
+	 *  Move all possible cells to the Up and merge cells if needed
+	 * @param quiet boolean parameter. indicate wheather to execute operation for real or not
+	 * @return true or false indicate if this operation is possible or not	 
 	 */
 	public boolean moveUp(boolean quiet){		
 		//save board before operation for undo purposes	
@@ -291,10 +297,11 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	}
 
 
-	/* Move all possible cells to the Down and merge cells if needed
-	 Input: boolean quiet - if true, do not move states, only see if we have possible movements. (such as preview)
-	 Output: boolean - if we have possible movements or not.
-	 */
+	/*
+	 *  Move all possible cells to the Down and merge cells if needed
+	 * @param quiet boolean parameter. indicate wheather to execute operation for real or not
+	 * @return true or false indicate if this operation is possible or not	 
+	*/
 	public boolean moveDown(boolean quiet){		
 		//save board before operation for undo purposes
 		if (!quiet)		{			
@@ -359,7 +366,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	
 	/*
 	 * Gets all free cells (0 value)
-	 * Output: returns a list of Points
+	 * return freeStates list of Points that are free cells
 	 */
 	public ArrayList<Point> getFreeStates() {
 		ArrayList<Point> freeStates = new ArrayList<Point>();
@@ -414,7 +421,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 
 	/*
 	 * Copy Board array
-	 * Output: return the copied array
+	 * @return copy the copied array
 	 */
 	public static int[][] copyBoard(int[][] source) {
 	    int[][] copy = new int[source.length][];
@@ -427,6 +434,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	
 	/*
 	 * Returns user Score (The maximum value on the board)
+	 * @return current score
 	 */
 	public int getScore() {
 		return this.score;
@@ -435,6 +443,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	
 	/*
 	 * generate the next score which will be 2 or 4 (90-10)
+	 * @return random score
 	 */
 	private int generateScore() {
 		return Math.random() < 0.9 ? 2 : 4;		
@@ -452,6 +461,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	/*
 	 * Check if the game is over. 
 	 * if we got no possible moves and if we got no free cells
+	 * @return true of false indicate if game is over or not
 	 */
 	public boolean isGameOver() {		
 		return ((!isMovesAvailable()) && (getFreeStates().size() == 0) );	
@@ -460,6 +470,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	
 	/*
 	 * Check if we won the game. if we have a cell with 2048 value
+	 * @return true or false indicate if we won the game or not
 	 */
 	public boolean isGameWon() 
 	{
@@ -490,6 +501,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	 */
 	@Override
 	public void saveGame() {
+		
 		Shell fileShell = new Shell();
         FileDialog fileDialog = new FileDialog(fileShell,SWT.SAVE);        
         fileDialog.setText("Select Target File");
@@ -578,12 +590,21 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	public void moveDiagonalLeftDown() {
 	}
 	
+	/*
+	 * toString function
+	 * @return the string defined the module (board + score)
+	 */
 	public String toString() {		
 		String str = Arrays.deepToString(mBoard);			
 		return "Array is " +  str + " and score is " + score;
 	}
 	
-	
+	/*
+	 * Mapping function between string direction to actual function
+	 * @param direction string that indicate the direction we want to move
+	 * @param virtual indicate wheather to execute for real or virtually
+	 * @return true or false which retunred from the move operation
+	 */
 	public boolean move(String direction, boolean virtual) {
 		if (direction.equals("Down"))
 				return moveDown(virtual);
@@ -596,12 +617,20 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 		return false;
 	}
 	
+	/*
+	 * Clone the Model
+	 * @return cloned object
+	 */
 	 public Object clone() throws CloneNotSupportedException {
 	        Model2048 copy = (Model2048)super.clone();
 	        copy.setBoard(copyBoard(mBoard));
 	        return copy;
 	    }
 	 
+	 /*
+	  * return List of integers that indicate empty Cells (alphaBetaPrunning)
+	  * @return List of integers
+	  */
 	 public List<Integer> getEmptyCellIds() {
 	        List<Integer> cellList = new ArrayList<Integer>();
 	        
@@ -616,12 +645,22 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	        return cellList;
 	    }
 	 
+	 /*
+	  * set cell as Empty (alphaBeta prunning)
+	  * @param i row for cell
+	  * @param j col for cell
+	  * @param value set the given value
+	  */
 	 public void setEmptyCell(int i, int j, int value) {
 	        if(mBoard[i][j]==0) {
 	        	mBoard[i][j]=value;	            
 	        }
 	    }	 
 		
+	 /*
+	  * get Hint From RMI server
+	  * @return string that indicate the best next direction to move
+	  */
 		public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
 			System.out.println("Client of 2048");
 			Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
@@ -638,6 +677,9 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 		}
 
 		
+		/*
+		 * solve the game by the RMI Server
+		 */
 		public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {			
 			Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
 			RemoteInt lookup=null;
@@ -654,17 +696,9 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-		}
-
-
-				@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			
 		}
 		
 }

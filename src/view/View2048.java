@@ -75,7 +75,7 @@ public class View2048 extends Observable implements View,Runnable {
 	
 	@Override
 	public void run() { 		
-		initComponents();
+		initComponents();		
 		setChanged();
 		notifyObservers();
 		shell.forceFocus();
