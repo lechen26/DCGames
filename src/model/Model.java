@@ -1,5 +1,7 @@
 package model;
 
+import java.rmi.RemoteException;
+
 public interface Model  {
 
 	public int[][] getBoard();
@@ -17,4 +19,5 @@ public interface Model  {
 	public void moveDiagonalRightDown();
 	public void moveDiagonalLeftUp();
 	public void moveDiagonalLeftDown();
+	void getHintFromServer() throws RemoteException, CloneNotSupportedException;
 }
