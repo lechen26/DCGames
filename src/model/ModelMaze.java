@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -24,12 +25,15 @@ import model.algorithms.Action;
 import model.algorithms.Searcher;
 import model.algorithms.a_star.Astar;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 
-public class ModelMaze extends Observable implements Model {
+public class ModelMaze extends Observable implements Model, Serializable , Runnable{
+
+	private static final long serialVersionUID = 1L;
 	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
 	int[][] mBoard;		       
 	int rows,cols;
@@ -38,11 +42,11 @@ public class ModelMaze extends Observable implements Model {
 	Point startPosition;
 	int numOfMoves=0;
 	int minMoves=0;
-	
+	RemoteInt lookup;
 	//Define Static definitions for Maze Game components
-	private final static int mickey=-2;
+	public final static int mickey=-2;
 	public final static int mini=-3;	
-	private final static int wall=-1;
+	public final static int wall=-1;
 	
 	
 	public ModelMaze(int rows,int cols) {		
@@ -100,22 +104,42 @@ public class ModelMaze extends Observable implements Model {
 	public Point getExitPosition() {
 		return exitPosition;
 	}
+	
+	public Point getStartPosition() {
+		return startPosition;
+	}
 
 	/*
 	 * Get current Position on the Maze
 	 */
 	public Point getCurrentPosition(){
+
 		for (int i=0; i<mBoard.length; i++)
 			for (int j=0;j<mBoard[0].length ; j++)
 				if (mBoard[i][j] == mickey )
 					return new Point(i,j);
-		return null; // din't find the mouse
+		return null; // didn't find the mouse
 	}
 
-
-	public Point getStartPosition() {
-		return startPosition;
+	public void setCurrentPosition(int x, int y) {		
+		int oldX = getCurrentPosition().x;
+		int oldY = getCurrentPosition().y;
+		System.out.println("Old position is " + oldX + ", " + oldY);				
+		//Board[oldX][oldY] = 0;
+		//setChanged();
+		//notifyObservers();		
+		mBoard[oldX][oldY] = 0;
+		mBoard[x][y] = mickey;
+		setChanged();
+		notifyObservers();
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
 	/*
 	 * Check if we won or lost after we got to the EndPoint
 	 */
@@ -391,7 +415,9 @@ public class ModelMaze extends Observable implements Model {
 	/*
 	 * check if we Won the game
 	 */
-	public boolean isGameWon(){		
+	public boolean isGameWon(){
+		System.out.println("NumOfMoves=" + numOfMoves);
+		System.out.println("MinMoves = " + minMoves);
 		if (numOfMoves ==  minMoves)
 			return true;
 		else
@@ -502,16 +528,22 @@ public class ModelMaze extends Observable implements Model {
 		Maze maze = new Maze(boardForMaze,startPosition,exitPosition);
 		Searcher as = new Astar(new MazeDomain(maze),new MazeHeuristicDistance(), new MazeStandardDistance());		
 		ArrayList<Action> actions  = as.search(maze.getStart(),maze.getGoal());
-		if (actions != null)		
-			minMoves=actions.size();		
+		if (actions != null)						
+			minMoves=actions.size();			
 	}
 
 
+	@Override
+	public void doubleWinNumber() {
+	}
+
+
+	@Override
 	public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
 		System.out.println("eneterd function");
 		Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
 		System.out.println("Maze Client bounded to registry");		
-		RemoteInt lookup=null;
+		//RemoteInt lookup=null;
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
 			System.out.println("Maze Client found server");
@@ -524,8 +556,7 @@ public class ModelMaze extends Observable implements Model {
 	
 	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException {		
 		Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
-		System.out.println("Maze Client bounded to registry");
-		RemoteInt lookup=null;
+		System.out.println("Maze Client bounded to registry");		
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");			
 		} catch (NotBoundException e) {
@@ -586,9 +617,12 @@ public class ModelMaze extends Observable implements Model {
 	}
 
 
-
 	@Override
-	public void doubleWinNumber() {
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
+	
+
 
 }

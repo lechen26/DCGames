@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -23,8 +24,10 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-public class Model2048 extends Observable implements Model {
+
+public class Model2048 extends Observable implements Model, Serializable, Cloneable, Runnable {
 	
+	private static final long serialVersionUID = 1L;
 	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
 	ArrayList<Integer>undoScores = new ArrayList<Integer>();
 	int[][] mBoard;		
@@ -74,6 +77,9 @@ public class Model2048 extends Observable implements Model {
 		return mBoard;
 	}
 
+	public void setBoard(int[][] board) {
+		this.mBoard = board;
+	}
 	
 	/*
 	 * Undo the last operation and revert back to the board before it (including score)
@@ -366,6 +372,7 @@ public class Model2048 extends Observable implements Model {
 		return freeStates;
 	}
 	
+	
 	/*
 	 * Generate new state on the board
 	 */
@@ -571,7 +578,12 @@ public class Model2048 extends Observable implements Model {
 	public void moveDiagonalLeftDown() {
 	}
 	
-
+	public String toString() {		
+		String str = Arrays.deepToString(mBoard);			
+		return "Array is " +  str + " and score is " + score;
+	}
+	
+	
 	public boolean move(String direction, boolean virtual) {
 		if (direction.equals("Down"))
 				return moveDown(virtual);
@@ -590,11 +602,6 @@ public class Model2048 extends Observable implements Model {
 	        return copy;
 	    }
 	 
-
-		public void setBoard(int[][] board) {
-			this.mBoard = board;
-		}
-
 	 public List<Integer> getEmptyCellIds() {
 	        List<Integer> cellList = new ArrayList<Integer>();
 	        
@@ -614,7 +621,7 @@ public class Model2048 extends Observable implements Model {
 	        	mBoard[i][j]=value;	            
 	        }
 	    }	 
-
+		
 		public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
 			System.out.println("Client of 2048");
 			Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
@@ -631,20 +638,33 @@ public class Model2048 extends Observable implements Model {
 		}
 
 		
-		public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {
-			System.out.println("Clie nt of 2048");
+		public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {			
 			Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
-			System.out.println("Client bounded to registry");		
 			RemoteInt lookup=null;
 			try {
 				lookup = (RemoteInt) registry.lookup("Server2048");
 			} catch (NotBoundException e) {
 				System.out.println("Unable to lookup Server on registry , Error " + e);
 			}
-			ArrayList<Action> result = lookup.solveGame(this);
-			System.out.println("Message from server: " + result);
-			
+			while (true) {
+				if (isGameOver() || isGameWon())
+					break;
+				String result = lookup.getHint(this);
+				move(result,false);
+				try {
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 
-	
+
+				@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
+		
 }

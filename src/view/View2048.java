@@ -123,28 +123,31 @@ public class View2048 extends Observable implements View,Runnable {
 	/*
 	 * Display game Winning board
 	 */
-	public void gameWon() {		
-		shell.update();		
-		//Current board location and Preparation for Transparent Shell addition
-		Point location = new Point(shell.getLocation().x + board.getLocation().x,shell.getLocation().y + board.getLocation().y);
-		String[] msgs = {"You won the game!", "now go to Study!"};		
-		new TransparentShell(display, msgs, board.getBounds(), location).run();		
-		
-		//MessageBox
-		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
-		end.setMessage("You Won! by Default game will continue. do you want to start a new Game? ");
-		end.setText("gameWon");
-		int response = end.open();
-		if (response == SWT.NO){
-			setUserCommand(5);
-			setChanged();
-			notifyObservers();
-		}
-		if (response == SWT.YES){
-			setUserCommand(2);
-			setChanged();
-			notifyObservers();	
-		}
+	public void gameWon() {
+		display.asyncExec(new Runnable() { 			 
+			 public void run() { 		
+				shell.update();		
+				//Current board location and Preparation for Transparent Shell addition
+				Point location = new Point(shell.getLocation().x + board.getLocation().x,shell.getLocation().y + board.getLocation().y);
+				String[] msgs = {"You won the game!", "now go to Study!"};		
+				new TransparentShell(display, msgs, board.getBounds(), location).run();				
+				//MessageBox
+				MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
+				end.setMessage("You Won! by Default game will continue. do you want to start a new Game? ");
+				end.setText("gameWon");
+				int response = end.open();
+				if (response == SWT.NO){
+					setUserCommand(5);
+					setChanged();
+					notifyObservers();
+				}
+				if (response == SWT.YES){
+					setUserCommand(2);
+					setChanged();
+					notifyObservers();	
+				}
+			 }
+			});
 	}
 	
 	/*
@@ -335,10 +338,13 @@ public class View2048 extends Observable implements View,Runnable {
 	}
 
 	@Override
-	public void displayScore(int scr) {		
-		score.setText("Score "+ scr);
+	public void displayScore(final int scr) {		
+		display.asyncExec(new Runnable() { 
+			 @Override 
+			 public void run() { 
+				 score.setText("Score "+ scr);
+			 }
+	});
 	}
 	
-	public void saveGame() {			
-	}
 }
