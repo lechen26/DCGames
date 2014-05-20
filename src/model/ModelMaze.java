@@ -37,7 +37,7 @@ public class ModelMaze extends Observable implements Model {
 	
 	//Define Static definitions for Maze Game components
 	private final static int mickey=-2;
-	private final static int mini=-3;	
+	public final static int mini=-3;	
 	private final static int wall=-1;
 	
 	

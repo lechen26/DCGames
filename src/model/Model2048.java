@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Observable;
 import java.util.Random;
 
@@ -348,7 +349,7 @@ public class Model2048 extends Observable implements Model {
 	 * Gets all free cells (0 value)
 	 * Output: returns a list of Points
 	 */
-	private ArrayList<Point> getFreeStates() {
+	public ArrayList<Point> getFreeStates() {
 		ArrayList<Point> freeStates = new ArrayList<Point>();
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j){				
@@ -563,4 +564,49 @@ public class Model2048 extends Observable implements Model {
 	@Override
 	public void moveDiagonalLeftDown() {
 	}
+	
+
+	public boolean move(String direction, boolean virtual) {
+		if (direction.equals("Down"))
+				return moveDown(virtual);
+		else if (direction.equals("Up"))			
+			return moveUp(virtual);				
+		else if (direction.equals("Right"))
+			return moveRight(virtual);
+		else if (direction.equals("Left"))			
+			return moveLeft(virtual);		
+		return false;
+	}
+	
+	 public Object clone() throws CloneNotSupportedException {
+	        Model2048 copy = (Model2048)super.clone();
+	        copy.setBoard(copyBoard(mBoard));
+	        return copy;
+	    }
+	 
+
+		public void setBoard(int[][] board) {
+			this.mBoard = board;
+		}
+
+	 public List<Integer> getEmptyCellIds() {
+	        List<Integer> cellList = new ArrayList<Integer>();
+	        
+	        for(int i=0;i<mBoard.length;++i) {
+	            for(int j=0;j<mBoard[0].length;++j) {
+	                if(mBoard[i][j]==0) {
+	                    cellList.add(mBoard.length*i+j);
+	                }
+	            }
+	        }
+	        
+	        return cellList;
+	    }
+	 
+	 public void setEmptyCell(int i, int j, int value) {
+	        if(mBoard[i][j]==0) {
+	        	mBoard[i][j]=value;	            
+	        }
+	    }	 
+	
 }
