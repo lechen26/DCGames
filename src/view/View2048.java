@@ -160,8 +160,7 @@ public class View2048 extends Observable implements View,Runnable {
 		end.setText("gameOver");
 		int response = end.open();
 		if (response == SWT.NO) {
-			display.dispose();
-			System.exit(0);
+			display.dispose();			
 		}
 		if (response == SWT.YES){
 			setUserCommand(2);
@@ -225,8 +224,7 @@ public class View2048 extends Observable implements View,Runnable {
 	    exitItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
-	    		shell.getDisplay().dispose();
-	    		System.exit(0);
+	    		shell.dispose();
 	    	}
 	    });		
 	}

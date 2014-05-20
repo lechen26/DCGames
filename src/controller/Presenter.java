@@ -14,15 +14,11 @@ public class Presenter  implements Observer {
 Model mModel;
 View ui;	
 int horizental=0, vertical=0;
-Executor rmiExc = Executors.newCachedThreadPool();
+ExecutorService rmiExc = Executors.newCachedThreadPool();
 
 public Presenter(Model model,View view){
 	this.mModel = model;
 	this.ui = view;
-}
-
-public void finalize() {
-	((ExecutorService) rmiExc).shutdown();
 }
 
 @Override
@@ -30,13 +26,16 @@ public void update(Observable o, Object arg ) {
 	if (o == mModel){	
 		if (arg != null)
 		{				
-			if (arg.equals("gameOver")){				
+			if (arg.equals("gameOver")){
+				rmiExc.shutdown();
 				ui.gameOver();
 			}
 			else if (arg.equals("gameWon")){
+				rmiExc.shutdown();
 				ui.gameWon();
 			}					
 			else if (arg.equals("undoEnd")){
+				rmiExc.shutdown();
 				ui.undoEnd();
 			}
 		}else{							
