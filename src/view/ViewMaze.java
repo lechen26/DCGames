@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ViewMaze extends Observable implements View, Runnable {
 
-	Display display;
+	 Display display;
 	Shell shell;
 	Board board;
 	int userCommand = 0;
@@ -42,6 +42,9 @@ public class ViewMaze extends Observable implements View, Runnable {
 		this.cols = cols;
 	}
 
+	public Display getDisplay() {
+		return display;
+	}
 	private void initComponents() {
 		int scr = 0;
 		display = new Display();
@@ -90,21 +93,21 @@ public class ViewMaze extends Observable implements View, Runnable {
 				default:
 					break;
 				}
-				userCommand = e.keyCode;
+				userCommand = e.keyCode;		
 				setChanged();				
 				// support diagonal moves
 				if (pressed == 0) {
 					notifyObservers("" + horizental + "," + vertical);
 					horizental = 0;
 					vertical = 0;
-				}
+				}			
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
 				// switch case for the key pressed
 				switch (e.keyCode) {
-				case SWT.ARROW_UP:
+				case SWT.ARROW_UP:					
 					vertical++;
 					if (!upPressed) {
 						pressed++;
@@ -131,8 +134,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 						pressed++;
 						leftPressed = true;
 					}
-					break;
-
+					break;				
 				default:
 					break;
 				}
@@ -222,10 +224,17 @@ public class ViewMaze extends Observable implements View, Runnable {
 	/*
 	* Display the Board with the given data
 	*/
-	public void displayBoard(int[][] data) {
-		board.setBoard(data);
-		board.redraw();
-
+	public void displayBoard(final int[][] data) {
+		display.syncExec(new Runnable() { 
+			 @Override 
+			 public void run() { 
+			 //... 
+				 board.setBoard(data);
+				board.redraw();
+ 
+			 } 
+			 });
+		
 	}
 
 	/*
@@ -246,7 +255,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	private void initializeBoard() {
 		board = new Board(shell, SWT.BORDER, rows, cols, SWT.NONE);
-		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 5));
+		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 7));
 		board.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		shell.forceFocus();
 	}
@@ -330,36 +339,6 @@ public class ViewMaze extends Observable implements View, Runnable {
 				shell.forceFocus();
 			}
 		});
-		
-		Button hintButton = new Button(shell,SWT.PUSH);
-		hintButton.setText("Get Hint");
-		hintButton.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false, 1, 1));
-		hintButton.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {}
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				setUserCommand(6);
-				setChanged();
-				notifyObservers();
-				shell.forceFocus();
-			}
-		});
-		Button solveButton = new Button(shell,SWT.PUSH);
-		solveButton.setText("Solve Game");
-		solveButton.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false, 1, 1));
-		solveButton.addSelectionListener(new SelectionListener() {
-			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {}
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				setUserCommand(7);
-				setChanged();
-				notifyObservers();
-				shell.forceFocus();
-			}
-		});
-
 
 		Button loadButton = new Button(shell, SWT.PUSH);
 		loadButton.setText("Load Game");
@@ -395,6 +374,36 @@ public class ViewMaze extends Observable implements View, Runnable {
 				shell.forceFocus();
 			}
 		});
+		
+		Button hintButton = new Button(shell,SWT.PUSH);
+		hintButton.setText("Get Hint");
+		hintButton.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false, 1, 1));
+		hintButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {}
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				setUserCommand(6);
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();
+			}
+		});
+		
+		Button solveButton = new Button(shell,SWT.PUSH);
+		solveButton.setText("Solve Game");
+		solveButton.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false, 1, 1));
+		solveButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {}
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				setUserCommand(7);
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();
+			}
+		});
 	}
 
 	@Override
@@ -406,9 +415,14 @@ public class ViewMaze extends Observable implements View, Runnable {
 	}
 
 	@Override
-	public void displayScore(int scr) {
-		score.setText("Score " + scr);
-		score.redraw();
+	public void displayScore(final int scr) {
+		display.syncExec(new Runnable() { 
+			 @Override 
+			 public void run() { 		
+			score.setText("Score " + scr);
+			score.redraw();
+		}
+		});
 	}
 
 	
@@ -418,19 +432,25 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	@Override
 	public void gameWon() {
-		new ExternalShell(display,"Game Won","resources/maze/win.jpg").run();
-		MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		end.setMessage("Mini is so Happy!!!:)  do you wanna play another one?");
-		end.setText("GAME WON");
-		int response = end.open();
-		if (response == SWT.NO) {
-			display.dispose();
-			System.exit(0);
-		} else {			
-			setUserCommand(2);			
-			setChanged();
-			notifyObservers();
-		}
+		display.syncExec(new Runnable() { 
+			 @Override 
+			 public void run() { 		
+			
+			new ExternalShell(display,"Game Won","resources/maze/win.jpg").run();
+			MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+			end.setMessage("Mini is so Happy!!!:)  do you wanna play another one?");
+			end.setText("GAME WON");
+			int response = end.open();
+			if (response == SWT.NO) {
+				display.dispose();
+				System.exit(0);
+			} else {			
+				setUserCommand(2);			
+				setChanged();
+				notifyObservers();
+			}
+			 }
+		});
 	}
 	
 		
@@ -439,20 +459,24 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	@Override
 	public void gameOver() {
-		new ExternalShell(display,"Finito la comedia","resources/maze/end.jpg").run();
-	 	MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		end.setMessage("Next Time, try better for mini, ha? you got to the END point but with More moves then possible! do you wanna play another one?");
-		end.setText("GAME FINISH");
-		int response = end.open();
-		if (response == SWT.NO) {
-			display.dispose();
-			System.exit(0);
-		} else {
-			setUserCommand(2);
-			setChanged();
-			notifyObservers();
-		}
-
+		display.syncExec(new Runnable() { 
+			 @Override 
+			 public void run() { 				
+				new ExternalShell(display,"Finito la comedia","resources/maze/end.jpg").run();
+			 	MessageBox end = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				end.setMessage("Next Time, try better for mini, ha? you got to the END point but with More moves then possible! do you wanna play another one?");
+				end.setText("GAME FINISH");
+				int response = end.open();
+				if (response == SWT.NO) {
+					display.dispose();
+					System.exit(0);
+				} else {
+					setUserCommand(2);
+					setChanged();
+					notifyObservers();
+				}
+			 }
+			 });
 	}
 
 }
