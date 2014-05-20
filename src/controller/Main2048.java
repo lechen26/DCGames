@@ -12,5 +12,5 @@ public class Main2048 {
 		m.addObserver(p);
 		ui.addObserver(p);				
 		ui.run();
-		}
+	}
 }

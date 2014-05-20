@@ -1,26 +1,28 @@
 package controller;
 
-import java.rmi.RemoteException;
-import java.security.PrivilegedAction;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import model.Model;
 import org.eclipse.swt.SWT;
 import view.View;
-import view.ViewMaze;
 
 public class Presenter  implements Observer {
 
 Model mModel;
 View ui;	
 int horizental=0, vertical=0;
+Executor rmiExc = Executors.newCachedThreadPool();
 
 public Presenter(Model model,View view){
 	this.mModel = model;
 	this.ui = view;
+}
+
+public void finalize() {
+	((ExecutorService) rmiExc).shutdown();
 }
 
 @Override
@@ -47,7 +49,8 @@ public void update(Observable o, Object arg ) {
 	if (o == ui)
 	{
 		horizental=0;
-		vertical=0;					
+		vertical=0;
+		
 		//Retrieve argument notified for diagonal moves
 		if (arg != null){ 
 			String[] values = ((String) arg ).split(",");	
@@ -55,7 +58,7 @@ public void update(Observable o, Object arg ) {
 			vertical=Integer.parseInt(values[1]);
 		}
 		//Check for diagonal moves
-		if (horizental > 0 && vertical > 0){			
+		if (horizental > 0 && vertical > 0){
 			mModel.moveDiagonalRightUp();
 			return;
 		}
@@ -91,35 +94,30 @@ public void update(Observable o, Object arg ) {
 			case 5:	// double Win number	
 				mModel.doubleWinNumber();	
 				break;
-			case 6: // get Hint
-				try {
-					mModel.getHintFromServer();
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				} catch (CloneNotSupportedException e) {				
-					e.printStackTrace();
-				}
+			case 6: // get Hint				
+				rmiExc.execute(new Runnable() {					
+					@Override
+					public void run() {
+						try {
+							mModel.getHintFromServer();
+						} catch (Exception e1) {			
+							e1.printStackTrace();
+						}
+					}
+				});
 				break;
 			case 7:							
-				//ui.getDisplay().syncExec(new Runnable() {
-				new Thread(new Runnable() {					
+				rmiExc.execute(new Runnable() {					
 					@Override
 					public void run() {
 						try {
 							mModel.getSolutionFromServer();
-						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (CloneNotSupportedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InterruptedException e) {
+						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
 					}
-				}).start();						
+				});				
 			case SWT.ARROW_UP:				
 				mModel.moveUp(false);				
 				break;

@@ -252,6 +252,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 			mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
 			score += 10;
+
 		}
 		if ((move) && (!diagonal))
 			numOfMoves++;
