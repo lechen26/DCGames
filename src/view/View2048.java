@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class View2048 extends Observable implements View,Runnable {
 
-	Display display;
+	public Display display;
 	Shell shell;
 	Board board;
 	Label score;	
@@ -61,7 +61,7 @@ public class View2048 extends Observable implements View,Runnable {
 			
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) ) {					
+				if ( ( e.keyCode == SWT.ARROW_DOWN ) || (e.keyCode == SWT.ARROW_LEFT) || (e.keyCode == SWT.ARROW_UP) || (e.keyCode == SWT.ARROW_RIGHT) || (e.keyCode == SWT.ESC)) {					
 					userCommand=e.keyCode;
 					setChanged();
 					notifyObservers();
@@ -92,10 +92,16 @@ public class View2048 extends Observable implements View,Runnable {
 	/*
 	 * Display the Board with the given data
 	 */
-	public void displayBoard(int[][] data) {				
-		board.setBoard(data);
-		board.redraw();
-		
+	public void displayBoard(final int[][] data) {
+		display.asyncExec(new Runnable() { 
+			 @Override 
+			 public void run() { 
+			 //... 
+				 board.setBoard(data);
+				board.redraw();
+
+			 } 
+			});
 	}
 
 	/*
@@ -177,7 +183,7 @@ public class View2048 extends Observable implements View,Runnable {
 	 */
 	private void initializeBoard() {		
 		board = new Board(shell, SWT.BORDER,rows,cols,SWT.BORDER);		
-		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,5));
+		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,6));
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
 		shell.forceFocus();
 	}
