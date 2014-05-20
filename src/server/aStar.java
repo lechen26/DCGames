@@ -3,6 +3,8 @@ package server;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import common.Constants;
+
 import maze.Maze;
 import maze.MazeDomain;
 import maze.MazeHeuristicDistance;
@@ -19,7 +21,7 @@ public class aStar {
 		int[][] boardForMaze=ModelMaze.copyBoard(model.getBoard());		
 		for (int i=0;i<boardForMaze.length;++i){
 			for(int j=0;j<boardForMaze[0].length;++j) {
-				if ( boardForMaze[i][j] == ModelMaze.mini)
+				if ( boardForMaze[i][j] == Constants.mini)
 					boardForMaze[i][j]=2;
 			}
 		}		

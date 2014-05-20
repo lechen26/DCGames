@@ -25,32 +25,27 @@ import maze.MazeStandardDistance;
 import model.algorithms.Action;
 import model.algorithms.Searcher;
 import model.algorithms.a_star.Astar;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-
 import common.Constants;
 import common.RemoteInt;
 
 
 public class ModelMaze extends Observable implements Model, Serializable , Runnable{
-
 	private static final long serialVersionUID = 1L;
 	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
 	int[][] mBoard;		       
 	int rows,cols;
-	int score=0;
+	RemoteInt lookup;
 	Point exitPosition;
 	Point startPosition;
 	int numOfMoves=0;
 	int minMoves=0;
-	RemoteInt lookup;
-	//Define Static definitions for Maze Game components
-	public final static int mickey=-2;
-	public final static int mini=-3;	
-	public final static int wall=-1;
+	int score=0;
+	
+	
 	
 	
 	public ModelMaze(int rows,int cols) {		
@@ -120,7 +115,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 
 		for (int i=0; i<mBoard.length; i++)
 			for (int j=0;j<mBoard[0].length ; j++)
-				if (mBoard[i][j] == mickey )
+				if (mBoard[i][j] == Constants.mickey )
 					return new Point(i,j);
 		return null; // didn't find the mouse
 	}
@@ -133,7 +128,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 		//setChanged();
 		//notifyObservers();		
 		mBoard[oldX][oldY] = 0;
-		mBoard[x][y] = mickey;
+		mBoard[x][y] = Constants.mickey;
 		setChanged();
 		notifyObservers();
 		try {
@@ -174,7 +169,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX - 1;
-		if((newPos >= 0) && (mBoard[newPos][cPosY] != wall)){
+		if((newPos >= 0) && (mBoard[newPos][cPosY] != Constants.wall)){
 			move=true;
 			mBoard[newPos][cPosY] = mBoard[cPosX][cPosY];
 			mBoard[cPosX][cPosY] = 0 ;
@@ -200,7 +195,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosX + 1;
-		if((newPos < mBoard.length) && (mBoard[newPos][cPosY] != wall)){
+		if((newPos < mBoard.length) && (mBoard[newPos][cPosY] != Constants.wall)){
 			move=true;
 			mBoard[newPos][cPosY] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
@@ -225,7 +220,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY - 1;
-		if((newPos >= 0 ) &&(mBoard[cPosX][newPos] != wall)){
+		if((newPos >= 0 ) &&(mBoard[cPosX][newPos] != Constants.wall)){
 			move=true;
 			mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
@@ -251,7 +246,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 		int cPosX = getCurrentPosition().x;
 		int cPosY = getCurrentPosition().y;
 		int newPos = cPosY + 1;
-		if((newPos < mBoard[0].length) &&(mBoard[cPosX][newPos] != wall)){
+		if((newPos < mBoard[0].length) &&(mBoard[cPosX][newPos] != Constants.wall)){
 			move=true;
 			mBoard[cPosX][newPos] = mBoard[cPosX][cPosY] ;
 			mBoard[cPosX][cPosY] = 0 ;
@@ -526,7 +521,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 		int[][] boardForMaze=copyBoard(mBoard);
 		for (int i=0;i<boardForMaze.length;++i){
 			for(int j=0;j<boardForMaze[0].length;++j) {
-				if ( boardForMaze[i][j] == mini )
+				if ( boardForMaze[i][j] == Constants.mini )
 					boardForMaze[i][j]=2;
 			}
 		}

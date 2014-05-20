@@ -31,13 +31,10 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
 	ArrayList<Integer> undoScores = new ArrayList<Integer>();
 	int[][] mBoard;		
-	int score=0;	
 	int winNumber;
 	int originalWin;
+	int score=0;		
 	boolean win=false;
-	
-	//Define static definition for free component	
-	private final static int free=-5;
 		
 	public Model2048(int rows,int cols,int winNumber) {		
 		mBoard = new int[rows][cols];	
@@ -159,14 +156,14 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
 			for(int j=mBoard[0].length-1;j>0;j--){
 				int pos = j-1;
-				if(mBoard[i][pos] != free){
+				if(mBoard[i][pos] != Constants.free){
 					for(int k=j;k<mBoard[0].length;k++){ 
-						if(mBoard[i][k] == free){
+						if(mBoard[i][k] == Constants.free){
 							move=true;
 							if (!quiet)
 							{
 								mBoard[i][k] = mBoard[i][pos];
-								mBoard[i][pos] = free;
+								mBoard[i][pos] = Constants.free;
 								pos++;
 							}
 						}else{						
@@ -176,7 +173,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 								{									
 									score+=mBoard[i][pos];
 									mBoard[i][k] = mBoard[i][pos] * 2;
-									mBoard[i][pos] = free;
+									mBoard[i][pos] = Constants.free;
 									merged.add(k);																		
 								}
 							}
@@ -212,14 +209,14 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 			ArrayList<Integer> merged = new ArrayList<Integer>();
 			for(int j=0;j<mBoard[0].length-1;j++){
 				int pos = j+1;
-				if(mBoard[i][pos] != free){				
+				if(mBoard[i][pos] != Constants.free){				
 					for(int k=j;k>=0;k--){ 
-						if(mBoard[i][k] == free){
+						if(mBoard[i][k] == Constants.free){
 							move=true;
 							if (!quiet)
 							{
 								mBoard[i][k] = mBoard[i][pos];
-								mBoard[i][pos] = free;
+								mBoard[i][pos] = Constants.free;
 								pos--;
 							}
 						}
@@ -230,7 +227,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 								{									
 									score+=mBoard[i][pos];
 									mBoard[i][k] = mBoard[i][pos] * 2;
-									mBoard[i][pos] = free;
+									mBoard[i][pos] = Constants.free;
 									merged.add(k);																		
 								}
 							}
@@ -264,14 +261,14 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 			ArrayList<Integer> merged = new ArrayList<Integer>(); 
 				for(int j=0;j<mBoard.length-1;j++){
 					int pos = j+1;
-					if(mBoard[pos][i] != free){				
+					if(mBoard[pos][i] != Constants.free){				
 						for(int k=j;k>=0;k--){
-							if(mBoard[k][i] == free){
+							if(mBoard[k][i] == Constants.free){
 								move=true;
 								if(!quiet)
 								{
 									mBoard[k][i] = mBoard[pos][i];
-									mBoard[pos][i] = free;
+									mBoard[pos][i] = Constants.free;
 									pos--;
 								}
 							}else{
@@ -281,7 +278,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 									{										
 										score+=mBoard[pos][i];
 										mBoard[k][i] = mBoard[pos][i] * 2;
-										mBoard[pos][i] = free;
+										mBoard[pos][i] = Constants.free;
 										merged.add(k);																			
 									}
 									
@@ -317,14 +314,14 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 			ArrayList<Integer> merged = new ArrayList<Integer>();
 			for(int j=mBoard.length-1;j>0;j--){
 				int pos = j-1;
-				if(mBoard[pos][i] != free){				
+				if(mBoard[pos][i] != Constants.free){				
 					for(int k=j;k<mBoard.length;k++){
-						if(mBoard[k][i] == free){
+						if(mBoard[k][i] == Constants.free){
 							move=true;
 							if (!quiet)
 							{
 								mBoard[k][i] = mBoard[pos][i];
-								mBoard[pos][i] = free;	
+								mBoard[pos][i] = Constants.free;	
 								pos++;
 							}
 						}else{
@@ -334,7 +331,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 								{									
 									score+=mBoard[pos][i];
 									mBoard[k][i] = mBoard[pos][i] * 2;
-									mBoard[pos][i] = free;
+									mBoard[pos][i] = Constants.free;
 									merged.add(k);																	
 								}
 							}
@@ -360,7 +357,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	private void createEmptyBoard() {
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j){				
-				mBoard[i][j]=free;			
+				mBoard[i][j]=Constants.free;			
 			}
 		}		
 		undoBoards = new ArrayList<int[][]>();
@@ -376,7 +373,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 		ArrayList<Point> freeStates = new ArrayList<Point>();
 		for(int i=0;i<mBoard.length;++i){
 			for(int j=0;j<mBoard[0].length;++j){				
-				if (mBoard[i][j] == free)
+				if (mBoard[i][j] == Constants.free)
 					freeStates.add(new Point(i,j));
 			}
 		}
