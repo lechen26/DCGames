@@ -621,6 +621,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	/*
 	 * Clone the Model
 	 * @return cloned object
+	 * @throws CloneNotSupportedException
 	 */
 	 public Object clone() throws CloneNotSupportedException {
 	        Model2048 copy = (Model2048)super.clone();
@@ -661,6 +662,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	 /*
 	  * get Hint From RMI server
 	  * @return string that indicate the best next direction to move
+	  * @throws RemoteException, CloneNoeSupportedException
 	  */
 		public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
 			System.out.println("Client of 2048");
@@ -680,6 +682,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 		
 		/*
 		 * solve the game by the RMI Server
+		 * @throws RemoteException, CloneNotSupportedException
 		 */
 		public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {			
 			Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);

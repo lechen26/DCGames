@@ -16,6 +16,13 @@ import model.algorithms.a_star.Astar;
 
 public class aStar {
 
+	/*
+	 * execute Astar algorithm to get the best route to the destination
+	 * @param model the Model object
+	 * @param start the start Point
+	 * @param exit the destination Point
+	 * @return ArrayList of actions that indicate the best route 
+	 */
 	public ArrayList<Action>  runAstar(ModelMaze model,Point start, Point exit) {			
 		//Change Cheeze value to be as implementd on Astar
 		int[][] boardForMaze=ModelMaze.copyBoard(model.getBoard());		

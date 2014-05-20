@@ -542,6 +542,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 
 	/*
 	 * get Hint from RMI Server
+	 * @throws RemoteException, CloneNotSupportedException
 	 */
 	@Override
 	public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
@@ -559,7 +560,8 @@ public class ModelMaze extends Observable implements Model, Serializable {
 
 	
 	/*
-	 * solve the game using RMI Server
+	 * solve the game using RMI Server, InterruptedException
+	 * throws RemoteException, CloneNotSupportedException
 	 */
 	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException {		
 		Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
