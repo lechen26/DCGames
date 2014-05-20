@@ -100,8 +100,7 @@ public class ModelMaze extends Observable implements Model {
 	/*
 	 * Get current Position on the Maze
 	 */
-	private Point getCurrentPosition(){
-
+	public Point getCurrentPosition(){
 		for (int i=0; i<mBoard.length; i++)
 			for (int j=0;j<mBoard[0].length ; j++)
 				if (mBoard[i][j] == mickey )
@@ -109,7 +108,10 @@ public class ModelMaze extends Observable implements Model {
 		return null; // din't find the mouse
 	}
 
-	
+
+	public Point getStartPosition() {
+		return startPosition;
+	}
 	/*
 	 * Check if we won or lost after we got to the EndPoint
 	 */
