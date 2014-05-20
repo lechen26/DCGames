@@ -6,6 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -501,6 +505,86 @@ public class ModelMaze extends Observable implements Model {
 		if (actions != null)		
 			minMoves=actions.size();		
 	}
+
+
+	public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
+		System.out.println("eneterd function");
+		Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
+		System.out.println("Maze Client bounded to registry");		
+		RemoteInt lookup=null;
+		try {
+			lookup = (RemoteInt) registry.lookup("ServerMaze");
+			System.out.println("Maze Client found server");
+		} catch (NotBoundException e) {
+			System.out.println("Maze Client couldnt find Server on registry , Error " + e);
+		}
+		System.out.println("Message from server: " + lookup.getHint(this));				
+	}
+	
+	
+	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException {		
+		Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
+		System.out.println("Maze Client bounded to registry");
+		RemoteInt lookup=null;
+		try {
+			lookup = (RemoteInt) registry.lookup("ServerMaze");			
+		} catch (NotBoundException e) {
+			System.out.println("Maze Client couldnt find Server on registry , Error " + e);
+		}
+		numOfMoves--;
+		final ArrayList<Action> actions = lookup.solveGame(this);		
+			if (!actions.isEmpty()){
+				for (Action ac: actions) {
+					executeAction(ac);					
+				}				
+			}				
+	}
+		
+		private void executeAction(Action ac) {			
+			String parsedName = ac.getName().replaceAll("\\(", "").replaceAll("\\)", "");
+			String position[] = parsedName.toString().split(",");
+			int row = Integer.parseInt(position[0]);
+			int col = Integer.parseInt(position[1]);			
+			System.out.println("X=" + row + "Y=" + col);
+			if ( (row < getCurrentPosition().x) && (col == getCurrentPosition().y)){
+				System.out.println("Should move to up");
+				moveUp(false);
+			}
+			else if ( (row > getCurrentPosition().x) && (col == getCurrentPosition().y)) {
+				System.out.println("Should move to down");
+				moveDown(false);
+			}				
+			else if ( (row ==  getCurrentPosition().x) && (col <  getCurrentPosition().y)) {
+				System.out.println("Should move to left");
+				moveLeft(false);
+			}
+			else if ( (row ==  getCurrentPosition().x) && (col > getCurrentPosition().y)) {
+				System.out.println("Should move to right");
+				moveRight(false);
+			}
+			else if ( (row > getCurrentPosition().x) && (col > getCurrentPosition().y)) {
+				System.out.println("Should move Diagonal right up");
+				moveDiagonalRightDown();
+			}
+			else if ( (row > getCurrentPosition().x) && (col < getCurrentPosition().y)) {
+				System.out.println("Should move Diagonal left up");
+				moveDiagonalLeftDown();
+			}
+			else if ( (row < getCurrentPosition().x) && (col > getCurrentPosition().y)) {
+				System.out.println("Should move Diagonal right down");
+				moveDiagonalRightUp();
+			}
+			else if ( (row < getCurrentPosition().x) && (col < getCurrentPosition().y)) {
+				System.out.println("Should move Diagonal right down");
+				moveDiagonalLeftUp();
+			}					
+		}
+	
+	public String toString() {		
+		String str = Arrays.deepToString(mBoard);			
+		return "Array is " +  str + " and score is " + score;
+	}
+
 
 
 	@Override
