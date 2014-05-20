@@ -33,19 +33,17 @@ import common.Constants;
 import common.RemoteInt;
 
 
-public class ModelMaze extends Observable implements Model, Serializable , Runnable{
+public class ModelMaze extends Observable implements Model, Serializable {
 	private static final long serialVersionUID = 1L;
 	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
 	int[][] mBoard;		       
-	int rows,cols;
-	RemoteInt lookup;
+	int rows,cols;	
 	Point exitPosition;
 	Point startPosition;
+	RemoteInt lookup;
 	int numOfMoves=0;
 	int minMoves=0;
 	int score=0;
-	
-	
 	
 	
 	public ModelMaze(int rows,int cols) {		
@@ -60,6 +58,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 
 	/*
 	 * Get Board data
+	 * @return board 
 	 */
 	@Override
 	public int[][] getBoard() {
@@ -69,6 +68,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 
 	/*
 	 * Set number of moves
+	 * @param numOfMoves number of moves
 	 */
 	private void setNumOfMoves(int numOfMoves) {
 		this.numOfMoves = numOfMoves;
@@ -76,6 +76,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 
 	/*
 	 * Set start position
+	 * @param point start position to set
 	 */
 	public void setStartPosition(Point point) {
 		this.startPosition=point;		
@@ -84,6 +85,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 	
 	/*
 	 * Set Exit position
+	 * @param exitPosition exit position to set
 	 */
 	public void setExitPosition(Point exitPosition) {
 		this.exitPosition = exitPosition;
@@ -91,6 +93,7 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 
 	/*
 	 * Set current score
+	 * @param score the score to set
 	 */
 	public void setScore(int score) {
 		this.score = score;
@@ -98,18 +101,24 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 
 	
 	/* 
-	 * return exit Position
+	 * get exit Position
+	 * @return exit position
 	 */
 	public Point getExitPosition() {
 		return exitPosition;
 	}
 	
+	/*
+	 * get start position
+	 * @return start position
+	 */
 	public Point getStartPosition() {
 		return startPosition;
 	}
 
 	/*
 	 * Get current Position on the Maze
+	 * @return get current position
 	 */
 	public Point getCurrentPosition(){
 
@@ -118,25 +127,6 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 				if (mBoard[i][j] == Constants.mickey )
 					return new Point(i,j);
 		return null; // didn't find the mouse
-	}
-
-	public void setCurrentPosition(int x, int y) {		
-		int oldX = getCurrentPosition().x;
-		int oldY = getCurrentPosition().y;
-		System.out.println("Old position is " + oldX + ", " + oldY);				
-		//Board[oldX][oldY] = 0;
-		//setChanged();
-		//notifyObservers();		
-		mBoard[oldX][oldY] = 0;
-		mBoard[x][y] = Constants.mickey;
-		setChanged();
-		notifyObservers();
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	/*
@@ -160,6 +150,8 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 	
 	/*
 	* move up method
+	* @param diagonal indicate wheather its diagonal move or not
+	* @return true or false indicate if operation was success or not
 	*/
 	@Override
 	public boolean moveUp(boolean diagonal) {		
@@ -185,6 +177,8 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 	
 	/*
 	* move down method
+	* @param diagonal indicate wheather its diagonal move or not
+	* @return true or false indicate if operation was success or not
 	*/
 	@Override
 	public boolean moveDown(boolean diagonal) {		
@@ -211,6 +205,8 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 	}
 	/*
 	* move left method
+	* @param diagonal indicate wheather its diagonal move or not
+	* @return true or false indicate if operation was success or not
 	*/
 	@Override
 	public boolean moveLeft(boolean diagonal) {		
@@ -237,6 +233,8 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 	
 	/*
 	* move right method
+	* @param diagonal indicate wheather its diagonal move or not
+	* @return true or false indicate if operation was success or not
 	*/
 	@Override
 	public boolean moveRight(boolean diagonal) {		
@@ -322,7 +320,8 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 
 	
 	/*
-	 *  initialize the Maze Board 
+	 *  initialize the Maze Board.
+	 *  set start and exit positions and calculate the wanted moves according to astar 
 	 */
 	@Override
 	public void initializeBoard() {		
@@ -368,6 +367,8 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 
 	/*
 	 * Copy Board and return the copy
+	 * @param source array to copy 
+	 * @return copied array
 	 */
 	public static int[][] copyBoard(int[][] source) {
 	    int[][] copy = new int[source.length][];
@@ -401,7 +402,8 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 	}
 	
 	/*
-	 * boolean method that returns if game is won
+	 * check if we got to the end point
+	 * @return true or false 
 	 */
 	private boolean isGotToEndPoint(int currX,int currY)
 	{
@@ -414,10 +416,9 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 	
 	/*
 	 * check if we Won the game
+	 * @return true or false
 	 */
 	public boolean isGameWon(){
-		System.out.println("NumOfMoves=" + numOfMoves);
-		System.out.println("MinMoves = " + minMoves);
 		if (numOfMoves ==  minMoves)
 			return true;
 		else
@@ -425,7 +426,8 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 	}
 
 	/*
-	 * Return score
+	 * get Score
+	 * @return score
 	 */
 	@Override
 	public int getScore() {
@@ -538,12 +540,14 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 	}
 
 
+	/*
+	 * get Hint from RMI Server
+	 */
 	@Override
 	public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
 		System.out.println("eneterd function");
 		Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
-		System.out.println("Maze Client bounded to registry");		
-		//RemoteInt lookup=null;
+		System.out.println("Maze Client bounded to registry");				
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
 			System.out.println("Maze Client found server");
@@ -552,8 +556,11 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 		}
 		System.out.println("Message from server: " + lookup.getHint(this));				
 	}
+
 	
-	
+	/*
+	 * solve the game using RMI Server
+	 */
 	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException {		
 		Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
 		System.out.println("Maze Client bounded to registry");		
@@ -571,58 +578,57 @@ public class ModelMaze extends Observable implements Model, Serializable , Runna
 			}				
 	}
 		
-		private void executeAction(Action ac) {			
-			String parsedName = ac.getName().replaceAll("\\(", "").replaceAll("\\)", "");
-			String position[] = parsedName.toString().split(",");
-			int row = Integer.parseInt(position[0]);
-			int col = Integer.parseInt(position[1]);			
-			System.out.println("X=" + row + "Y=" + col);
-			if ( (row < getCurrentPosition().x) && (col == getCurrentPosition().y)){
-				System.out.println("Should move to up");
-				moveUp(false);
-			}
-			else if ( (row > getCurrentPosition().x) && (col == getCurrentPosition().y)) {
-				System.out.println("Should move to down");
-				moveDown(false);
-			}				
-			else if ( (row ==  getCurrentPosition().x) && (col <  getCurrentPosition().y)) {
-				System.out.println("Should move to left");
-				moveLeft(false);
-			}
-			else if ( (row ==  getCurrentPosition().x) && (col > getCurrentPosition().y)) {
-				System.out.println("Should move to right");
-				moveRight(false);
-			}
-			else if ( (row > getCurrentPosition().x) && (col > getCurrentPosition().y)) {
-				System.out.println("Should move Diagonal right up");
-				moveDiagonalRightDown();
-			}
-			else if ( (row > getCurrentPosition().x) && (col < getCurrentPosition().y)) {
-				System.out.println("Should move Diagonal left up");
-				moveDiagonalLeftDown();
-			}
-			else if ( (row < getCurrentPosition().x) && (col > getCurrentPosition().y)) {
-				System.out.println("Should move Diagonal right down");
-				moveDiagonalRightUp();
-			}
-			else if ( (row < getCurrentPosition().x) && (col < getCurrentPosition().y)) {
-				System.out.println("Should move Diagonal right down");
-				moveDiagonalLeftUp();
-			}					
+	/*
+	 * parse action and execute the relevant method
+	 * @param ac Action thats needs to be executed 
+	 */
+	private void executeAction(Action ac) {			
+		String parsedName = ac.getName().replaceAll("\\(", "").replaceAll("\\)", "");
+		String position[] = parsedName.toString().split(",");
+		int row = Integer.parseInt(position[0]);
+		int col = Integer.parseInt(position[1]);			
+		System.out.println("X=" + row + "Y=" + col);
+		if ( (row < getCurrentPosition().x) && (col == getCurrentPosition().y)){
+			System.out.println("Should move to up");
+			moveUp(false);
 		}
-	
+		else if ( (row > getCurrentPosition().x) && (col == getCurrentPosition().y)) {
+			System.out.println("Should move to down");
+			moveDown(false);
+		}				
+		else if ( (row ==  getCurrentPosition().x) && (col <  getCurrentPosition().y)) {
+			System.out.println("Should move to left");
+			moveLeft(false);
+		}
+		else if ( (row ==  getCurrentPosition().x) && (col > getCurrentPosition().y)) {
+			System.out.println("Should move to right");
+			moveRight(false);
+		}
+		else if ( (row > getCurrentPosition().x) && (col > getCurrentPosition().y)) {
+			System.out.println("Should move Diagonal right up");
+			moveDiagonalRightDown();
+		}
+		else if ( (row > getCurrentPosition().x) && (col < getCurrentPosition().y)) {
+			System.out.println("Should move Diagonal left up");
+			moveDiagonalLeftDown();
+		}
+		else if ( (row < getCurrentPosition().x) && (col > getCurrentPosition().y)) {
+			System.out.println("Should move Diagonal right down");
+			moveDiagonalRightUp();
+		}
+		else if ( (row < getCurrentPosition().x) && (col < getCurrentPosition().y)) {
+			System.out.println("Should move Diagonal right down");
+			moveDiagonalLeftUp();
+		}					
+	}
+
+	/*
+	* toString function
+	* @return string that defines the model
+	*/
 	public String toString() {		
 		String str = Arrays.deepToString(mBoard);			
 		return "Array is " +  str + " and score is " + score;
 	}
-
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-
 
 }
