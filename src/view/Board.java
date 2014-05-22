@@ -22,7 +22,7 @@ public class Board extends Composite {
 	public Board(Composite parent, int style, int rows, int cols, int stateStyle) {
 		super(parent,style);	
 		boardData = new int[rows][cols];
-		GridLayout grid = new GridLayout(cols,false);	
+		GridLayout grid = new GridLayout(cols,true);	
 		grid.verticalSpacing=0;
 		grid.horizontalSpacing=0;
 		grid.makeColumnsEqualWidth=false;

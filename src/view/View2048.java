@@ -185,7 +185,7 @@ public class View2048 extends Observable implements View,Runnable {
 	 */
 	private void initializeBoard() {		
 		board = new Board(shell, SWT.BORDER,rows,cols,SWT.BORDER);		
-		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,6));
+		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,7));
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
 		shell.forceFocus();
 	}
@@ -237,7 +237,7 @@ public class View2048 extends Observable implements View,Runnable {
 		//Defines undo button
 	    Button undoButton=new Button(shell, SWT.PUSH);
 		undoButton.setText("Undo Move");
-		undoButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		undoButton.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
 		undoButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -255,7 +255,7 @@ public class View2048 extends Observable implements View,Runnable {
 		//Defines restart Button
 		Button restartButton=new Button(shell, SWT.PUSH);
 		restartButton.setText("Restart Game");
-		restartButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		restartButton.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
 		restartButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -272,7 +272,7 @@ public class View2048 extends Observable implements View,Runnable {
 		
 		Button loadButton=new Button(shell, SWT.PUSH);
 		loadButton.setText("Load Game");
-		loadButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		loadButton.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
 		loadButton.addSelectionListener(new SelectionListener() {
 
 			@Override	
@@ -289,7 +289,7 @@ public class View2048 extends Observable implements View,Runnable {
 		});
 		Button saveButton=new Button(shell, SWT.PUSH);
 		saveButton.setText("Save Game");	
-		saveButton.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		saveButton.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
 		saveButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -306,7 +306,7 @@ public class View2048 extends Observable implements View,Runnable {
 		
 		Button hintButton = new Button(shell,SWT.PUSH);
 		hintButton.setText("Get Hint");
-		hintButton.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false, 1, 1));
+		hintButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
 		hintButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {}
@@ -320,7 +320,7 @@ public class View2048 extends Observable implements View,Runnable {
 		});
 		Button solveButton = new Button(shell,SWT.PUSH);
 		solveButton.setText("Solve Game");
-		solveButton.setLayoutData(new GridData(SWT.NONE, SWT.NONE, false, false, 1, 1));
+		solveButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
 		solveButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {}
