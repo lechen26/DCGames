@@ -26,13 +26,16 @@ public void update(Observable o, Object arg ) {
 	if (o == mModel){	
 		if (arg != null)
 		{				
-			if (arg.equals("gameOver")){				
+			if (arg.equals("gameOver")){
+				rmiExc.shutdown();
 				ui.gameOver();
 			}
-			else if (arg.equals("gameWon")){				
+			else if (arg.equals("gameWon")){
+				rmiExc.shutdown();
 				ui.gameWon();
 			}					
-			else if (arg.equals("undoEnd")){				
+			else if (arg.equals("undoEnd")){
+				rmiExc.shutdown();
 				ui.undoEnd();
 			}
 		}else{							

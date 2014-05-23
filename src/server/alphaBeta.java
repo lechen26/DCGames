@@ -21,13 +21,12 @@ public class alphaBeta {
         String[] directions = {"Up","Down","Right","Left"};
         int bestScore = 0;        
         if (model.isGameOver()) {
-        	System.out.println("Finito");        	
+        	System.out.println("Finito");
         	if(model.isGameWon())    {
         		System.out.println("win");
-        		bestScore=Integer.MAX_VALUE; //highest possible score
-        		System.exit(0);
+        		bestScore=Integer.MAX_VALUE; //highest possible score        	
         	}
-        	else 
+        	else
         		bestScore=Math.min(model.getScore(), 1); //lowest possible score
         }else if(depth==0) 
             bestScore=heuristicScore(model.getScore(),model.getFreeStates().size(),calculateClusteringScore(model.getBoard()));

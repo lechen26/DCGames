@@ -128,6 +128,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	private void checkAndNotify() {			
 		if (isGameOver()){
 			stopSolverPressed=true;
+			System.out.println("game is over from notify");
 			setGameOver();
 			setChanged();			
 			notifyObservers("gameOver");
@@ -149,8 +150,8 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	 * @param quiet boolean parameter. indicate wheather to execute operation for real or not
 	 * @return true or false indicate if this operation is possible or not	 
 	 */
-	public boolean moveRight(boolean quiet){
-		boolean move=false;
+	public boolean moveRight(boolean quiet){		
+		boolean move=false;		
 		//save board before operation for undo purposes
 		if (!quiet)		{			
 			undoBoards.add(copyBoard(mBoard));
@@ -691,23 +692,23 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 			stopSolverPressed=false;
 			Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
 			RemoteInt lookup=null;
-			try {
+			try { 
 				lookup = (RemoteInt) registry.lookup("Server2048");
 			} catch (NotBoundException e) {
 				System.out.println("Unable to lookup Server on registry , Error " + e);
 			}
-			while (true) {
-				//if (isGameOver() || isGameWon() || stopSolverPressed)
-				if (stopSolverPressed)
-					break;
+			while (!stopSolverPressed) {			
 				String result = lookup.getHint(this);
 				move(result,false);
+				System.out.println("stopserver=" + stopSolverPressed);
 				try {
 					Thread.sleep(300);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
+			setGameOver();
+			System.out.println("STop pressed");
 		}
 		
 		public int hashCode() {

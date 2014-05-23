@@ -36,6 +36,7 @@ import common.RemoteInt;
 public class ModelMaze extends Observable implements Model, Serializable {
 	private static final long serialVersionUID = 1L;
 	Map<Integer,int[][]> undoBoards = new LinkedHashMap<Integer,int[][]>();
+	
 	int[][] mBoard;		       
 	int rows,cols;	
 	Point exitPosition;
@@ -392,6 +393,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		}	
 		else
 		{
+			numOfMoves--;
 			List<Integer> list = new ArrayList<Integer>(undoBoards.keySet());
 			score=list.get(list.size()-1);
 			mBoard=copyBoard(undoBoards.remove(score));
