@@ -36,7 +36,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	int score=0;		
 	String server;
 	boolean win=false;
-	boolean stopSolverPressed=false;
+	volatile boolean stopSolverPressed=false;
 	
 	public Model2048(int rows,int cols,int winNumber) {		
 		mBoard = new int[rows][cols];	
@@ -127,10 +127,9 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	 */
 	private void checkAndNotify() {			
 		if (isGameOver()){
-			stopSolverPressed=true;
-			System.out.println("game is over from notify");
+			stopSolverPressed=true;			
 			setGameOver();
-			setChanged();			
+			setChanged();
 			notifyObservers("gameOver");
 		}  else if ((!win) && (isGameWon())){
 			stopSolverPressed=true;
@@ -696,19 +695,21 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 				lookup = (RemoteInt) registry.lookup("Server2048");
 			} catch (NotBoundException e) {
 				System.out.println("Unable to lookup Server on registry , Error " + e);
-			}
+			}	
+			//Keep getting hint from Solver until end or win the game
 			while (!stopSolverPressed) {			
 				String result = lookup.getHint(this);
-				move(result,false);
-				System.out.println("stopserver=" + stopSolverPressed);
+				if (result != null)
+					move(result,false);								
+				else					
+					stopSolverPressed=true;			
 				try {
 					Thread.sleep(300);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
-			setGameOver();
-			System.out.println("STop pressed");
+			checkAndNotify();
 		}
 		
 		public int hashCode() {

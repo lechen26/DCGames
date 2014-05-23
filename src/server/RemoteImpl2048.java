@@ -31,7 +31,9 @@ public class RemoteImpl2048 extends UnicastRemoteObject implements RemoteInt {
 		  }*/
 		  Map<String, Object> result = alphaBeta.alphabeta((Model2048)model, 7, Integer.MIN_VALUE, Integer.MAX_VALUE, Player.USER);		  
 		  //proxy.put(model, (String)result.get("Direction"));
-	      return (String)result.get("Direction");					
+		  if (result != null)
+			  return (String)result.get("Direction");
+		  return null;
 	}
 
 	@Override

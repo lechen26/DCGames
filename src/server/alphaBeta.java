@@ -15,7 +15,7 @@ public class alphaBeta {
         USER
     }
     
-	public static Map<String, Object> alphabeta(Model2048 model, int depth, int alpha, int beta, Player player) throws CloneNotSupportedException {        
+	public static Map<String, Object> alphabeta(Model2048 model, int depth, int alpha, int beta, Player player) throws CloneNotSupportedException {		
 		Map<String, Object> result = new HashMap<String, Object>();                
         String bestDirection = null;
         String[] directions = {"Up","Down","Right","Left"};
@@ -36,18 +36,18 @@ public class alphaBeta {
                 	if (!model.move(direction, true))
                 		continue;
                     Model2048 newModel = (Model2048) model.clone();
-                    if (newModel.move(direction,false) ) {
-                    	//int points=newModel.getScore();                    
-                    	Map<String, Object> currentResult = alphabeta(newModel, depth-1, alpha, beta, Player.COMPUTER);
-                    	int currentScore=((Number)currentResult.get("Score")).intValue();                                        
-                    	if(currentScore>alpha) { //maximize score
-                    		alpha=currentScore;
-                    		bestDirection=direction;
-                    	}                    
-                    	if((beta<=alpha) || model.isGameOver() || model.isGameWon()) {
-                    		break; //beta cutoff
-                    	}
-                    }                
+                    newModel.move(direction,false);
+                    
+                	//int points=newModel.getScore();                    
+                	Map<String, Object> currentResult = alphabeta(newModel, depth-1, alpha, beta, Player.COMPUTER);
+                	int currentScore=((Number)currentResult.get("Score")).intValue();                                        
+                	if(currentScore>alpha) { //maximize score
+                		alpha=currentScore;
+                		bestDirection=direction;
+                	}                    
+                	if((beta<=alpha) || model.isGameOver() || model.isGameWon()) {
+                		break; //beta cutoff
+                	}                
                     bestScore = alpha;
                 }           
             }else {

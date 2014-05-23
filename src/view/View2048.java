@@ -157,19 +157,23 @@ public class View2048 extends Observable implements View,Runnable {
 	 * Display Game over board 
 	 */
 	public void gameOver() {
-		shell.update();
-		MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
-		end.setMessage("You have lost the game. do you want to play another one?");
-		end.setText("gameOver");
-		int response = end.open();
-		if (response == SWT.NO) {
-			display.dispose();			
-		}
-		if (response == SWT.YES){
-			setUserCommand(2);
-			setChanged();
-			notifyObservers();	
-		}
+		display.asyncExec(new Runnable() { 			 
+			 public void run() { 				
+				shell.update();
+				MessageBox end = new MessageBox(shell,SWT.ICON_QUESTION | SWT.YES | SWT.NO);		
+				end.setMessage("You have lost the game. do you want to play another one?");
+				end.setText("gameOver");
+				int response = end.open();
+				if (response == SWT.NO) {
+					display.dispose();			
+				}
+				if (response == SWT.YES){
+					setUserCommand(2);
+					setChanged();
+					notifyObservers();	
+				}
+			 }
+		});
 	}
 	
 	/*
