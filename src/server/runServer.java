@@ -17,12 +17,25 @@ public class runServer {
 	public static void main(String[] args) throws RemoteException, AlreadyBoundException {
 		RemoteImpl2048 imp2048 = new RemoteImpl2048();
 		RemoteImplMaze impMaze = new RemoteImplMaze();
-		Registry registry = LocateRegistry.createRegistry(Constants.RMI_PORT);
-		System.out.println("java RMI registry created.");		
-		registry.bind("Server2048", imp2048);		
-		System.out.println("PeerServer 2048 bound in registry");
-		registry.bind("ServerMaze", impMaze);
-		System.out.println("PeerServer Maze bound in registry");		
+		// Creation of Registry 
+		Registry registry=null;
+		try {
+			registry = LocateRegistry.createRegistry(Constants.RMI_PORT);
+			System.out.println("java RMI registry created.");
+			
+			//Server2048 binding
+			registry.bind("Server2048", imp2048);
+			System.out.println("2048 app bounded to server on port " + Constants.RMI_PORT);
+			
+			//ServerMaze binding		
+			registry.bind("ServerMaze", impMaze);
+			System.out.println("Maze app bounded to server on port " + Constants.RMI_PORT);		
+
+		}catch (RemoteException e) {
+			System.out.println("Registry already created on Port " + Constants.RMI_PORT);			
+		}		
+
+		
 	}
 
 }
