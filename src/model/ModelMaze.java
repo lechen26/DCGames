@@ -44,7 +44,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	int numOfMoves=0;
 	int minMoves=0;
 	int score=0;
-	
+	String server;
 	
 	public ModelMaze(int rows,int cols) {		
 		if ((rows != 16) | (cols != 16))
@@ -631,6 +631,12 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	public String toString() {		
 		String str = Arrays.deepToString(mBoard);			
 		return "Array is " +  str + " and score is " + score;
+	}
+
+
+	@Override
+	public void setServer(String server) {
+		this.server=server;
 	}
 
 }

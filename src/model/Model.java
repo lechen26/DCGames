@@ -19,6 +19,7 @@ public interface Model  {
 	public void moveDiagonalRightDown();
 	public void moveDiagonalLeftUp();
 	public void moveDiagonalLeftDown();
+	public void setServer(String server);
 	void getHintFromServer() throws RemoteException, CloneNotSupportedException;
 	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException;			
 }

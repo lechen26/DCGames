@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -255,7 +256,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	private void initializeBoard() {
 		board = new Board(shell, SWT.BORDER, rows, cols, SWT.NONE);
-		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 7));
+		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 9));
 		board.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		shell.forceFocus();
 	}
@@ -403,6 +404,51 @@ public class ViewMaze extends Observable implements View, Runnable {
 				shell.forceFocus();
 			}
 		});
+		
+
+	    Label rmi = new Label(shell, SWT.NONE);		
+		rmi.setText("RMI Server:");
+		rmi.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
+		final Combo serverCombo = new Combo(shell, SWT.SIMPLE);	    
+	    serverCombo.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
+	    final String items[] = { "localhost","127.0.0.1" };
+	    serverCombo.setItems(items);
+	    serverCombo.select(0);	    
+	    serverCombo.addSelectionListener(new SelectionAdapter() {
+	    	 public void widgetSelected(SelectionEvent e) {
+	    		 setUserCommand(8);
+	    		 setChanged();
+	    		 notifyObservers("server=" + serverCombo.getText());
+	    		 System.out.println("Server is=" + serverCombo.getText());
+	    	 }
+	    });	  
+	    
+	    serverCombo.addKeyListener(new KeyListener() {			
+			public void keyPressed(KeyEvent arg0) {
+	        	if (arg0.keyCode == SWT.CR)
+	        	{		        	
+		        	String res=serverCombo.getText();	            
+		            String[] items=serverCombo.getItems();		            
+		            for (String it : items)
+		            {
+		            	if (res.equals(it))
+		            	{		            		
+		            		setUserCommand(8);
+			    		 	setChanged();
+			    		 	notifyObservers("server=" + serverCombo.getText());
+			    		 	System.out.println("Server is=" + serverCombo.getText());
+		            	}		            	
+		            }
+	        	}								
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+	    });
+
 	}
 
 	@Override

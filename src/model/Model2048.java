@@ -34,6 +34,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	int winNumber;
 	int originalWin;
 	int score=0;		
+	String server;
 	boolean win=false;
 		
 	public Model2048(int rows,int cols,int winNumber) {		
@@ -664,10 +665,9 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	  * @return string that indicate the best next direction to move
 	  * @throws RemoteException, CloneNoeSupportedException
 	  */
-		public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
-			System.out.println("Client of 2048");
-			Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
-			System.out.println("Client bounded to registry");		
+		public void getHintFromServer() throws RemoteException, CloneNotSupportedException {			
+			Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
+			System.out.println("Client bounded to registry on server" + server);		
 			RemoteInt lookup=null;
 			try {
 				lookup = (RemoteInt) registry.lookup("Server2048");
@@ -675,7 +675,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 				System.out.println("Unable to lookup Server on registry , Error " + e);
 			}
 			String result = lookup.getHint(this);
-			System.out.println("Message from server: " + result);
+			System.out.println("Message from server: " + server + result);
 			move(result,false);
 		}
 
@@ -685,7 +685,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 		 * @throws RemoteException, CloneNotSupportedException
 		 */
 		public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {			
-			Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
+			Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
 			RemoteInt lookup=null;
 			try {
 				lookup = (RemoteInt) registry.lookup("Server2048");
@@ -705,4 +705,21 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 			}
 		}
 		
+		public int hashCode() {
+			return getBoard().hashCode() + ((Integer) getScore()).hashCode();
+		}
+		
+		public boolean equals(Object o) {			
+			if(null != o) {
+			      if(o instanceof Model) {
+			        return ((Model)o).getBoard().equals(getBoard()) 
+			          && ((Integer)((Model)o).getScore()).equals((Integer)((Model)o).getScore());
+			      }
+			    }
+			    return false;
+			  }
+		
+		public void setServer(String server) {
+			this.server=server;
+		}
 }

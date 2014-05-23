@@ -13,6 +13,7 @@ public class Presenter  implements Observer {
 Model mModel;
 View ui;	
 int horizental=0, vertical=0;
+String server=null;
 ExecutorService rmiExc = Executors.newCachedThreadPool();
 
 public Presenter(Model model,View view){
@@ -50,10 +51,17 @@ public void update(Observable o, Object arg ) {
 		vertical=0;
 		
 		//Retrieve argument notified for diagonal moves
-		if (arg != null){ 
-			String[] values = ((String) arg ).split(",");	
-			horizental=Integer.parseInt(values[0]);
-			vertical=Integer.parseInt(values[1]);
+		if (arg != null){			
+			String[] values;
+			//Check if we got server name
+			if (((String) arg).contains("server=")) {
+				values=((String) arg).split("server=");
+				server=values[1];
+			}else {
+				values = ((String) arg ).split(",");	
+				horizental=Integer.parseInt(values[0]);
+				vertical=Integer.parseInt(values[1]);
+			}
 		}
 		//Check for diagonal moves
 		if (horizental > 0 && vertical > 0){
@@ -115,7 +123,10 @@ public void update(Observable o, Object arg ) {
 							e.printStackTrace();
 						}
 					}
-				});				
+				});
+			case 8:
+				mModel.setServer(server);
+				break;
 			case SWT.ARROW_UP:				
 				mModel.moveUp(false);				
 				break;
