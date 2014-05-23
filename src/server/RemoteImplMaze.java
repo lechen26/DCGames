@@ -29,7 +29,7 @@ public class RemoteImplMaze extends UnicastRemoteObject implements RemoteInt {
 	@Override
 	public ArrayList<Action> solveGame(Model model) throws RemoteException, CloneNotSupportedException {
 		aStar as = new aStar();		
-		ArrayList<Action> actions = as.runAstar((ModelMaze)model, ((ModelMaze)model).getStartPosition(), ((ModelMaze)model).getExitPosition());		
+		ArrayList<Action> actions = as.runAstar((ModelMaze)model, ((ModelMaze)model).getCurrentPosition(), ((ModelMaze)model).getExitPosition());		
 		if (!actions.isEmpty())
 			return actions;		
 		return null;

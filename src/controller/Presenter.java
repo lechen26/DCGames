@@ -26,16 +26,13 @@ public void update(Observable o, Object arg ) {
 	if (o == mModel){	
 		if (arg != null)
 		{				
-			if (arg.equals("gameOver")){
-				rmiExc.shutdown();
+			if (arg.equals("gameOver")){				
 				ui.gameOver();
 			}
-			else if (arg.equals("gameWon")){
-				rmiExc.shutdown();
+			else if (arg.equals("gameWon")){				
 				ui.gameWon();
 			}					
-			else if (arg.equals("undoEnd")){
-				rmiExc.shutdown();
+			else if (arg.equals("undoEnd")){				
 				ui.undoEnd();
 			}
 		}else{							
@@ -113,10 +110,12 @@ public void update(Observable o, Object arg ) {
 				});
 				break;
 			case 7:							
+				System.out.println("Pressed solver");
 				rmiExc.execute(new Runnable() {					
 					@Override
 					public void run() {
 						try {
+							System.out.println("Executing new thread for solution");
 							mModel.getSolutionFromServer();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
@@ -126,6 +125,9 @@ public void update(Observable o, Object arg ) {
 				});
 			case 8:
 				mModel.setServer(server);
+				break;
+			case 9:
+				mModel.setStopSolverPressed(true);
 				break;
 			case SWT.ARROW_UP:				
 				mModel.moveUp(false);				

@@ -24,11 +24,11 @@ public class RemoteImpl2048 extends UnicastRemoteObject implements RemoteInt {
 
 	@Override
 	public String getHint(Model model) throws RemoteException, CloneNotSupportedException {		
-		  String proxyStr = checkLocal(model);		  
+		  /*String proxyStr = checkLocal(model);		  
 		  if (proxyStr != null) {
 			  System.out.println("Retrieve from local hash");
 			  return proxyStr;
-		  }
+		  }*/
 		  Map<String, Object> result = alphaBeta.alphabeta((Model2048)model, 7, Integer.MIN_VALUE, Integer.MAX_VALUE, Player.USER);
 		  proxy.put(model, (String)result.get("Direction"));
 	      return (String)result.get("Direction");					

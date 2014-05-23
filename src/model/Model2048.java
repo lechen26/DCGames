@@ -665,18 +665,18 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	  * @return string that indicate the best next direction to move
 	  * @throws RemoteException, CloneNoeSupportedException
 	  */
-		public void getHintFromServer() throws RemoteException, CloneNotSupportedException {			
-			Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
-			System.out.println("Client bounded to registry on server" + server);		
+		public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
+			Registry registry=null;			
+			registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
 			RemoteInt lookup=null;
 			try {
 				lookup = (RemoteInt) registry.lookup("Server2048");
-			} catch (NotBoundException e) {
-				System.out.println("Unable to lookup Server on registry , Error " + e);
+				String result = lookup.getHint(this);				
+				move(result,false);
+			} catch (Exception e) {
+				System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
 			}
-			String result = lookup.getHint(this);
-			System.out.println("Message from server: " + server + result);
-			move(result,false);
+			
 		}
 
 		
@@ -721,5 +721,11 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 		
 		public void setServer(String server) {
 			this.server=server;
+		}
+
+		@Override
+		public void setStopSolverPressed(boolean b) {
+			// TODO Auto-generated method stub
+			
 		}
 }

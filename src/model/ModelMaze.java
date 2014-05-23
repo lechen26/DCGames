@@ -44,6 +44,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	int numOfMoves=0;
 	int minMoves=0;
 	int score=0;
+	boolean stopSolverPressed=false;
 	String server;
 	
 	public ModelMaze(int rows,int cols) {		
@@ -547,15 +548,14 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	@Override
 	public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
 		System.out.println("eneterd function");
-		Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
-		System.out.println("Maze Client bounded to registry");				
+		Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
-			System.out.println("Maze Client found server");
+			System.out.println("Message from server: " + lookup.getHint(this));			
 		} catch (NotBoundException e) {
-			System.out.println("Maze Client couldnt find Server on registry , Error " + e);
+			System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
 		}
-		System.out.println("Message from server: " + lookup.getHint(this));				
+						
 	}
 
 	
@@ -563,19 +563,21 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	 * solve the game using RMI Server, InterruptedException
 	 * throws RemoteException, CloneNotSupportedException
 	 */
-	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException {		
-		Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);
-		System.out.println("Maze Client bounded to registry");		
+	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException {
+		stopSolverPressed=false;
+		final Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);		
 		try {
-			lookup = (RemoteInt) registry.lookup("ServerMaze");			
-		} catch (NotBoundException e) {
+			lookup = (RemoteInt) registry.lookup("ServerMaze");
+		} catch (Exception e) {
 			System.out.println("Maze Client couldnt find Server on registry , Error " + e);
-		}				
-		final ArrayList<Action> actions = lookup.solveGame(this);		
-		System.out.println("Actions num should be "+ actions.size());
+		}			
+		final ArrayList<Action> actions = lookup.solveGame(this);			
 			if (!actions.isEmpty()){
 				for (Action ac: actions) {
+					if (stopSolverPressed)
+						break;
 					executeAction(ac);					
+					Thread.sleep(200);
 				}				
 			}
 	}
@@ -639,4 +641,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		this.server=server;
 	}
 
+	public void setStopSolverPressed(boolean b){
+		this.stopSolverPressed=b;
+	}
 }

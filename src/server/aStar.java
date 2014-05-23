@@ -27,8 +27,7 @@ public class aStar {
 		}		
 		Maze maze = new Maze(boardForMaze,start,exit);
 		Searcher as = new Astar(new MazeDomain(maze),new MazeHeuristicDistance(), new MazeStandardDistance());		
-		ArrayList<Action> actions  = as.search(maze.getStart(),maze.getGoal());
-		System.out.println("" + actions.size());
+		ArrayList<Action> actions  = as.search(maze.getStart(),maze.getGoal());		
 		return actions;
 	}
 

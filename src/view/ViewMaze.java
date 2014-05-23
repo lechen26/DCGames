@@ -256,7 +256,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	private void initializeBoard() {
 		board = new Board(shell, SWT.BORDER, rows, cols, SWT.NONE);
-		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 9));
+		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 10));
 		board.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		shell.forceFocus();
 	}
@@ -405,13 +405,28 @@ public class ViewMaze extends Observable implements View, Runnable {
 			}
 		});
 		
+		Button stopButton = new Button(shell,SWT.PUSH);
+		stopButton.setText("Stop Solver");
+		stopButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
+		stopButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {}
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				setUserCommand(9);
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();
+			}
+		});
+
 
 	    Label rmi = new Label(shell, SWT.NONE);		
 		rmi.setText("RMI Server:");
 		rmi.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
 		final Combo serverCombo = new Combo(shell, SWT.SIMPLE);	    
 	    serverCombo.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
-	    final String items[] = { "localhost","127.0.0.1" , "10.0.0.8"};
+	    final String items[] = { "localhost","127.0.0.1" , ""};
 	    serverCombo.setItems(items);
 	    serverCombo.select(0);	    
 	    serverCombo.addSelectionListener(new SelectionAdapter() {

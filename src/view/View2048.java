@@ -188,7 +188,7 @@ public class View2048 extends Observable implements View,Runnable {
 	 */
 	private void initializeBoard() {		
 		board = new Board(shell, SWT.BORDER,rows,cols,SWT.BORDER);		
-		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,9));
+		board.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true, 1,10));
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));	
 		shell.forceFocus();
 	}
@@ -331,6 +331,21 @@ public class View2048 extends Observable implements View,Runnable {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				setUserCommand(7);
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();
+			}
+		});
+
+		Button stopButton = new Button(shell,SWT.PUSH);
+		stopButton.setText("Stop Solver");
+		stopButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
+		stopButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {}
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				setUserCommand(9);
 				setChanged();
 				notifyObservers();
 				shell.forceFocus();
