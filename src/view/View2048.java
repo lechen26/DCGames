@@ -342,7 +342,7 @@ public class View2048 extends Observable implements View,Runnable {
 		rmi.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
 		final Combo serverCombo = new Combo(shell, SWT.SIMPLE);	    
 	    serverCombo.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
-	    final String items[] = { "localhost","127.0.0.1","10.0.0.8" };
+	    final String items[] = { "localhost","127.0.0.1" };
 	    serverCombo.setItems(items);
 	    serverCombo.select(0);	    
 	    serverCombo.addSelectionListener(new SelectionAdapter() {
@@ -358,7 +358,8 @@ public class View2048 extends Observable implements View,Runnable {
 			public void keyPressed(KeyEvent arg0) {
 	        	if (arg0.keyCode == SWT.CR)
 	        	{		        	
-		        	String res=serverCombo.getText();	            
+		        	String res=serverCombo.getText();
+		        	serverCombo.add(res);
 		            String[] items=serverCombo.getItems();		            
 		            for (String it : items)
 		            {
