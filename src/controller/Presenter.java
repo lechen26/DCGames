@@ -109,13 +109,11 @@ public void update(Observable o, Object arg ) {
 					}
 				});
 				break;
-			case 7:							
-				System.out.println("Pressed solver");
+			case 7:											
 				rmiExc.execute(new Runnable() {					
 					@Override
 					public void run() {
-						try {
-							System.out.println("Executing new thread for solution");
+						try {							
 							mModel.getSolutionFromServer();
 						} catch (Exception e) {
 							// TODO Auto-generated catch block

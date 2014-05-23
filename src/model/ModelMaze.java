@@ -57,7 +57,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 
 
-	/*
+	/**
 	 * Get Board data
 	 * @return board 
 	 */
@@ -67,7 +67,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 
 
-	/*
+	/**
 	 * Set number of moves
 	 * @param numOfMoves number of moves
 	 */
@@ -75,7 +75,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		this.numOfMoves = numOfMoves;
 	}
 
-	/*
+	/**
 	 * Set start position
 	 * @param point start position to set
 	 */
@@ -84,7 +84,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 
 	
-	/*
+	/**
 	 * Set Exit position
 	 * @param exitPosition exit position to set
 	 */
@@ -92,7 +92,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		this.exitPosition = exitPosition;
 	}
 
-	/*
+	/**
 	 * Set current score
 	 * @param score the score to set
 	 */
@@ -101,7 +101,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 
 	
-	/* 
+	/**
 	 * get exit Position
 	 * @return exit position
 	 */
@@ -109,7 +109,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		return exitPosition;
 	}
 	
-	/*
+	/**
 	 * get start position
 	 * @return start position
 	 */
@@ -117,7 +117,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		return startPosition;
 	}
 
-	/*
+	/**
 	 * Get current Position on the Maze
 	 * @return get current position
 	 */
@@ -130,7 +130,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		return null; // didn't find the mouse
 	}
 	
-	/*
+	/**
 	 * Check if we won or lost after we got to the EndPoint
 	 */
 	private void checkAndNotify(int x,int y,boolean diagonal){
@@ -149,7 +149,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		}
 	}
 	
-	/*
+	/**
 	* move up method
 	* @param diagonal indicate wheather its diagonal move or not
 	* @return true or false indicate if operation was success or not
@@ -176,7 +176,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		return move;
 	}	
 	
-	/*
+	/**
 	* move down method
 	* @param diagonal indicate wheather its diagonal move or not
 	* @return true or false indicate if operation was success or not
@@ -204,7 +204,8 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		return move;
 		
 	}
-	/*
+	
+	/**
 	* move left method
 	* @param diagonal indicate wheather its diagonal move or not
 	* @return true or false indicate if operation was success or not
@@ -232,7 +233,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 	
 	
-	/*
+	/**
 	* move right method
 	* @param diagonal indicate wheather its diagonal move or not
 	* @return true or false indicate if operation was success or not
@@ -261,7 +262,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 
 
-	/*
+	/**
 	 * Move diagonal Right and Up
 	 */
 	@Override
@@ -276,7 +277,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	
 	}
 
-	/*
+	/**
 	 * Move diagonal Right and Down
 	 */
 	@Override
@@ -290,7 +291,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		}
 	}
 	
-	/*
+	/**
 	* Move diagonal Left and Up
 	*/
 	@Override
@@ -305,7 +306,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		}			
 	}
 
-	/*
+	/**
 	* Move diagonal Left and Down
 	*/
 	@Override
@@ -320,7 +321,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 
 	
-	/*
+	/**
 	 *  initialize the Maze Board.
 	 *  set start and exit positions and calculate the wanted moves according to astar 
 	 */
@@ -355,7 +356,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 
 
-	/*
+	/**
 	 * Display Board
 	 */
 	public void displayBoard(int[][] mBoard) {	
@@ -366,7 +367,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		}
 	}
 
-	/*
+	/**
 	 * Copy Board and return the copy
 	 * @param source array to copy 
 	 * @return copied array
@@ -379,7 +380,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	    return copy;
 	}
 
-	/*
+	/**
 	 * Undo the last operation and revert back to the board before it
 	 * if no operation was made, do nothing
 	 */
@@ -402,7 +403,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		
 	}
 	
-	/*
+	/**
 	 * check if we got to the end point
 	 * @return true or false 
 	 */
@@ -415,7 +416,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 		
 	
-	/*
+	/**
 	 * check if we Won the game
 	 * @return true or false
 	 */
@@ -426,7 +427,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 			return false;
 	}
 
-	/*
+	/**
 	 * get Score
 	 * @return score
 	 */
@@ -435,7 +436,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		return this.score;
 	}
 		
-	/*
+	/**
 	 * Save the game to chosen file
 	 */
 	@Override
@@ -466,7 +467,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
         	fileShell.dispose();        
 	}
 	
-	/*
+	/**
 	 * Load the game from chosen file
 	 */
 	public void loadGame() {
@@ -516,7 +517,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	
 	
 	
-	/*
+	/**
 	 * BFS calculation (Manhatten move) for low value road
 	 */
 	public void runAstar() {	
@@ -541,7 +542,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 
 
-	/*
+	/**
 	 * get Hint from RMI Server
 	 * @throws RemoteException, CloneNotSupportedException
 	 */
@@ -551,7 +552,9 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
-			System.out.println("Message from server: " + lookup.getHint(this));			
+			String res = lookup.getHint(this);
+			System.out.println("Message from server: " + res);
+			executeAction("" + res);
 		} catch (NotBoundException e) {
 			System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
 		}
@@ -559,9 +562,9 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	}
 
 	
-	/*
+	/**
 	 * solve the game using RMI Server, InterruptedException
-	 * throws RemoteException, CloneNotSupportedException
+	 * @throws RemoteException, CloneNotSupportedException
 	 */
 	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException {
 		stopSolverPressed=false;
@@ -574,6 +577,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		final ArrayList<Action> actions = lookup.solveGame(this);			
 			if (!actions.isEmpty()){
 				for (Action ac: actions) {
+					System.out.println("Action is=" + ac.getName());
 					if (stopSolverPressed)
 						break;
 					executeAction(ac);					
@@ -582,12 +586,12 @@ public class ModelMaze extends Observable implements Model, Serializable {
 			}
 	}
 		
-	/*
-	 * parse action and execute the relevant method
-	 * @param ac Action thats needs to be executed 
+	/**
+	 * Trigger move operation from the given action string
+	 * @param action String that identify the move	 
 	 */
-	private void executeAction(Action ac) {			
-		String parsedName = ac.getName().replaceAll("\\(", "").replaceAll("\\)", "");
+	private void executeAction(String action) {
+		String parsedName = action.replaceAll("\\(", "").replaceAll("\\)", "");
 		String position[] = parsedName.toString().split(",");
 		int row = Integer.parseInt(position[0]);
 		int col = Integer.parseInt(position[1]);			
@@ -624,9 +628,18 @@ public class ModelMaze extends Observable implements Model, Serializable {
 			System.out.println("Should move Diagonal right down");
 			moveDiagonalLeftUp();
 		}					
+
+	}
+	/**
+	 * parse action and execute the relevant method
+	 * @param ac Action thats needs to be executed 
+	 */
+	private void executeAction(Action ac) {			
+		String parsedName = ac.getName().replaceAll("\\(", "").replaceAll("\\)", "");
+		executeAction(parsedName);
 	}
 
-	/*
+	/**
 	* toString function
 	* @return string that defines the model
 	*/
