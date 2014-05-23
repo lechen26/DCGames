@@ -411,7 +411,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 		rmi.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
 		final Combo serverCombo = new Combo(shell, SWT.SIMPLE);	    
 	    serverCombo.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
-	    final String items[] = { "localhost","127.0.0.1" };
+	    final String items[] = { "localhost","127.0.0.1" , "10.0.0.8"};
 	    serverCombo.setItems(items);
 	    serverCombo.select(0);	    
 	    serverCombo.addSelectionListener(new SelectionAdapter() {

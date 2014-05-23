@@ -26,7 +26,7 @@ public class RemoteImpl2048 extends UnicastRemoteObject implements RemoteInt {
 	 * @return the String that indicate the best direction to move
 	 */
 	public String getHint(Model model) throws RemoteException, CloneNotSupportedException {		
-		  Map<String, Object> result = alphaBeta.alphabeta((Model2048)model, 7, Integer.MIN_VALUE, Integer.MAX_VALUE, Player.USER);	       
+		  Map<String, Object> result = alphaBeta.alphabeta((Model2048)model, 21, Integer.MIN_VALUE, Integer.MAX_VALUE, Player.USER);	       
 	      return (String)result.get("Direction");					
 	}
 
