@@ -12,16 +12,7 @@ public class alphaBeta {
         COMPUTER, 
         USER
     }
-
-	/*
-	 * alphaBeta algorithm that calculate the best next move for 2048 game
-	 * @param model the model
-	 * @param alpha
-	 * @param beta
-	 * @param Player the current player
-	 * @return Map of String and Object to indicate the direction
-	 * @throws CloneNotSupportedException  
-	 */
+    
 	public static Map<String, Object> alphabeta(Model2048 model, int depth, int alpha, int beta, Player player) throws CloneNotSupportedException {        
 		Map<String, Object> result = new HashMap<String, Object>();                
         String bestDirection = null;
@@ -94,7 +85,7 @@ public class alphaBeta {
     
 	
     
-    /*
+    /**
      * Estimates a heuristic score by taking into account the real score, the
      * number of empty cells and the clustering score of the board.
      * 
@@ -108,7 +99,7 @@ public class alphaBeta {
         return Math.max(score, Math.min(actualScore, 1));
     }
     
-    /*
+    /**
      * Calculates a heuristic variance-like score that measures how clustered the
      * board is.
      * 
@@ -125,6 +116,10 @@ public class alphaBeta {
                 if(boardArray[i][j]==0) {
                     continue; //ignore empty cells
                 }
+                
+                //clusteringScore-=boardArray[i][j];
+                
+                //for every pixel find the distance from each neightbors
                 int numOfNeighbors=0;
                 int sum=0;
                 for(int k : neighbors) {

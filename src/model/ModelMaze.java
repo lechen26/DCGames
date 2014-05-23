@@ -418,7 +418,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	 * check if we Won the game
 	 * @return true or false
 	 */
-	public boolean isGameWon(){
+	public boolean isGameWon(){		
 		if (numOfMoves ==  minMoves)
 			return true;
 		else
@@ -570,14 +570,14 @@ public class ModelMaze extends Observable implements Model, Serializable {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");			
 		} catch (NotBoundException e) {
 			System.out.println("Maze Client couldnt find Server on registry , Error " + e);
-		}
-		numOfMoves--;
+		}				
 		final ArrayList<Action> actions = lookup.solveGame(this);		
+		System.out.println("Actions num should be "+ actions.size());
 			if (!actions.isEmpty()){
 				for (Action ac: actions) {
 					executeAction(ac);					
 				}				
-			}				
+			}
 	}
 		
 	/*

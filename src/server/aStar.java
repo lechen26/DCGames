@@ -16,13 +16,6 @@ import model.algorithms.a_star.Astar;
 
 public class aStar {
 
-	/*
-	 * execute Astar algorithm to get the best route to the destination
-	 * @param model the Model object
-	 * @param start the start Point
-	 * @param exit the destination Point
-	 * @return ArrayList of actions that indicate the best route 
-	 */
 	public ArrayList<Action>  runAstar(ModelMaze model,Point start, Point exit) {			
 		//Change Cheeze value to be as implementd on Astar
 		int[][] boardForMaze=ModelMaze.copyBoard(model.getBoard());		
@@ -34,7 +27,8 @@ public class aStar {
 		}		
 		Maze maze = new Maze(boardForMaze,start,exit);
 		Searcher as = new Astar(new MazeDomain(maze),new MazeHeuristicDistance(), new MazeStandardDistance());		
-		ArrayList<Action> actions  = as.search(maze.getStart(),maze.getGoal());		
+		ArrayList<Action> actions  = as.search(maze.getStart(),maze.getGoal());
+		System.out.println("" + actions.size());
 		return actions;
 	}
 
