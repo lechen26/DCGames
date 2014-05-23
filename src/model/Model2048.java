@@ -36,7 +36,8 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	int score=0;		
 	String server;
 	boolean win=false;
-		
+	boolean stopSolverPressed=false;
+	
 	public Model2048(int rows,int cols,int winNumber) {		
 		mBoard = new int[rows][cols];	
 		this.winNumber=winNumber;
@@ -126,12 +127,14 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	 */
 	private void checkAndNotify() {			
 		if (isGameOver()){
+			stopSolverPressed=true;
 			setGameOver();
-			setChanged();
-			notifyObservers("gameOver");
-		}  else if ((!win) && (isGameWon())){			
 			setChanged();			
-			notifyObservers("gameWon");		
+			notifyObservers("gameOver");
+		}  else if ((!win) && (isGameWon())){
+			stopSolverPressed=true;
+			setChanged();			
+			notifyObservers("gameWon");			
 		}
 		else{
 			generateState();
@@ -684,7 +687,8 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 		 * solve the game by the RMI Server
 		 * @throws RemoteException, CloneNotSupportedException
 		 */
-		public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {			
+		public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {
+			stopSolverPressed=false;
 			Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
 			RemoteInt lookup=null;
 			try {
@@ -693,12 +697,13 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 				System.out.println("Unable to lookup Server on registry , Error " + e);
 			}
 			while (true) {
-				if (isGameOver() || isGameWon())
+				//if (isGameOver() || isGameWon() || stopSolverPressed)
+				if (stopSolverPressed)
 					break;
 				String result = lookup.getHint(this);
 				move(result,false);
 				try {
-					Thread.sleep(500);
+					Thread.sleep(300);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -725,7 +730,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 
 		@Override
 		public void setStopSolverPressed(boolean b) {
-			// TODO Auto-generated method stub
+			this.stopSolverPressed=b;
 			
 		}
 }

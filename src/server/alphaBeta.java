@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.org.apache.xml.internal.utils.StopParseException;
+
 import model.Model2048;
 
 public class alphaBeta {
@@ -17,14 +19,18 @@ public class alphaBeta {
 		Map<String, Object> result = new HashMap<String, Object>();                
         String bestDirection = null;
         String[] directions = {"Up","Down","Right","Left"};
-        int bestScore;        
-        
-        if(model.isGameWon())            
-            bestScore=Integer.MAX_VALUE; //highest possible score            
-        else 
-        	bestScore=Math.min(model.getScore(), 1); //lowest possible score            
-        if(depth==0) 
-            bestScore=heuristicScore(model.getScore(),model.getFreeStates().size(),calculateClusteringScore(model.getBoard()));        
+        int bestScore = 0;        
+        if (model.isGameOver()) {
+        	System.out.println("Finito");        	
+        	if(model.isGameWon())    {
+        		System.out.println("win");
+        		bestScore=Integer.MAX_VALUE; //highest possible score
+        		System.exit(0);
+        	}
+        	else 
+        		bestScore=Math.min(model.getScore(), 1); //lowest possible score
+        }else if(depth==0) 
+            bestScore=heuristicScore(model.getScore(),model.getFreeStates().size(),calculateClusteringScore(model.getBoard()));
         else {
             if(player == Player.USER) {
                 for(String direction : directions) {
@@ -39,13 +45,13 @@ public class alphaBeta {
                     		alpha=currentScore;
                     		bestDirection=direction;
                     	}                    
-                    	if(beta<=alpha) {
+                    	if((beta<=alpha) || model.isGameOver() || model.isGameWon()) {
                     		break; //beta cutoff
                     	}
                     }                
                     bestScore = alpha;
-                }
-            } else {
+                }           
+            }else {
                 List<Integer> moves = model.getEmptyCellIds();
                 int[] possibleValues = {2, 4};
 
@@ -63,25 +69,24 @@ public class alphaBeta {
                             beta=currentScore;
                         }
                         
-                        if(beta<=alpha) {
+                        if((beta<=alpha) || model.isGameOver() || model.isGameWon()) {
                             break abloop; //alpha cutoff
                         }
                     }
                 }
                 
-                bestScore = beta;
-                
+                bestScore = beta;             
                 if(moves.isEmpty()) {
                     bestScore=0;
                 }
-            }
+            }        
         }
         
         result.put("Score", bestScore);
-        result.put("Direction", bestDirection);
-        
+        result.put("Direction", bestDirection);        
         return result;
     }
+        
     
 	
     
