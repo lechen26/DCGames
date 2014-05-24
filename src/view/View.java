@@ -8,7 +8,6 @@ public interface View {
 	public void gameOver();
 	public void gameWon();
 	//public void gameFinish();
-	public void undoEnd();
-	public void disposeDisplay();
+	public void undoEnd();	
 	
 }

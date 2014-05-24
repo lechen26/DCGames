@@ -554,10 +554,13 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
-			String res = lookup.getHint(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));
-			executeAction("" + res);
-		} catch (NotBoundException e) {
-			System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
+			if (lookup != null) {
+				String res = lookup.getHint(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));
+				if (res != null)
+					executeAction("" + res);
+			}
+		} catch (Exception e) {
+			System.out.println("Client could not connect to RMI server , Error :" + e.getCause());
 		}
 						
 	}
@@ -569,14 +572,10 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	 */
 	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException {
 		stopSolverPressed=false;
-		final Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);		
-		
-		try {
+		final Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);				
+		try {			
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
-		} catch (Exception e) {
-			System.out.println("Maze Client couldnt find Server on registry , Error " + e);
-		}			
-		final ArrayList<Action> actions = lookup.solveGame(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));			
+			final ArrayList<Action> actions = lookup.solveGame(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));			
 			if (actions != null && !actions.isEmpty()){
 				for (Action ac: actions) {
 					if (stopSolverPressed)
@@ -586,6 +585,9 @@ public class ModelMaze extends Observable implements Model, Serializable {
 					Thread.sleep(50);
 				}				
 			}
+		} catch (Exception e) {
+			System.out.println("Client couldnt find connect to RMI Server , Error " + e.getCause());
+		}			
 	}
 		
 	/**

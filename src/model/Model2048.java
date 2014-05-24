@@ -630,15 +630,14 @@ public class Model2048 extends Observable implements Model {
 		registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
 		RemoteInt lookup=null;
 		try {
-			lookup = (RemoteInt) registry.lookup("Server2048");				
+			lookup = (RemoteInt) registry.lookup("Server2048");
+			String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));			
+			if (result != null)
+				move(result,false);			
 		} catch (Exception e) {
-			System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
+			System.out.println("client could not connect to RMI Server , Error :" + e.getCause());
 		}
-		String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));			
-		if (result != null)
-			move(result,false);
-		}
-
+	}
 		
 	/**
 	 * solve the game by the RMI Server
@@ -650,26 +649,26 @@ public class Model2048 extends Observable implements Model {
 		RemoteInt lookup=null;
 		try { 
 			lookup = (RemoteInt) registry.lookup("Server2048");
-		} catch (NotBoundException e) {
-			System.out.println("Unable to lookup Server on registry , Error " + e);
+			//Keep getting hint from Solver until end or win the game
+			while (!stopSolverPressed) {			
+				String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));
+				if (result != null)
+					move(result,false);								
+				else		
+				{
+					System.out.println("we got null result");
+					stopSolverPressed=true;
+				}
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			checkAndNotify();
+		} catch (Exception e) {
+			System.out.println("Client could not connect to RMI Server , Error " + e.getCause());
 		}	
-		//Keep getting hint from Solver until end or win the game
-		while (!stopSolverPressed) {			
-			String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));
-			if (result != null)
-				move(result,false);								
-			else		
-			{
-				System.out.println("we got null result");
-				stopSolverPressed=true;
-			}
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		checkAndNotify();
 	}
 	/**
 	* own implementation of HashCode method

@@ -55,12 +55,12 @@ public void update(Observable o, Object arg ) {
 		//Retrieve argument notified for diagonal moves
 		if (arg != null){			
 			String[] values;
-			if (((String) arg).equals("Terminate")) {								
-				ui.disposeDisplay();
-				rmiExc.shutdown();
-			}
+			//if (((String) arg).equals("Terminate")) {								
+			//	rmiExc.shutdown();
+			//	ui.disposeDisplay();				
+			//}
 			//Check if we got server name
-			else if (((String) arg).contains("server=")) {
+			if (((String) arg).contains("server=")) {
 				values=((String) arg).split("server=");
 				server=values[1];
 			}else {

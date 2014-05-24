@@ -89,7 +89,7 @@ public class View2048 extends Observable implements View,Runnable {
 				display.sleep();
 			}
 		}
-		dispose();
+		display.dispose();
 	}
 	
 		
@@ -167,7 +167,7 @@ public class View2048 extends Observable implements View,Runnable {
 				end.setText("gameOver");
 				int response = end.open();
 				if (response == SWT.NO) {					
-					dispose();
+					display.dispose();
 				}
 				if (response == SWT.YES){
 					setUserCommand(2);
@@ -233,7 +233,7 @@ public class View2048 extends Observable implements View,Runnable {
 	    exitItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
-	    		dispose();	    		
+	    		display.dispose();	    		
 	    	}
 	    });		
 	}
@@ -416,14 +416,4 @@ public class View2048 extends Observable implements View,Runnable {
 	});
 	}
 	
-	private void dispose() {		
-		setChanged();
-		notifyObservers("Terminate");				
-		
-	}
-	
-	
-	public void disposeDisplay() {		
-		shell.dispose();
-	}
 }
