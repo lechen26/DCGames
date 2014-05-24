@@ -513,6 +513,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 			int response = end.open();
 			if (response == SWT.NO) {
 				dispose();
+				shell.dispose();
 			} else {			
 				setUserCommand(2);			
 				setChanged();
@@ -537,7 +538,8 @@ public class ViewMaze extends Observable implements View, Runnable {
 				end.setText("GAME FINISH");
 				int response = end.open();
 				if (response == SWT.NO) {
-					dispose();					
+					dispose();
+					shell.dispose();
 				} else {
 					setUserCommand(2);
 					setChanged();

@@ -620,7 +620,7 @@ public class Model2048 extends Observable implements Model {
 		return false;
 	}
 
-	/*
+	/**
 	* get Hint From RMI server
 	* @return string that indicate the best next direction to move
 	* @throws RemoteException, CloneNoeSupportedException
@@ -631,9 +631,15 @@ public class Model2048 extends Observable implements Model {
 		RemoteInt lookup=null;
 		try {
 			lookup = (RemoteInt) registry.lookup("Server2048");				
+		}  catch (RemoteException e) {
+			System.out.println("Server is unavailable ");
+		}catch (NullPointerException e) {
+			//System.out.println("im nulllll on model");
+		
 		} catch (Exception e) {
-			System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
+			//System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
 		}
+		
 		String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));			
 		if (result != null)
 			move(result,false);
@@ -660,11 +666,11 @@ public class Model2048 extends Observable implements Model {
 				move(result,false);								
 			else		
 			{
-				System.out.println("we got null result");
+				//System.out.println("we got null result");
 				stopSolverPressed=true;
 			}
 			try {
-				Thread.sleep(300);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
