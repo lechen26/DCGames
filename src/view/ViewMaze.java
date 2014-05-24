@@ -225,7 +225,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 				display.sleep();
 			}
 		}
-		display.dispose();
+		dispose();
 	}
 
 	@Override
@@ -233,7 +233,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	* Display the Board with the given data
 	*/
 	public void displayBoard(final int[][] data) {
-		display.syncExec(new Runnable() { 
+		display.asyncExec(new Runnable() { 
 			 @Override 
 			 public void run() { 
 				board.setBoard(data);
@@ -300,11 +300,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 		exitItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				setUserCommand(9);
-				setChanged();
-				notifyObservers();
-				shell.forceFocus();
-				shell.getDisplay().dispose();				
+				dispose();			
 			}
 		});
 	}
@@ -490,7 +486,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	*/
 	@Override
 	public void displayScore(final int scr) {
-		display.syncExec(new Runnable() { 
+		display.asyncExec(new Runnable() { 
 			 @Override 
 			 public void run() { 		
 			score.setText("Score " + scr);
@@ -516,8 +512,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 			end.setText("GAME WON");
 			int response = end.open();
 			if (response == SWT.NO) {
-				display.dispose();
-				shell.dispose();
+				dispose();
 			} else {			
 				setUserCommand(2);			
 				setChanged();
@@ -533,7 +528,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	@Override
 	public void gameOver() {
-		display.syncExec(new Runnable() { 
+		display.asyncExec(new Runnable() { 
 			 @Override 
 			 public void run() { 				
 				new ExternalShell(display,"Finito la comedia","resources/maze/end.jpg").run();
@@ -542,9 +537,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 				end.setText("GAME FINISH");
 				int response = end.open();
 				if (response == SWT.NO) {
-					display.dispose();
-					
-					//shell.dispose();
+					dispose();					
 				} else {
 					setUserCommand(2);
 					setChanged();
@@ -553,5 +546,17 @@ public class ViewMaze extends Observable implements View, Runnable {
 			 }
 			 });
 	}
-
+	
+	/**
+	 * Helper method to dispose the game. dispose the Display and 
+	 * sent Presenter Terminate to shutdown the Thread pool 
+	 */
+	private void dispose() {
+		setChanged();
+		notifyObservers("Terminate");		
+	}
+	
+	public void disposeDisplay() {
+		shell.dispose();
+	}
 }

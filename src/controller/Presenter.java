@@ -31,16 +31,13 @@ public void update(Observable o, Object arg ) {
 	if (o == mModel){	
 		if (arg != null)
 		{				
-			if (arg.equals("gameOver")){
-				//rmiExc.shutdown();
+			if (arg.equals("gameOver")){				
 				ui.gameOver();
 			}
 			else if (arg.equals("gameWon")){
-				//rmiExc.shutdown();
 				ui.gameWon();
 			}					
-			else if (arg.equals("undoEnd")){
-				//rmiExc.shutdown();
+			else if (arg.equals("undoEnd")){				
 				ui.undoEnd();
 			}
 		}else{							
@@ -58,8 +55,9 @@ public void update(Observable o, Object arg ) {
 		//Retrieve argument notified for diagonal moves
 		if (arg != null){			
 			String[] values;
-			if (((String) arg).equals("Terminate")) {
-				rmiExc.shutdownNow();				
+			if (((String) arg).equals("Terminate")) {								
+				ui.disposeDisplay();
+				rmiExc.shutdown();
 			}
 			//Check if we got server name
 			else if (((String) arg).contains("server=")) {

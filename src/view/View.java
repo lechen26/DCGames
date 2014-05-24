@@ -9,4 +9,6 @@ public interface View {
 	public void gameWon();
 	//public void gameFinish();
 	public void undoEnd();
+	public void disposeDisplay();
+	
 }

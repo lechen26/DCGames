@@ -233,7 +233,7 @@ public class View2048 extends Observable implements View,Runnable {
 	    exitItem.addSelectionListener(new SelectionAdapter() {
 	    	@Override
 	    	public void widgetSelected(SelectionEvent e) {
-	    		dispose();
+	    		dispose();	    		
 	    	}
 	    });		
 	}
@@ -416,10 +416,14 @@ public class View2048 extends Observable implements View,Runnable {
 	});
 	}
 	
-	private void dispose() {
+	private void dispose() {		
 		setChanged();
-		notifyObservers("Terminate");
-		display.dispose();
+		notifyObservers("Terminate");				
+		
 	}
 	
+	
+	public void disposeDisplay() {		
+		shell.dispose();
+	}
 }
