@@ -666,4 +666,5 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	public void setStopSolverPressed(boolean b){
 		this.stopSolverPressed=b;
 	}
+	
 }
