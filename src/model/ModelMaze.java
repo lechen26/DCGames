@@ -651,12 +651,17 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		return "Array is " +  str + " and score is " + score;
 	}
 
-
+	/**
+	* setting the server 
+	* @param server
+	*/
 	@Override
 	public void setServer(String server) {
 		this.server=server;
 	}
-
+	/**
+	* setting the stop solver
+	*/
 	public void setStopSolverPressed(boolean b){
 		this.stopSolverPressed=b;
 	}

@@ -44,7 +44,7 @@ public class State extends Canvas {
 		});
 	}
 
-	/*
+	/**
 	 * Draw image on Canvas
 	 */
 	private void drawImage(int x,int y, String imgPath,PaintEvent e){
@@ -53,7 +53,7 @@ public class State extends Canvas {
 		e.gc.drawImage(scaledImg, 0, 0);
 	}
 	
-	/*
+	/**
 	 * Update value of state
 	 */
 	public void setValue(int value) {
@@ -63,7 +63,7 @@ public class State extends Canvas {
 	}
 	
 	
-	/*
+	/**
 	 *  Update Background color of State
 	 */
 	public void changeBackground(int val) {

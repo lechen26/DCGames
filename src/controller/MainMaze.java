@@ -3,6 +3,10 @@ package controller;
 import model.ModelMaze;
 import view.ViewMaze;
 
+/**
+* Main for the Maze app
+*/
+
 public class MainMaze {
 
 	public static void main(String[] args) {

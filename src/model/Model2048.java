@@ -58,7 +58,7 @@ public class Model2048 extends Observable implements Model {
 	}
 
 	
-	/*
+	/**
 	 * double the winning number if we want to continue the game after winning
 	 * also set the win boolean to false
 	 */
@@ -67,7 +67,7 @@ public class Model2048 extends Observable implements Model {
 		win=false;
 	}
 	
-	/*
+	/**
 	 * Get Board data
 	 * @return the board data
 	 */
@@ -76,7 +76,7 @@ public class Model2048 extends Observable implements Model {
 		return mBoard;
 	}
 
-	/*
+	/**
 	 * Set Board data
 	 * @param board to set
 	 */
@@ -84,7 +84,7 @@ public class Model2048 extends Observable implements Model {
 		this.mBoard = board;
 	}
 	
-	/*
+	/**
 	 * Undo the last operation and revert back to the board before it (including score)
 	 * if no operation was made, do nothing
 	 */
@@ -105,7 +105,7 @@ public class Model2048 extends Observable implements Model {
 	}
 	
 	
-	/*
+	/**
 	 * set GameOver Board
 	 */
 	private void setGameOver() {
@@ -119,7 +119,7 @@ public class Model2048 extends Observable implements Model {
 	}
 	
 	
-	/*
+	/**
 	 * Helper method to check GameOver and Win and notify after specific move
 	 */
 	private void checkAndNotify() {			
@@ -141,7 +141,7 @@ public class Model2048 extends Observable implements Model {
 	}
 	
 	
-	/* 
+	/**
 	 * Move all possible cells to the Right and merge cells if needed
 	 * @param quiet boolean parameter. indicate wheather to execute operation for real or not
 	 * @return true or false indicate if this operation is possible or not	 
@@ -194,7 +194,7 @@ public class Model2048 extends Observable implements Model {
 
 	
 
-	/* 
+	/**
 	 * Move all possible cells to the Left and merge cells if needed
 	 * @param quiet boolean parameter. indicate wheather to execute operation for real or not
 	 * @return true or false indicate if this operation is possible or not	 
@@ -246,7 +246,7 @@ public class Model2048 extends Observable implements Model {
 		return move;
 	}
 	
-	/*
+	/**
 	 *  Move all possible cells to the Up and merge cells if needed
 	 * @param quiet boolean parameter. indicate wheather to execute operation for real or not
 	 * @return true or false indicate if this operation is possible or not	 
@@ -299,7 +299,7 @@ public class Model2048 extends Observable implements Model {
 	}
 
 
-	/*
+	/**
 	 *  Move all possible cells to the Down and merge cells if needed
 	 * @param quiet boolean parameter. indicate wheather to execute operation for real or not
 	 * @return true or false indicate if this operation is possible or not	 
@@ -351,7 +351,7 @@ public class Model2048 extends Observable implements Model {
 	}
 
 	
-	/*
+	/**
 	 *  Initialize Board array with 0 values
 	 *  also initialize unfoBoards list
 	 */
@@ -366,9 +366,9 @@ public class Model2048 extends Observable implements Model {
 	}
 	
 	
-	/*
+	/**
 	 * Gets all free cells (0 value)
-	 * return freeStates list of Points that are free cells
+	 * @return freeStates list of Points that are free cells
 	 */
 	public ArrayList<Point> getFreeStates() {
 		ArrayList<Point> freeStates = new ArrayList<Point>();
@@ -382,7 +382,7 @@ public class Model2048 extends Observable implements Model {
 	}
 	
 	
-	/*
+	/**
 	 * Generate new state on the board
 	 */
 	public void generateState() {
@@ -399,7 +399,7 @@ public class Model2048 extends Observable implements Model {
 		}
 	}
 	
-	/*
+	/**
 	 * Initialize Board: all board with 0 besides 2 cells with random score(2/4)
 	 */
 	public void initializeBoard() {			
@@ -421,7 +421,7 @@ public class Model2048 extends Observable implements Model {
 		notifyObservers();
 	}
 
-	/*
+	/**
 	 * Copy Board array
 	 * @return copy the copied array
 	 */
@@ -434,7 +434,7 @@ public class Model2048 extends Observable implements Model {
 	}
 	
 	
-	/*
+	/**
 	 * Returns user Score (The maximum value on the board)
 	 * @return current score
 	 */
@@ -443,7 +443,7 @@ public class Model2048 extends Observable implements Model {
 	}
 	
 	
-	/*
+	/**
 	 * generate the next score which will be 2 or 4 (90-10)
 	 * @return random score
 	 */
@@ -452,7 +452,7 @@ public class Model2048 extends Observable implements Model {
 	}
 
 	
-	/*
+	/**
 	 * Verify if we have any possible move on the game 
 	 * check each operation(right,left,down,up) in quiet mode and see if we have possible movements there
 	 */
@@ -460,7 +460,7 @@ public class Model2048 extends Observable implements Model {
 		return (moveRight(true) || moveLeft(true) || moveUp(true) || moveDown(true));					 		
 	}
 
-	/*
+	/**
 	 * Check if the game is over. 
 	 * if we got no possible moves and if we got no free cells
 	 * @return true of false indicate if game is over or not
@@ -470,7 +470,7 @@ public class Model2048 extends Observable implements Model {
 	}
 	
 	
-	/*
+	/**
 	 * Check if we won the game. if we have a cell with 2048 value
 	 * @return true or false indicate if we won the game or not
 	 */
@@ -490,15 +490,16 @@ public class Model2048 extends Observable implements Model {
 		return false;
 	}
 	
-	/*
+	/**
 	 * Initialize Score
+	 * @param score
 	 */
 	private void initializeScore() {
 		this.score=0;
 	}
 		
 		
-	/*
+	/**
 	 * Save game to chosen file
 	 */
 	@Override
@@ -530,7 +531,7 @@ public class Model2048 extends Observable implements Model {
         	fileShell.dispose();        
 	}
 	
-	/*
+	/**
 	 * Load game from chosen file
 	 */
 	public void loadGame() {
@@ -592,7 +593,7 @@ public class Model2048 extends Observable implements Model {
 	public void moveDiagonalLeftDown() {
 	}
 	
-	/*
+	/**
 	 * toString function
 	 * @return the string defined the module (board + score)
 	 */
@@ -601,7 +602,7 @@ public class Model2048 extends Observable implements Model {
 		return "Array is " +  str + " and score is " + score;
 	}
 	
-	/*
+	/**
 	 * Mapping function between string direction to actual function
 	 * @param direction string that indicate the direction we want to move
 	 * @param virtual indicate wheather to execute for real or virtually
@@ -618,122 +619,89 @@ public class Model2048 extends Observable implements Model {
 			return moveLeft(virtual);		
 		return false;
 	}
-	
+
 	/*
-	 * Clone the Model
-	 * @return cloned object
-	 * @throws CloneNotSupportedException
-	 */
-	/*
-	 public Object clone() throws CloneNotSupportedException {
-	        Model2048 copy = (Model2048)super.clone();
-	        copy.setBoard(copyBoard(mBoard));
-	        return copy;
-	    }
-	 
-	 /*
-	  * return List of integers that indicate empty Cells (alphaBetaPrunning)
-	  * @return List of integers
-	  *
-	 public List<Integer> getEmptyCellIds() {
-	        List<Integer> cellList = new ArrayList<Integer>();
-	        
-	        for(int i=0;i<mBoard.length;++i) {
-	            for(int j=0;j<mBoard[0].length;++j) {
-	                if(mBoard[i][j]==0) {
-	                    cellList.add(mBoard.length*i+j);
-	                }
-	            }
-	        }
-	        
-	        return cellList;
-	    }
-	 */
-	 /*
-	  * set cell as Empty (alphaBeta prunning)
-	  * @param i row for cell
-	  * @param j col for cell
-	  * @param value set the given value
-	  *
-	 public void setEmptyCell(int i, int j, int value) {
-	        if(mBoard[i][j]==0) {
-	        	mBoard[i][j]=value;	            
-	        }
-	    }	 
+	* get Hint From RMI server
+	* @return string that indicate the best next direction to move
+	* @throws RemoteException, CloneNoeSupportedException
 	*/
-	 /*
-	  * get Hint From RMI server
-	  * @return string that indicate the best next direction to move
-	  * @throws RemoteException, CloneNoeSupportedException
-	  */
-		public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
-			Registry registry=null;			
-			registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
-			RemoteInt lookup=null;
-			try {
-				lookup = (RemoteInt) registry.lookup("Server2048");				
-			} catch (Exception e) {
-				System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
-			}
-			String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));			
+	public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
+		Registry registry=null;			
+		registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
+		RemoteInt lookup=null;
+		try {
+			lookup = (RemoteInt) registry.lookup("Server2048");				
+		} catch (Exception e) {
+			System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
+		}
+		String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));			
+		if (result != null)
+			move(result,false);
+		}
+
+		
+	/**
+	 * solve the game by the RMI Server
+	 * @throws RemoteException, CloneNotSupportedException
+	 */
+	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {
+		stopSolverPressed=false;
+		Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
+		RemoteInt lookup=null;
+		try { 
+			lookup = (RemoteInt) registry.lookup("Server2048");
+		} catch (NotBoundException e) {
+			System.out.println("Unable to lookup Server on registry , Error " + e);
+		}	
+		//Keep getting hint from Solver until end or win the game
+		while (!stopSolverPressed) {			
+			String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));
 			if (result != null)
-				move(result,false);
-		}
-
-		
-		/*
-		 * solve the game by the RMI Server
-		 * @throws RemoteException, CloneNotSupportedException
-		 */
-		public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException {
-			stopSolverPressed=false;
-			Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
-			RemoteInt lookup=null;
-			try { 
-				lookup = (RemoteInt) registry.lookup("Server2048");
-			} catch (NotBoundException e) {
-				System.out.println("Unable to lookup Server on registry , Error " + e);
-			}	
-			//Keep getting hint from Solver until end or win the game
-			while (!stopSolverPressed) {			
-				String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));
-				if (result != null)
-					move(result,false);								
-				else		
-				{
-					System.out.println("we got null result");
-					stopSolverPressed=true;
-				}
-				try {
-					Thread.sleep(300);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				move(result,false);								
+			else		
+			{
+				System.out.println("we got null result");
+				stopSolverPressed=true;
 			}
-			checkAndNotify();
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+		checkAndNotify();
+	}
+	/**
+	* own implementation of HashCode method
+	*/
+	public int hashCode() {
+		return getBoard().hashCode() + ((Integer) getScore()).hashCode();
+	}
+	/**
+	* own implementation of equals method
+	*/	
+	public boolean equals(Object o) {			
+		if(null != o) {
+		      if(o instanceof Model) {
+		        return ((Model)o).getBoard().equals(getBoard()) 
+		          && ((Integer)((Model)o).getScore()).equals((Integer)((Model)o).getScore());
+		      }
+		    }
+		    return false;
+		  }
+	/**
+	* Setting the server to server
+	* @param this.server
+	*/
+	public void setServer(String server) {
+		this.server=server;
+	}
+	/**
+	* Setting the Stop Solver to true or false
+	*/
+	@Override
+	public void setStopSolverPressed(boolean b) {
+		this.stopSolverPressed=b;
 		
-		public int hashCode() {
-			return getBoard().hashCode() + ((Integer) getScore()).hashCode();
-		}
-		
-		public boolean equals(Object o) {			
-			if(null != o) {
-			      if(o instanceof Model) {
-			        return ((Model)o).getBoard().equals(getBoard()) 
-			          && ((Integer)((Model)o).getScore()).equals((Integer)((Model)o).getScore());
-			      }
-			    }
-			    return false;
-			  }
-		
-		public void setServer(String server) {
-			this.server=server;
-		}
-
-		@Override
-		public void setStopSolverPressed(boolean b) {
-			this.stopSolverPressed=b;
-			
-		}
+	}
 }

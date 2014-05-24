@@ -3,6 +3,10 @@ package controller;
 import model.Model2048;
 import view.View2048;
 
+/**
+* Main for 2048 Game
+*/
+
 public class Main2048 {
 
 	public static void main(String[] args) {

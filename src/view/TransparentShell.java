@@ -32,7 +32,7 @@ public class TransparentShell {
 		this.location=location;
 	}
   
-	/*
+	/**
 	 * Execute the shell on different thread and Set Timer for Transparent shell
 	 */
 	public void run()  {		
@@ -64,7 +64,7 @@ public class TransparentShell {
 	
 
   
-  /*
+  /**
    * Create the shell content and PaintControl for drawing the image
    */
   private void createContents(final Shell shell) {

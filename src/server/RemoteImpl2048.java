@@ -20,7 +20,9 @@ public class RemoteImpl2048 extends UnicastRemoteObject implements RemoteInt {
 	protected RemoteImpl2048() throws RemoteException {	
 		super(0);
 	}
-
+	/**
+	* Implementation of getHint on the Server
+	*/
 	@Override
 	public String getHint(customModel model) throws RemoteException, CloneNotSupportedException {	
 		  	Board theBoard = new Board(model.getBoard(),model.getScore());			
@@ -29,7 +31,9 @@ public class RemoteImpl2048 extends UnicastRemoteObject implements RemoteInt {
 				return ((Direction)result.get("Direction")).getDescription();
 			return null;
 	}
-
+	/**
+	* Implementation of solveGame on the Server
+	*/
 	@Override
 	public ArrayList<Action> solveGame(customModel model) throws RemoteException,
 			CloneNotSupportedException {

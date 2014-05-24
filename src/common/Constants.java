@@ -1,5 +1,9 @@
 package common;
 
+/**
+* defining constants for the app
+*/
+
 public class Constants {
 
 	//Define the RMI Port

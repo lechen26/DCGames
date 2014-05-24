@@ -14,7 +14,9 @@ public class RemoteImplMaze extends UnicastRemoteObject implements RemoteInt {
 	protected RemoteImplMaze() throws RemoteException {
 		super(0);
 	}
-
+	/**
+	* Implementation of getHint on the Server
+	*/
 	@Override
 	public String getHint(customModel model) throws RemoteException, CloneNotSupportedException {				
 			aStar as = new aStar();		
@@ -24,7 +26,9 @@ public class RemoteImplMaze extends UnicastRemoteObject implements RemoteInt {
 			}
 		return  null;
 	}
-
+	/**
+	* Implementation of solveGame on the Server
+	*/
 	@Override
 	public ArrayList<Action> solveGame(customModel model) throws RemoteException, CloneNotSupportedException {
 		aStar as = new aStar();		

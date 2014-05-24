@@ -46,6 +46,9 @@ public class ViewMaze extends Observable implements View, Runnable {
 	public Display getDisplay() {
 		return display;
 	}
+	/**
+	* Initialize components
+	*/
 	private void initComponents() {
 		int scr = 0;
 		display = new Display();
@@ -142,7 +145,9 @@ public class ViewMaze extends Observable implements View, Runnable {
 			}
 		});
 
-		// mouse event listener
+		/**
+		* mouse event listener added
+		*/
 		for (int i = 0; i < rows; i++)
 			for (int j = 0; j < cols; j++) {
 				board.states[i][j].addMouseListener(new MouseListener() {
@@ -206,7 +211,9 @@ public class ViewMaze extends Observable implements View, Runnable {
 
 		shell.open();
 	}
-
+	/**
+	* overriding the run method
+	*/
 	@Override
 	public void run() {
 		initComponents();
@@ -222,23 +229,20 @@ public class ViewMaze extends Observable implements View, Runnable {
 	}
 
 	@Override
-	/*
+	/**
 	* Display the Board with the given data
 	*/
 	public void displayBoard(final int[][] data) {
 		display.syncExec(new Runnable() { 
 			 @Override 
 			 public void run() { 
-			 //... 
-				 board.setBoard(data);
+				board.setBoard(data);
 				board.redraw();
- 
 			 } 
 			 });
-		
 	}
 
-	/*
+	/**
 	 *  Get user command
 	 */
 	@Override
@@ -246,12 +250,14 @@ public class ViewMaze extends Observable implements View, Runnable {
 		return userCommand;
 	}
 
+	/**
+	* set user command
+	*/
 	public void setUserCommand(int command) {
 		this.userCommand = command;
 	}
 
-
-	/*
+	/**
 	 * Initialize Board canvas
 	 */
 	private void initializeBoard() {
@@ -261,7 +267,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 		shell.forceFocus();
 	}
 
-	/*
+	/**
 	 * Initialize Menu buttons 
 	 */
 	private void initializeMenu() {
@@ -303,7 +309,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 		});
 	}
 
-	/*
+	/**
 	 * Initialize Shell buttons
 	 */
 	private void initializeButtons() {
@@ -470,6 +476,9 @@ public class ViewMaze extends Observable implements View, Runnable {
 
 	}
 
+	/**
+	* trying to undo when in first move
+	*/
 	@Override
 	public void undoEnd() {
 		MessageBox end = new MessageBox(shell,SWT.POP_UP);		
@@ -477,7 +486,9 @@ public class ViewMaze extends Observable implements View, Runnable {
 		end.setText("Undo");
 		end.open();		
 	}
-
+	/**
+	* display score method
+	*/
 	@Override
 	public void displayScore(final int scr) {
 		display.syncExec(new Runnable() { 
@@ -491,7 +502,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 
 	
 
-	/*
+	/**
 	 * Display Game Won board 
 	 */
 	@Override
@@ -506,7 +517,8 @@ public class ViewMaze extends Observable implements View, Runnable {
 			end.setText("GAME WON");
 			int response = end.open();
 			if (response == SWT.NO) {
-				display.dispose();				
+				display.dispose();
+				shell.dispose();
 			} else {			
 				setUserCommand(2);			
 				setChanged();
@@ -517,12 +529,12 @@ public class ViewMaze extends Observable implements View, Runnable {
 	}
 	
 		
-	/*}
+	/**
 	 * Display Game Won board 
 	 */
 	@Override
 	public void gameOver() {
-		display.asyncExec(new Runnable() { 
+		display.syncExec(new Runnable() { 
 			 @Override 
 			 public void run() { 				
 				new ExternalShell(display,"Finito la comedia","resources/maze/end.jpg").run();
@@ -531,7 +543,9 @@ public class ViewMaze extends Observable implements View, Runnable {
 				end.setText("GAME FINISH");
 				int response = end.open();
 				if (response == SWT.NO) {
-					display.dispose();				
+					display.dispose();
+					
+					//shell.dispose();
 				} else {
 					setUserCommand(2);
 					setChanged();

@@ -34,7 +34,7 @@ public class ExternalShell {
 	}
   
   
-	/*
+	/**
 	 * Execute the shell on different thread and Set Timer for animation processing
 	 */
 	public void run()  {		
@@ -72,7 +72,7 @@ public class ExternalShell {
   }
 
 	
-	/*
+	/**
 	 * moving Image animation 
 	 */
   private void animate() {	  	  
@@ -105,7 +105,7 @@ public class ExternalShell {
 	}
 
   
-  /*
+  /**
    * Create the shell content and PaintControl for drawing the image
    */
   private void createContents(final Shell shell) {

@@ -124,13 +124,12 @@ public void update(Observable o, Object arg ) {
 						try {							
 							mModel.getSolutionFromServer();
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 							//System.out.println("i'm trying to solve");
 						}
 					}
 				});
-			case 8:
+			case 8: // setting the server to be server for the RMI server 
 				mModel.setServer(server);
 				break;
 			case 9: //stop the auto solver 

@@ -32,7 +32,9 @@ public class View2048 extends Observable implements View,Runnable {
 		this.rows=rows;
 		this.cols=cols;
 	}
-	
+	/**
+	* initialize all board components
+	*/
 	private void initComponents(){
 		display = new Display();
 		shell = new Shell(display);
@@ -73,7 +75,9 @@ public class View2048 extends Observable implements View,Runnable {
 	    shell.open();
 	}   
 	
-	
+	/**
+	* overriding run method
+	*/
 	@Override
 	public void run() { 		
 		initComponents();		
@@ -90,7 +94,7 @@ public class View2048 extends Observable implements View,Runnable {
 	
 		
 	@Override
-	/*
+	/**
 	 * Display the Board with the given data
 	 */
 	public void displayBoard(final int[][] data) {
@@ -105,7 +109,7 @@ public class View2048 extends Observable implements View,Runnable {
 			});
 	}
 
-	/*
+	/**
 	 *  Get user command
 	 */
 	@Override
@@ -113,7 +117,7 @@ public class View2048 extends Observable implements View,Runnable {
 		return userCommand;
 	}
 	
-	/*
+	/**
 	 * Set user Command
 	 */
 	public void setUserCommand(int command) {
@@ -121,7 +125,7 @@ public class View2048 extends Observable implements View,Runnable {
 	}	
 
 	
-	/*
+	/**
 	 * Display game Winning board
 	 */
 	public void gameWon() {
@@ -151,7 +155,7 @@ public class View2048 extends Observable implements View,Runnable {
 			});
 	}
 	
-	/*
+	/**
 	 * Display Game over board 
 	 */
 	public void gameOver() {
@@ -164,7 +168,6 @@ public class View2048 extends Observable implements View,Runnable {
 				int response = end.open();
 				if (response == SWT.NO) {
 					display.dispose();	
-					
 				}
 				if (response == SWT.YES){
 					setUserCommand(2);
@@ -175,7 +178,7 @@ public class View2048 extends Observable implements View,Runnable {
 		});
 	}
 	
-	/*
+	/**
 	 * Display Undo Message
 	 */
 	public void undoEnd()
@@ -186,7 +189,7 @@ public class View2048 extends Observable implements View,Runnable {
 		end.open();		
 	}
 	
-	/*
+	/**
 	 * Initialize Board canvas
 	 */
 	private void initializeBoard() {		
@@ -197,7 +200,7 @@ public class View2048 extends Observable implements View,Runnable {
 	}
 	
 	
-	/*
+	/**
 	 * Initialize Menu bottons 
 	 */
 	private void initializeMenu() {	    
@@ -235,7 +238,7 @@ public class View2048 extends Observable implements View,Runnable {
 	    });		
 	}
 	
-	/*
+	/**
 	 * Initialize Shell buttons
 	 */
 	private void initializeButtons()

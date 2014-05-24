@@ -16,7 +16,7 @@ public class Board extends Composite {
 	int rows,cols;
 	State states[][];
 	
-	/*
+	/**
 	 * Board constructure, gets Canvas properties, size of the boardData array and style of State (bordered or not)
 	 */
 	public Board(Composite parent, int style, int rows, int cols, int stateStyle) {
@@ -51,7 +51,9 @@ public class Board extends Composite {
 		
 	}
 	
-	
+	/**
+	* Copy board method , take the source board and copy it to a new array
+	*/ 
 	private static int[][] copyBoard(int[][] source) {
 	    int[][] copy = new int[source.length][];
 	    for (int i = 0; i < source.length; i++) {
@@ -60,7 +62,7 @@ public class Board extends Composite {
 	    return copy;
 	}
 	
-	/*
+	/**
 	 * update array Board with the given array data
 	 */
 	public void setBoard(int[][] board) {
