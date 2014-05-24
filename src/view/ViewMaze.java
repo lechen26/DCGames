@@ -294,6 +294,10 @@ public class ViewMaze extends Observable implements View, Runnable {
 		exitItem.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				setUserCommand(9);
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();
 				shell.getDisplay().dispose();				
 			}
 		});
@@ -492,7 +496,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	@Override
 	public void gameWon() {
-		display.syncExec(new Runnable() { 
+		display.asyncExec(new Runnable() { 
 			 @Override 
 			 public void run() { 		
 			
@@ -502,7 +506,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 			end.setText("GAME WON");
 			int response = end.open();
 			if (response == SWT.NO) {
-				shell.dispose();				
+				display.dispose();				
 			} else {			
 				setUserCommand(2);			
 				setChanged();
@@ -518,7 +522,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	@Override
 	public void gameOver() {
-		display.syncExec(new Runnable() { 
+		display.asyncExec(new Runnable() { 
 			 @Override 
 			 public void run() { 				
 				new ExternalShell(display,"Finito la comedia","resources/maze/end.jpg").run();
@@ -527,7 +531,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 				end.setText("GAME FINISH");
 				int response = end.open();
 				if (response == SWT.NO) {
-					shell.dispose();					
+					display.dispose();				
 				} else {
 					setUserCommand(2);
 					setChanged();

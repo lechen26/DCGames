@@ -4,8 +4,13 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 import model.Model;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
+
 import view.View;
 
 public class Presenter  implements Observer {
@@ -27,15 +32,15 @@ public void update(Observable o, Object arg ) {
 		if (arg != null)
 		{				
 			if (arg.equals("gameOver")){
-				rmiExc.shutdown();
+				//rmiExc.shutdown();
 				ui.gameOver();
 			}
 			else if (arg.equals("gameWon")){
-				rmiExc.shutdown();
+				//rmiExc.shutdown();
 				ui.gameWon();
 			}					
 			else if (arg.equals("undoEnd")){
-				rmiExc.shutdown();
+				//rmiExc.shutdown();
 				ui.undoEnd();
 			}
 		}else{							
@@ -49,7 +54,7 @@ public void update(Observable o, Object arg ) {
 	{
 		horizental=0;
 		vertical=0;
-		
+
 		//Retrieve argument notified for diagonal moves
 		if (arg != null){			
 			String[] values;
@@ -112,7 +117,7 @@ public void update(Observable o, Object arg ) {
 					}
 				});
 				break;
-			case 7:											
+			case 7:	// solve game
 				rmiExc.execute(new Runnable() {					
 					@Override
 					public void run() {
@@ -121,13 +126,14 @@ public void update(Observable o, Object arg ) {
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+							//System.out.println("i'm trying to solve");
 						}
 					}
 				});
 			case 8:
 				mModel.setServer(server);
 				break;
-			case 9:
+			case 9: //stop the auto solver 
 				mModel.setStopSolverPressed(true);
 				break;
 			case SWT.ARROW_UP:				

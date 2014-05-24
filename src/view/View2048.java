@@ -163,7 +163,8 @@ public class View2048 extends Observable implements View,Runnable {
 				end.setText("gameOver");
 				int response = end.open();
 				if (response == SWT.NO) {
-					display.dispose();			
+					display.dispose();	
+					
 				}
 				if (response == SWT.YES){
 					setUserCommand(2);
@@ -353,10 +354,12 @@ public class View2048 extends Observable implements View,Runnable {
 				shell.forceFocus();
 			}
 		});
-
+		// RMI LABEL
 	    Label rmi = new Label(shell, SWT.NONE);		
 		rmi.setText("RMI Server:");
 		rmi.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
+		
+		// SERVER LIST COMBO BOX
 		final Combo serverCombo = new Combo(shell, SWT.SIMPLE);	    
 	    serverCombo.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
 	    final String items[] = { "localhost","127.0.0.1" };
@@ -370,7 +373,6 @@ public class View2048 extends Observable implements View,Runnable {
 	    		 System.out.println("Server is=" + serverCombo.getText());
 	    	 }
 	    });	  
-	    
 	    serverCombo.addKeyListener(new KeyListener() {			
 			public void keyPressed(KeyEvent arg0) {
 	        	if (arg0.keyCode == SWT.CR)
@@ -386,9 +388,11 @@ public class View2048 extends Observable implements View,Runnable {
 			    		 	setChanged();
 			    		 	notifyObservers("server=" + serverCombo.getText());
 			    		 	System.out.println("Server is=" + serverCombo.getText());
+			    		 	
 		            	}		            	
 		            }
-	        	}								
+	        	}
+	        	
 			}
 
 			@Override

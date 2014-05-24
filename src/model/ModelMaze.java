@@ -580,11 +580,11 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		final ArrayList<Action> actions = lookup.solveGame(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));			
 			if (!actions.isEmpty()){
 				for (Action ac: actions) {
-					System.out.println("Action is=" + ac.getName());
+					//System.out.println("Action is=" + ac.getName());
 					if (stopSolverPressed)
 						break;
 					executeAction(ac);					
-					Thread.sleep(200);
+					Thread.sleep(50);
 				}				
 			}
 	}
@@ -598,37 +598,37 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		String position[] = parsedName.toString().split(",");
 		int row = Integer.parseInt(position[0]);
 		int col = Integer.parseInt(position[1]);			
-		System.out.println("X=" + row + "Y=" + col);
+		//System.out.println("X=" + row + "Y=" + col);
 		if ( (row < getCurrentPosition().x) && (col == getCurrentPosition().y)){
-			System.out.println("Should move to up");
+			//System.out.println("Should move to up");
 			moveUp(false);
 		}
 		else if ( (row > getCurrentPosition().x) && (col == getCurrentPosition().y)) {
-			System.out.println("Should move to down");
+			//System.out.println("Should move to down");
 			moveDown(false);
 		}				
 		else if ( (row ==  getCurrentPosition().x) && (col <  getCurrentPosition().y)) {
-			System.out.println("Should move to left");
+			//System.out.println("Should move to left");
 			moveLeft(false);
 		}
 		else if ( (row ==  getCurrentPosition().x) && (col > getCurrentPosition().y)) {
-			System.out.println("Should move to right");
+			//System.out.println("Should move to right");
 			moveRight(false);
 		}
 		else if ( (row > getCurrentPosition().x) && (col > getCurrentPosition().y)) {
-			System.out.println("Should move Diagonal right up");
+			//System.out.println("Should move Diagonal right up");
 			moveDiagonalRightDown();
 		}
 		else if ( (row > getCurrentPosition().x) && (col < getCurrentPosition().y)) {
-			System.out.println("Should move Diagonal left up");
+			//System.out.println("Should move Diagonal left up");
 			moveDiagonalLeftDown();
 		}
 		else if ( (row < getCurrentPosition().x) && (col > getCurrentPosition().y)) {
-			System.out.println("Should move Diagonal right down");
+			//System.out.println("Should move Diagonal right down");
 			moveDiagonalRightUp();
 		}
 		else if ( (row < getCurrentPosition().x) && (col < getCurrentPosition().y)) {
-			System.out.println("Should move Diagonal right down");
+			//System.out.println("Should move Diagonal right down");
 			moveDiagonalLeftUp();
 		}					
 
