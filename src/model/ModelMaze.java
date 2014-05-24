@@ -570,18 +570,19 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException {
 		stopSolverPressed=false;
 		final Registry registry = LocateRegistry.getRegistry("localhost", Constants.RMI_PORT);		
+		
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
 		} catch (Exception e) {
 			System.out.println("Maze Client couldnt find Server on registry , Error " + e);
 		}			
 		final ArrayList<Action> actions = lookup.solveGame(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));			
-			if (!actions.isEmpty()){
+			if (actions != null && !actions.isEmpty()){
 				for (Action ac: actions) {
-					//System.out.println("Action is=" + ac.getName());
 					if (stopSolverPressed)
 						break;
-					executeAction(ac);					
+					if (ac != null)
+						executeAction(ac);					
 					Thread.sleep(50);
 				}				
 			}
