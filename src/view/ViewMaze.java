@@ -343,7 +343,6 @@ public class ViewMaze extends Observable implements View, Runnable {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 				setUserCommand(2);
-				System.out.println("user restart game and sent command is=" + getUserCommand());
 				setChanged();
 				notifyObservers();
 				shell.forceFocus();

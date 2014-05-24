@@ -551,12 +551,10 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	 */
 	@Override
 	public void getHintFromServer() throws RemoteException, CloneNotSupportedException {
-		System.out.println("eneterd function");
 		Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
 			String res = lookup.getHint(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));
-			System.out.println("Message from server: " + res);
 			executeAction("" + res);
 		} catch (NotBoundException e) {
 			System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
