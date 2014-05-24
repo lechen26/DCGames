@@ -415,5 +415,5 @@ public class View2048 extends Observable implements View,Runnable {
 			 }
 	});
 	}
-	
+
 }

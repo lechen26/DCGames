@@ -23,4 +23,5 @@ public interface Model  {
 	void getHintFromServer() throws RemoteException, CloneNotSupportedException;
 	public void getSolutionFromServer() throws RemoteException, CloneNotSupportedException, InterruptedException;
 	public void setStopSolverPressed(boolean b);
+	public void closeRmiConnection();
 }

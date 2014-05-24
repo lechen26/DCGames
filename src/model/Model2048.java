@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -14,10 +13,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Random;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+
 import common.Constants;
 import common.RemoteInt;
 import common.customModel;
@@ -636,7 +637,9 @@ public class Model2048 extends Observable implements Model {
 				move(result,false);			
 		} catch (Exception e) {
 			System.out.println("client could not connect to RMI Server , Error :" + e.getCause());
-		}
+		}		
+		System.out.println("Closing");
+		closeRmiConnection();
 	}
 		
 	/**
@@ -668,7 +671,9 @@ public class Model2048 extends Observable implements Model {
 			checkAndNotify();
 		} catch (Exception e) {
 			System.out.println("Client could not connect to RMI Server , Error " + e.getCause());
-		}	
+		}			
+		System.out.println("Closing");
+		closeRmiConnection();
 	}
 	/**
 	* own implementation of HashCode method
@@ -701,6 +706,17 @@ public class Model2048 extends Observable implements Model {
 	@Override
 	public void setStopSolverPressed(boolean b) {
 		this.stopSolverPressed=b;
+		
+	}
+	
+	public void closeRmiConnection() {
+		try {
+			Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
+			registry.unbind("Server2048");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("NO RMI connection exist");
+		}
 		
 	}
 }

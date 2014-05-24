@@ -55,11 +55,6 @@ public void update(Observable o, Object arg ) {
 		//Retrieve argument notified for diagonal moves
 		if (arg != null){			
 			String[] values;
-			//if (((String) arg).equals("Terminate")) {								
-			//	rmiExc.shutdown();
-			//	ui.disposeDisplay();				
-			//}
-			//Check if we got server name
 			if (((String) arg).contains("server=")) {
 				values=((String) arg).split("server=");
 				server=values[1];
@@ -125,11 +120,10 @@ public void update(Observable o, Object arg ) {
 						try {							
 							mModel.getSolutionFromServer();
 						} catch (Exception e) {
-							e.printStackTrace();
-							//System.out.println("i'm trying to solve");
+							e.printStackTrace();					
 						}
 					}
-				});
+				});			
 			case 8: // setting the server to be server for the RMI server 
 				mModel.setServer(server);
 				break;

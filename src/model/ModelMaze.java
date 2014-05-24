@@ -666,4 +666,16 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	public void setStopSolverPressed(boolean b){
 		this.stopSolverPressed=b;
 	}
+	
+
+	public void closeRmiConnection() {
+		try {
+			Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
+			registry.unbind("ServerMaze");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("NO RMI connection exist");
+		}
+		
+	}
 }
