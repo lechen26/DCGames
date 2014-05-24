@@ -208,7 +208,6 @@ public class ViewMaze extends Observable implements View, Runnable {
 
 				});
 			}
-
 		shell.open();
 	}
 	/**
@@ -226,6 +225,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 			}
 		}
 		display.dispose();
+		System.exit(0);
 	}
 
 	@Override
@@ -544,7 +544,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 					notifyObservers();
 				}
 			 }
-			 });
+		});
 	}
 	
 }

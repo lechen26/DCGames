@@ -637,9 +637,7 @@ public class Model2048 extends Observable implements Model {
 				move(result,false);			
 		} catch (Exception e) {
 			System.out.println("client could not connect to RMI Server , Error :" + e.getCause());
-		}		
-		System.out.println("Closing");
-		closeRmiConnection();
+		}				
 	}
 		
 	/**
@@ -671,9 +669,8 @@ public class Model2048 extends Observable implements Model {
 			checkAndNotify();
 		} catch (Exception e) {
 			System.out.println("Client could not connect to RMI Server , Error " + e.getCause());
-		}			
-		System.out.println("Closing");
-		closeRmiConnection();
+		}				
+	
 	}
 	/**
 	* own implementation of HashCode method
@@ -707,16 +704,5 @@ public class Model2048 extends Observable implements Model {
 	public void setStopSolverPressed(boolean b) {
 		this.stopSolverPressed=b;
 		
-	}
-	
-	public void closeRmiConnection() {
-		try {
-			Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);
-			registry.unbind("Server2048");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println("NO RMI connection exist");
-		}
-		
-	}
+	}	
 }
