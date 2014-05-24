@@ -13,9 +13,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
@@ -412,8 +410,7 @@ public class View2048 extends Observable implements View,Runnable {
 	}
 	
 	private void dispose() {
-		//disconnect from RMI Server
-		
+		//disconnect from RMI Server		
 		display.dispose();
 	}
 	

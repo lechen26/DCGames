@@ -9,16 +9,14 @@ import maze.Maze;
 import maze.MazeDomain;
 import maze.MazeHeuristicDistance;
 import maze.MazeStandardDistance;
-import model.ModelMaze;
 import model.algorithms.Action;
 import model.algorithms.Searcher;
 import model.algorithms.a_star.Astar;
 
 public class aStar {
 
-	public ArrayList<Action>  runAstar(ModelMaze model,Point start, Point exit) {			
-		//Change Cheeze value to be as implementd on Astar
-		int[][] boardForMaze=ModelMaze.copyBoard(model.getBoard());		
+	public ArrayList<Action>  runAstar(int[][] boardForMaze,Point start, Point exit) {			
+		//Change Cheeze value to be as implementd on Astar			
 		for (int i=0;i<boardForMaze.length;++i){
 			for(int j=0;j<boardForMaze[0].length;++j) {
 				if ( boardForMaze[i][j] == Constants.mini)

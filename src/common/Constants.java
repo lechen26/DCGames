@@ -6,7 +6,7 @@ public class Constants {
 	public static int RMI_PORT=1099;
 	
 	//Define static definition for free component	
-	public final static int free=-5;
+	public final static int free=0;
 	
 	//Define Static definitions for Maze Game components
 		public final static int mickey=-2;

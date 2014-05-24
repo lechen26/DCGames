@@ -6,28 +6,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Observable;
 import java.util.Random;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-
 import common.Constants;
 import common.RemoteInt;
+import common.customModel;
 
 
-public class Model2048 extends Observable implements Model, Serializable, Cloneable {	
-	private static final long serialVersionUID = 1L;
+public class Model2048 extends Observable implements Model {	
+	
 	ArrayList<int[][]> undoBoards = new ArrayList<int[][]>();
 	ArrayList<Integer> undoScores = new ArrayList<Integer>();
 	int[][] mBoard;		
@@ -44,7 +41,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 		this.originalWin=winNumber;
 	}
 	
-	/*
+	/**
 	 * Get Winning number
 	 * @return the winning number for the game
 	 */
@@ -609,7 +606,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	 * @param direction string that indicate the direction we want to move
 	 * @param virtual indicate wheather to execute for real or virtually
 	 * @return true or false which retunred from the move operation
-	 */
+	 */	
 	public boolean move(String direction, boolean virtual) {
 		if (direction.equals("Down"))
 				return moveDown(virtual);
@@ -627,6 +624,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	 * @return cloned object
 	 * @throws CloneNotSupportedException
 	 */
+	/*
 	 public Object clone() throws CloneNotSupportedException {
 	        Model2048 copy = (Model2048)super.clone();
 	        copy.setBoard(copyBoard(mBoard));
@@ -636,7 +634,7 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	 /*
 	  * return List of integers that indicate empty Cells (alphaBetaPrunning)
 	  * @return List of integers
-	  */
+	  *
 	 public List<Integer> getEmptyCellIds() {
 	        List<Integer> cellList = new ArrayList<Integer>();
 	        
@@ -650,19 +648,19 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 	        
 	        return cellList;
 	    }
-	 
+	 */
 	 /*
 	  * set cell as Empty (alphaBeta prunning)
 	  * @param i row for cell
 	  * @param j col for cell
 	  * @param value set the given value
-	  */
+	  *
 	 public void setEmptyCell(int i, int j, int value) {
 	        if(mBoard[i][j]==0) {
 	        	mBoard[i][j]=value;	            
 	        }
 	    }	 
-		
+	*/
 	 /*
 	  * get Hint From RMI server
 	  * @return string that indicate the best next direction to move
@@ -673,13 +671,13 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 			registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
 			RemoteInt lookup=null;
 			try {
-				lookup = (RemoteInt) registry.lookup("Server2048");
-				String result = lookup.getHint(this);				
-				move(result,false);
+				lookup = (RemoteInt) registry.lookup("Server2048");				
 			} catch (Exception e) {
 				System.out.println("Unable to lookup Server on registry , Error :" + e.getCause());
 			}
-			
+			String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));			
+			if (result != null)
+				move(result,false);
 		}
 
 		
@@ -698,11 +696,14 @@ public class Model2048 extends Observable implements Model, Serializable, Clonea
 			}	
 			//Keep getting hint from Solver until end or win the game
 			while (!stopSolverPressed) {			
-				String result = lookup.getHint(this);
+				String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));
 				if (result != null)
 					move(result,false);								
-				else					
-					stopSolverPressed=true;			
+				else		
+				{
+					System.out.println("we got null result");
+					stopSolverPressed=true;
+				}
 				try {
 					Thread.sleep(300);
 				} catch (InterruptedException e) {

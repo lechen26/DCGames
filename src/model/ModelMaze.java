@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import common.Constants;
 import common.RemoteInt;
+import common.customModel;
 
 
 public class ModelMaze extends Observable implements Model, Serializable {
@@ -554,7 +555,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		Registry registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
-			String res = lookup.getHint(this);
+			String res = lookup.getHint(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));
 			System.out.println("Message from server: " + res);
 			executeAction("" + res);
 		} catch (NotBoundException e) {
@@ -576,7 +577,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		} catch (Exception e) {
 			System.out.println("Maze Client couldnt find Server on registry , Error " + e);
 		}			
-		final ArrayList<Action> actions = lookup.solveGame(this);			
+		final ArrayList<Action> actions = lookup.solveGame(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));			
 			if (!actions.isEmpty()){
 				for (Action ac: actions) {
 					System.out.println("Action is=" + ac.getName());

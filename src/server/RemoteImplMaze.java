@@ -3,12 +3,10 @@ package server;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-
-import model.Model;
-import model.ModelMaze;
 import model.algorithms.Action;
 
 import common.RemoteInt;
+import common.customModel;
 
 public class RemoteImplMaze extends UnicastRemoteObject implements RemoteInt { 	
 	private static final long serialVersionUID = 1L;
@@ -18,20 +16,21 @@ public class RemoteImplMaze extends UnicastRemoteObject implements RemoteInt {
 	}
 
 	@Override
-	public String getHint(Model model) throws RemoteException, CloneNotSupportedException {				
+	public String getHint(customModel model) throws RemoteException, CloneNotSupportedException {				
 			aStar as = new aStar();		
-			ArrayList<Action> actions = as.runAstar((ModelMaze)model, ((ModelMaze)model).getCurrentPosition(), ((ModelMaze)model).getExitPosition());
-			if (!actions.isEmpty())
-				return (actions.get(0)).getName();												
+			ArrayList<Action> actions = as.runAstar(model.getBoard(), model.getStartPosition()	,model.getEndPosition());
+			if (actions != null && !actions.isEmpty()) {				
+				return (actions.get(0)).getName();
+			}
 		return  null;
 	}
 
 	@Override
-	public ArrayList<Action> solveGame(Model model) throws RemoteException, CloneNotSupportedException {
+	public ArrayList<Action> solveGame(customModel model) throws RemoteException, CloneNotSupportedException {
 		aStar as = new aStar();		
-		ArrayList<Action> actions = as.runAstar((ModelMaze)model, ((ModelMaze)model).getCurrentPosition(), ((ModelMaze)model).getExitPosition());		
-		if (!actions.isEmpty())
-			return actions;		
+		ArrayList<Action> actions = as.runAstar(model.getBoard(), model.getStartPosition()	,model.getEndPosition());		
+		if (actions != null && !actions.isEmpty())
+			return actions;
 		return null;
 	}	
 }
