@@ -632,8 +632,7 @@ public class Model2048 extends Observable implements Model {
 		RemoteInt lookup=null;
 		try {
 			lookup = (RemoteInt) registry.lookup("Server2048");			
-			for(int i=0;i<hintsNumber;++i) {						
-				System.out.println("hint number " + hintsNumber);
+			for(int i=0;i<hintsNumber;++i) {										
 				String result = lookup.getHint(new customModel(this.getBoard(), this.getScore(),this.getDepthNumber()));			
 				if (result != null)
 					move(result,false);				
@@ -659,8 +658,7 @@ public class Model2048 extends Observable implements Model {
 				if (result != null)
 					move(result,false);								
 				else		
-				{
-					System.out.println("we got null result");
+				{					
 					stopSolverPressed=true;
 				}
 				try {
