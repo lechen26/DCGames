@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -425,31 +426,8 @@ public class ViewMaze extends Observable implements View, Runnable {
 				shell.forceFocus();
 			}
 		});
-
-	    Label hints = new Label(shell, SWT.NONE);		
-		hints.setText("Num of Hints: ");
 		
-		final Text hintsNumber = new Text(shell,SWT.BORDER);
-		hintsNumber.setText("  "+ hintsNum);
-		hintsNumber.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				if (arg0.keyCode == SWT.CR) {
-					hintsNum=Integer.parseInt(hintsNumber.getText().replace(" ",""));
-					setUserCommand(11);
-					setChanged();
-					notifyObservers("Hints=" + hintsNum);
-				}
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
+		//RMI SERVER 
 	    Label rmi = new Label(shell, SWT.NONE);		
 		rmi.setText("RMI Server:");
 		rmi.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
@@ -492,6 +470,39 @@ public class ViewMaze extends Observable implements View, Runnable {
 				
 			}
 	    });
+		
+		// creating new area for label and text on same line
+		Composite area = new Composite(shell,SWT.NONE);
+		GridLayout gridlayout = new GridLayout(2,false);
+		area.setLayout(gridlayout);
+		
+		GridData gridata = new GridData(SWT.HORIZONTAL,SWT.NONE,false,false);
+		area.setLayoutData(gridata);
+		
+	    Label hints = new Label(area, SWT.NONE);		
+		hints.setText("Num of Hints: ");
+		
+		final Text hintsNumber = new Text(area,SWT.BORDER);
+		hintsNumber.setText(" "+ hintsNum);
+		hintsNumber.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				if (arg0.keyCode == SWT.CR) {
+					hintsNum=Integer.parseInt(hintsNumber.getText().replace(" ",""));
+					setUserCommand(11);
+					setChanged();
+					notifyObservers("Hints=" + hintsNum);
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 
 
 	}

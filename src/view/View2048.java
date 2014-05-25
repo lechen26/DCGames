@@ -9,10 +9,12 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -209,7 +211,7 @@ public class View2048 extends Observable implements View, Runnable {
 	 */
 	private void initializeBoard() {
 		board = new Board(shell, SWT.BORDER, rows, cols, SWT.BORDER);
-		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 15));
+		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 20));
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
 		shell.forceFocus();
 	}
@@ -259,8 +261,7 @@ public class View2048 extends Observable implements View, Runnable {
 		// Defines undo button
 		Button undoButton = new Button(shell, SWT.PUSH);
 		undoButton.setText("Undo Move");
-		undoButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,
-				1, 1));
+		undoButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
 		undoButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -278,8 +279,7 @@ public class View2048 extends Observable implements View, Runnable {
 		// Defines restart Button
 		Button restartButton = new Button(shell, SWT.PUSH);
 		restartButton.setText("Restart Game");
-		restartButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false,
-				false, 1, 1));
+		restartButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false,false, 1, 1));
 		restartButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -296,8 +296,7 @@ public class View2048 extends Observable implements View, Runnable {
 
 		Button loadButton = new Button(shell, SWT.PUSH);
 		loadButton.setText("Load Game");
-		loadButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,
-				1, 1));
+		loadButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
 		loadButton.addSelectionListener(new SelectionListener() {
 
 			@Override
@@ -314,8 +313,7 @@ public class View2048 extends Observable implements View, Runnable {
 		});
 		Button saveButton = new Button(shell, SWT.PUSH);
 		saveButton.setText("Save Game");
-		saveButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,
-				1, 1));
+		saveButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
 		saveButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -333,8 +331,7 @@ public class View2048 extends Observable implements View, Runnable {
 
 		Button hintButton = new Button(shell, SWT.PUSH);
 		hintButton.setText("Get Hint");
-		hintButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,
-				1, 1));
+		hintButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,1, 1));
 		hintButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -351,8 +348,7 @@ public class View2048 extends Observable implements View, Runnable {
 
 		Button solveButton = new Button(shell, SWT.PUSH);
 		solveButton.setText("Solve Game");
-		solveButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false,
-				false, 1, 1));
+		solveButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false,false, 1, 1));
 		solveButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(SelectionEvent arg0) {
@@ -366,53 +362,22 @@ public class View2048 extends Observable implements View, Runnable {
 				shell.forceFocus();
 			}
 		});
-
-		   
-		Label depth = new Label(shell, SWT.NONE);			
-		depth.setText("Depth : ");	
-		depth.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
-		final Text depthNumber = new Text(shell,SWT.BORDER);
-		depthNumber.setText("  "+depthNum);		
-		depthNumber.addKeyListener(new KeyListener() {
-				
-			@Override
-				public void keyPressed(KeyEvent arg0) {
-				if (arg0.keyCode == SWT.CR)
-					depthNum=Integer.parseInt(depthNumber.getText().replace(" ", ""));
-					setUserCommand(10);
-					setChanged();
-					notifyObservers("Depth=" + depthNum);
-				}
-
-				@Override
-				public void keyReleased(KeyEvent arg0) {
-				}			
-		});
 		
-		Label hints = new Label(shell, SWT.NONE);		
-		hints.setText("Num of Hints: ");
+		Button stopButton = new Button(shell,SWT.PUSH);
+		stopButton.setText("Stop Solver");
+		stopButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false, 1, 1));
+		stopButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {}
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				setUserCommand(9);
+				setChanged();
+				notifyObservers();
+				shell.forceFocus();
+			}
+		});	
 		
-		final Text hintsNumber = new Text(shell,SWT.BORDER);
-		hintsNumber.setText("  "+ hintsNum);
-		hintsNumber.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				if (arg0.keyCode == SWT.CR) {
-					hintsNum=Integer.parseInt(hintsNumber.getText().replace(" ",""));
-					setUserCommand(11);
-					setChanged();
-					notifyObservers("Hints=" + hintsNum);
-				}
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-			
 		// RMI LABEL
 		Label rmi = new Label(shell, SWT.NONE);
 		rmi.setText("RMI Server:");
@@ -420,8 +385,7 @@ public class View2048 extends Observable implements View, Runnable {
 
 		// SERVER LIST COMBO BOX
 		final Combo serverCombo = new Combo(shell, SWT.SIMPLE);
-		serverCombo.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false,
-				false, 1, 1));
+		serverCombo.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false,false, 1, 1));
 		final String items[] = { "localhost", "127.0.0.1" };
 		serverCombo.setItems(items);
 		serverCombo.select(0);		
@@ -451,6 +415,62 @@ public class View2048 extends Observable implements View, Runnable {
 
 			}
 		});
+		
+		Composite area = new Composite(shell,SWT.NONE);
+		GridLayout gridlayout = new GridLayout(2,false);
+		area.setLayout(gridlayout);
+		
+		GridData gridata = new GridData(SWT.HORIZONTAL,SWT.NONE,false,false);
+		area.setLayoutData(gridata);
+		//label & text for the depth param   
+		Label depth = new Label(area, SWT.NONE);			
+		depth.setText("Depth for minimax: ");	
+		
+		final Text depthNumber = new Text(area,SWT.BORDER);
+		depthNumber.setText("  "+depthNum);	
+	
+		depthNumber.addKeyListener(new KeyListener() {
+				
+			@Override
+				public void keyPressed(KeyEvent arg0) {
+				if (arg0.keyCode == SWT.CR)
+					depthNum=Integer.parseInt(depthNumber.getText().replace(" ", ""));
+					setUserCommand(10);
+					setChanged();
+					notifyObservers("Depth=" + depthNum);
+				}
+
+				@Override
+				public void keyReleased(KeyEvent arg0) {
+				}			
+		});
+		// label and text for the hints param
+
+
+		Label hints = new Label(area, SWT.NONE);		
+		hints.setText("Num of Hints: ");
+		final Text hintsNumber = new Text(area,SWT.BORDER);
+		hintsNumber.setText("  "+ hintsNum);
+		hintsNumber.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				if (arg0.keyCode == SWT.CR) {
+					hintsNum=Integer.parseInt(hintsNumber.getText().replace(" ",""));
+					setUserCommand(11);
+					setChanged();
+					notifyObservers("Hints=" + hintsNum);
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+			
+
 	}
 
 	@Override

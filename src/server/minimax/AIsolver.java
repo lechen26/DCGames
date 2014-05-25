@@ -78,7 +78,7 @@ public class AIsolver {
 			if (theBoard.hasWon()) {
 				bestScore = Integer.MAX_VALUE; // highest possible score
 			} else {
-				bestScore = Math.min(theBoard.getScore(), 1); // lowest possible																//score
+				bestScore = Math.min(theBoard.getScore(), 1); // lowest possible score
 			}
 		} else if (depth == 0) {
 			bestScore = heuristicScore(theBoard.getScore(),
