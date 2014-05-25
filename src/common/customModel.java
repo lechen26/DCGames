@@ -14,6 +14,7 @@ public class customModel implements Serializable{
 	int score;
 	Point start,end;
 	int free;
+	int depth;
 	boolean over;
 	boolean won;
 	
@@ -22,9 +23,10 @@ public class customModel implements Serializable{
 	 * @param b board array
 	 * @param s score
 	 */
-	public customModel(int [][] b, int s) {
+	public customModel(int [][] b, int s,int d) {
 		this.board=b;
 		this.score=s;
+		this.depth=d;
 	}
 	
 	/**
@@ -94,6 +96,10 @@ public class customModel implements Serializable{
 	        copy[i] = Arrays.copyOf(source[i],source[i].length);
 	    }
 	    return copy;
+	}
+	
+	public int getDepth() {
+		return this.depth;
 	}
 
 }

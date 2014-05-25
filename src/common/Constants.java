@@ -11,9 +11,12 @@ public class Constants {
 	
 	//Define static definition for free component	
 	public final static int free=0;
-	
 	//Define Static definitions for Maze Game components
-		public final static int mickey=-2;
-		public final static int mini=-3;	
-		public final static int wall=-1;
+	public final static int mickey=-2;
+	public final static int mini=-3;	
+	public final static int wall=-1;
+	
+	public final static int defaultHint=1;
+	public final static int defaultDepth=7;
+	
 }

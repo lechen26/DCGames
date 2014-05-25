@@ -25,12 +25,13 @@ public class RemoteImpl2048 extends UnicastRemoteObject implements RemoteInt {
 	*/
 	@Override
 	public String getHint(customModel model) throws RemoteException, CloneNotSupportedException {	
-		  	Board theBoard = new Board(model.getBoard(),model.getScore());			
-			Map<String, Object> result =  server.minimax.AIsolver.alphabeta(theBoard, 7, Integer.MIN_VALUE, Integer.MAX_VALUE, Player.USER);					
+		  	Board theBoard = new Board(model.getBoard(),model.getScore());			  	
+			Map<String, Object> result =  server.minimax.AIsolver.alphabeta(theBoard, model.getDepth(), Integer.MIN_VALUE, Integer.MAX_VALUE, Player.USER);					
 			if (result != null && (Direction)result.get("Direction") != null)
 				return ((Direction)result.get("Direction")).getDescription();
 			return null;
 	}
+	
 	/**
 	* Implementation of solveGame on the Server
 	*/

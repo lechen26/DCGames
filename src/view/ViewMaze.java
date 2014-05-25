@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 public class ViewMaze extends Observable implements View, Runnable {
 
@@ -37,7 +38,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	boolean leftPressed = false;
 	boolean upPressed = false;
 	boolean downPressed = false;
-	
+	int hintsNum=1;
 	public ViewMaze(int rows, int cols) {
 		this.rows = rows;
 		this.cols = cols;
@@ -262,7 +263,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 	 */
 	private void initializeBoard() {
 		board = new Board(shell, SWT.BORDER, rows, cols, SWT.NONE);
-		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 10));
+		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 13));
 		board.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
 		shell.forceFocus();
 	}
@@ -425,7 +426,30 @@ public class ViewMaze extends Observable implements View, Runnable {
 			}
 		});
 
-
+	    Label hints = new Label(shell, SWT.NONE);		
+		hints.setText("Num of Hints: ");
+		
+		final Text hintsNumber = new Text(shell,SWT.BORDER);
+		hintsNumber.setText("  "+ hintsNum);
+		hintsNumber.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				if (arg0.keyCode == SWT.CR) {
+					hintsNum=Integer.parseInt(hintsNumber.getText().replace(" ",""));
+					setUserCommand(11);
+					setChanged();
+					notifyObservers("Hints=" + hintsNum);
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 	    Label rmi = new Label(shell, SWT.NONE);		
 		rmi.setText("RMI Server:");
 		rmi.setLayoutData(new GridData(SWT.FILL,SWT.NONE,false,false,1,1));
@@ -468,6 +492,7 @@ public class ViewMaze extends Observable implements View, Runnable {
 				
 			}
 	    });
+
 
 	}
 

@@ -19,6 +19,9 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+
+import common.Constants;
 
 public class View2048 extends Observable implements View, Runnable {
 
@@ -28,7 +31,9 @@ public class View2048 extends Observable implements View, Runnable {
 	Label score;
 	int userCommand = 0;
 	int rows, cols;
-
+	int depthNum=Constants.defaultDepth;
+	int hintsNum=Constants.defaultHint;
+	
 	public View2048(int rows, int cols) {
 		this.rows = rows;
 		this.cols = cols;
@@ -204,7 +209,7 @@ public class View2048 extends Observable implements View, Runnable {
 	 */
 	private void initializeBoard() {
 		board = new Board(shell, SWT.BORDER, rows, cols, SWT.BORDER);
-		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 10));
+		board.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 15));
 		board.setBackground(display.getSystemColor(SWT.COLOR_GRAY));
 		shell.forceFocus();
 	}
@@ -362,23 +367,52 @@ public class View2048 extends Observable implements View, Runnable {
 			}
 		});
 
-		Button stopButton = new Button(shell, SWT.PUSH);
-		stopButton.setText("Stop Solver");
-		stopButton.setLayoutData(new GridData(SWT.FILL, SWT.NONE, false, false,
-				1, 1));
-		stopButton.addSelectionListener(new SelectionListener() {
+		   
+		Label depth = new Label(shell, SWT.NONE);			
+		depth.setText("Depth : ");	
+		depth.setLayoutData(new GridData(SWT.NONE,SWT.NONE,false,false,1,1));
+		final Text depthNumber = new Text(shell,SWT.BORDER);
+		depthNumber.setText("  "+depthNum);		
+		depthNumber.addKeyListener(new KeyListener() {
+				
 			@Override
-			public void widgetDefaultSelected(SelectionEvent arg0) {
-			}
+				public void keyPressed(KeyEvent arg0) {
+				if (arg0.keyCode == SWT.CR)
+					depthNum=Integer.parseInt(depthNumber.getText().replace(" ", ""));
+					setUserCommand(10);
+					setChanged();
+					notifyObservers("Depth=" + depthNum);
+				}
 
+				@Override
+				public void keyReleased(KeyEvent arg0) {
+				}			
+		});
+		
+		Label hints = new Label(shell, SWT.NONE);		
+		hints.setText("Num of Hints: ");
+		
+		final Text hintsNumber = new Text(shell,SWT.BORDER);
+		hintsNumber.setText("  "+ hintsNum);
+		hintsNumber.addKeyListener(new KeyListener() {
+			
 			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				setUserCommand(9);
-				setChanged();
-				notifyObservers();
-				shell.forceFocus();
+			public void keyReleased(KeyEvent arg0) {
+				if (arg0.keyCode == SWT.CR) {
+					hintsNum=Integer.parseInt(hintsNumber.getText().replace(" ",""));
+					setUserCommand(11);
+					setChanged();
+					notifyObservers("Hints=" + hintsNum);
+				}
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
+			
 		// RMI LABEL
 		Label rmi = new Label(shell, SWT.NONE);
 		rmi.setText("RMI Server:");
@@ -390,15 +424,7 @@ public class View2048 extends Observable implements View, Runnable {
 				false, 1, 1));
 		final String items[] = { "localhost", "127.0.0.1" };
 		serverCombo.setItems(items);
-		serverCombo.select(0);
-		serverCombo.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				setUserCommand(8);
-				setChanged();
-				notifyObservers("server=" + serverCombo.getText());
-				System.out.println("Server is=" + serverCombo.getText());
-			}
-		});
+		serverCombo.select(0);		
 		serverCombo.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent arg0) {
 				if (arg0.keyCode == SWT.CR) {
