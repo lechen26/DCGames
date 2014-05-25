@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -17,7 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
-
 import maze.Maze;
 import maze.MazeDomain;
 import maze.MazeHeuristicDistance;
@@ -48,6 +46,7 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	int score=0;
 	boolean stopSolverPressed=false;
 	String server;
+	private int hintsNumber=Constants.defaultHint;
 	
 	public ModelMaze(int rows,int cols) {		
 		if ((rows != 16) | (cols != 16))
@@ -555,9 +554,12 @@ public class ModelMaze extends Observable implements Model, Serializable {
 		try {
 			lookup = (RemoteInt) registry.lookup("ServerMaze");
 			if (lookup != null) {
-				String res = lookup.getHint(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));
-				if (res != null)
-					executeAction("" + res);
+				for(int i=0;i<hintsNumber;++i)
+				{
+					String res = lookup.getHint(new customModel(this.getBoard(), this.getScore(), this.getCurrentPosition(), this.getExitPosition()));
+					if (res != null)
+						executeAction("" + res);
+				}
 			}
 		} catch (Exception e) {
 			System.out.println("Client could not connect to RMI server , Error :" + e.getCause());
@@ -666,5 +668,22 @@ public class ModelMaze extends Observable implements Model, Serializable {
 	public void setStopSolverPressed(boolean b){
 		this.stopSolverPressed=b;
 	}
+
+
+	@Override
+	public void setDepthNumber(int num) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setHintsNumber(int num) {
+		this.hintsNumber=num;
+	}
+	
+	public int getHintsumber()
+	{
+		return this.hintsNumber;
+	}
+
 	
 }

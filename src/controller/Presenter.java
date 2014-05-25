@@ -4,12 +4,10 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import model.Model;
-
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
+
+import common.Constants;
 
 import view.View;
 
@@ -19,6 +17,9 @@ Model mModel;
 View ui;	
 int horizental=0, vertical=0;
 String server=null;
+int depthNum=Constants.defaultDepth;
+int hintsNum=Constants.defaultHint;
+
 ExecutorService rmiExc = Executors.newCachedThreadPool();
 
 public Presenter(Model model,View view){
@@ -54,8 +55,17 @@ public void update(Observable o, Object arg ) {
 
 		//Retrieve argument notified for diagonal moves
 		if (arg != null){			
-			String[] values;
-			if (((String) arg).contains("server=")) {
+			String[] values;			
+			if (((String) arg).contains("Depth=")) {
+				values=((String) arg).split("Depth=");				
+				depthNum=Integer.parseInt(values[1]);
+			}
+			else if (((String) arg).contains("Hints=")) {
+				values=((String) arg).split("Hints=");				
+				hintsNum=Integer.parseInt(values[1]);
+			}
+ 
+			else if (((String) arg).contains("server=")) {
 				values=((String) arg).split("server=");
 				server=values[1];
 			}else {
@@ -105,7 +115,7 @@ public void update(Observable o, Object arg ) {
 				rmiExc.execute(new Runnable() {					
 					@Override
 					public void run() {
-						try {
+						try {				
 							mModel.getHintFromServer();
 						} catch (Exception e1) {			
 							e1.printStackTrace();
@@ -129,6 +139,12 @@ public void update(Observable o, Object arg ) {
 				break;
 			case 9: //stop the auto solver 
 				mModel.setStopSolverPressed(true);
+				break;
+			case 10:
+				mModel.setDepthNumber(depthNum);
+				break;
+			case 11:				
+				mModel.setHintsNumber(hintsNum);
 				break;
 			case SWT.ARROW_UP:				
 				mModel.moveUp(false);				

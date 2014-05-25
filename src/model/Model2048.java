@@ -13,12 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Observable;
 import java.util.Random;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-
 import common.Constants;
 import common.RemoteInt;
 import common.customModel;
@@ -34,7 +32,9 @@ public class Model2048 extends Observable implements Model {
 	int score=0;		
 	String server;
 	boolean win=false;
+	int depthNumber=Constants.defaultDepth;
 	volatile boolean stopSolverPressed=false;
+	int hintsNumber=Constants.defaultHint;
 	
 	public Model2048(int rows,int cols,int winNumber) {		
 		mBoard = new int[rows][cols];	
@@ -631,10 +631,13 @@ public class Model2048 extends Observable implements Model {
 		registry = LocateRegistry.getRegistry(server, Constants.RMI_PORT);					
 		RemoteInt lookup=null;
 		try {
-			lookup = (RemoteInt) registry.lookup("Server2048");
-			String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));			
-			if (result != null)
-				move(result,false);			
+			lookup = (RemoteInt) registry.lookup("Server2048");			
+			for(int i=0;i<hintsNumber;++i) {						
+				System.out.println("hint number " + hintsNumber);
+				String result = lookup.getHint(new customModel(this.getBoard(), this.getScore(),this.getDepthNumber()));			
+				if (result != null)
+					move(result,false);				
+			}
 		} catch (Exception e) {
 			System.out.println("client could not connect to RMI Server , Error :" + e.getCause());
 		}				
@@ -652,7 +655,7 @@ public class Model2048 extends Observable implements Model {
 			lookup = (RemoteInt) registry.lookup("Server2048");
 			//Keep getting hint from Solver until end or win the game
 			while (!stopSolverPressed) {			
-				String result = lookup.getHint(new customModel(this.getBoard(), this.getScore()));
+				String result = lookup.getHint(new customModel(this.getBoard(), this.getScore(),this.getDepthNumber()));
 				if (result != null)
 					move(result,false);								
 				else		
@@ -705,4 +708,23 @@ public class Model2048 extends Observable implements Model {
 		this.stopSolverPressed=b;
 		
 	}	
+	
+	public void setDepthNumber(int num) {
+		this.depthNumber=num;
+	}
+	
+	public int getDepthNumber()
+	{
+		return this.depthNumber;
+	}
+	
+	public void setHintsNumber(int num) {
+		this.hintsNumber=num;
+	}
+	
+	public int getHintsumber()
+	{
+		return this.hintsNumber;
+	}
+
 }

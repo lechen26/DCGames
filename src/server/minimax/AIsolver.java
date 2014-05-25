@@ -69,8 +69,7 @@ public class AIsolver {
 	public static Map<String, Object> alphabeta(Board theBoard, int depth,
 			int alpha, int beta, Player player)
 			throws CloneNotSupportedException {		
-		Map<String, Object> result = new HashMap<String, Object>();
-
+		Map<String, Object> result = new HashMap<String, Object>();		
 		Direction bestDirection = null;
 		int bestScore;
 
